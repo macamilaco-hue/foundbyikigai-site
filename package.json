@@ -1,0 +1,8 @@
+{
+  "name": "found-by-ikigai",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.129.0"
+  }
+}

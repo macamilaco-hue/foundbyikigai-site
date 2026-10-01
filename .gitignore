@@ -1,0 +1,19 @@
+.DS_Store
+.vercel
+.env*
+node_modules
+
+# Private working files: kept on this computer and in the private
+# found-by-ikigai-archive repo, never in this public repo.
+.claude/
+Found-by-Ikigai-Brand-Guidelines.pdf
+HANDOFF-COMPLETO.md
+brand.html
+dsb-state.json
+ikigai-tool.html
+quiz.html
+toolikigai not the latest.html
+logo-src
+ctapath.svg
+api/
+vercel.json

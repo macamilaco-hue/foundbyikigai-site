@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Found by Ikigai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/ikigai-symbol.png">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { overflow-x:clip; scroll-behavior:smooth; }
+:root {
+  --cream:#FBF7EE; --merino:#F3EDDD; --pearl:#E7E0D2;
+  --wine:#551E29; --lime:#E3FE55; --orange:#FF9C34; --blue:#D7EFFF; --cornflower:#9CCBEC;
+  --sage:#AEBBA0; --forest:#3F4A3A;
+  --zeus:#1A1714; --armadillo:#4A453D; --olive:#8A8270; --nomad:#B7AFA0; --ink:#2E2A25;
+  --border:rgba(74,69,61,0.14);
+  --sans:'Inter',system-ui,sans-serif; --serif:'Newsreader',Georgia,serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --nav-h:74px;
+}
+body { background:var(--cream); color:var(--armadillo); font-family:var(--sans); overflow-x:clip; -webkit-font-smoothing:antialiased; }
+a { color:inherit; text-decoration:none; }
+
+/* NAV */
+.nav { position:fixed; top:0; left:0; right:0; z-index:100; height:var(--nav-h); padding:0 32px;
+  display:flex; align-items:center; background:rgba(251,247,238,0.85); backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(0,0,0,0.05); }
+.brand{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand .mark{width:26px;height:26px;flex:none;color:var(--zeus)}
+.brand .wm{font-family:var(--serif);font-weight:500;font-size:19px;line-height:1;color:var(--zeus)}
+.brand .sub{font-family:var(--sans);font-weight:500;font-size:10px;letter-spacing:.4px;color:var(--olive);align-self:center}
+.mark path{stroke:currentColor;stroke-width:.96;stroke-linecap:round;fill:none}
+.mark .core{fill:var(--orange);stroke:none}
+
+section { width:100%; }
+.wrap { max-width:720px; margin:0 auto; padding:0 24px; }
+
+/* HERO */
+#hero-section { position:relative; overflow:hidden; min-height:100vh; display:flex; align-items:center; padding-top:var(--nav-h); }
+.hero-wrap { position:relative; z-index:2; width:100%; max-width:1180px; margin:0 auto; padding:0 48px; }
+.hero { padding:40px 0; }
+.blobs{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  --bs:380px;--sx:340px;--sy:170px;--tx:130px;--ty:125px;}
+.blobs .blob{position:absolute;left:76%;top:50%;width:var(--bs);height:var(--bs);
+  margin:calc(var(--bs) / -2) 0 0 calc(var(--bs) / -2);border-radius:50%;will-change:transform;}
+.blobs .blob.b1{filter:blur(11px);background:radial-gradient(closest-side,rgba(116,184,232,.62) 66%,rgba(116,184,232,0) 100%);
+  animation:conv1 3.4s var(--ease) both, breathe1 10s ease-in-out 3.4s infinite;}
+.blobs .blob.b2{filter:blur(11px);background:radial-gradient(closest-side,rgba(206,236,86,.58) 66%,rgba(206,236,86,0) 100%);
+  animation:conv2 3.4s var(--ease) .08s both, breathe2 11s ease-in-out 3.48s infinite;}
+.blobs .blob.b3{filter:blur(11px);background:radial-gradient(closest-side,rgba(255,150,50,.58) 66%,rgba(255,150,50,0) 100%);
+  animation:conv3 3.4s var(--ease) .16s both, breathe3 12s ease-in-out 3.56s infinite;}
+.blobs .blob.b4{filter:blur(11px);background:radial-gradient(closest-side,rgba(140,58,74,.52) 66%,rgba(140,58,74,0) 100%);
+  animation:conv4 3.4s var(--ease) .12s both, breathe4 11.5s ease-in-out 3.52s infinite;}
+@keyframes conv1{from{translate:calc(var(--sx) * -1) calc(var(--sy) * -1)}to{translate:calc(var(--tx) * -1) calc(var(--ty) * -1)}}
+@keyframes conv2{from{translate:var(--sx) calc(var(--sy) * -1)}to{translate:var(--tx) calc(var(--ty) * -1)}}
+@keyframes conv3{from{translate:calc(var(--sx) * -1) var(--sy)}to{translate:calc(var(--tx) * -1) var(--ty)}}
+@keyframes conv4{from{translate:var(--sx) var(--sy)}to{translate:var(--tx) var(--ty)}}
+@keyframes breathe1{0%,100%{scale:1}50%{scale:1.035}}
+@keyframes breathe2{0%,100%{scale:1}50%{scale:1.045}}
+@keyframes breathe3{0%,100%{scale:1}50%{scale:1.04}}
+@keyframes breathe4{0%,100%{scale:1}50%{scale:1.05}}
+.hero h1 { font-family:var(--serif); font-size:clamp(44px,7vw,78px); font-weight:400; line-height:1.02; letter-spacing:-0.02em; color:var(--zeus); margin-bottom:24px; }
+.hero-desc { font-size:17px; line-height:1.7; color:var(--armadillo); max-width:480px; margin-bottom:38px; }
+@media(max-width:820px){ .hero-wrap{padding:0 24px} .blobs{--bs:250px;--sx:120px;--sy:115px;--tx:78px;--ty:74px} .blobs .blob{left:50%} #hero-section{text-align:center} .hero-desc{margin-left:auto;margin-right:auto} }
+
+/* BUTTONS */
+.btn-primary { display:inline-flex; align-items:center; gap:12px; background:var(--lime); color:var(--zeus); font-family:var(--sans); font-size:15px; font-weight:700; letter-spacing:.2px; padding:15px 30px; border:none; border-radius:40px; cursor:pointer; transition:transform .25s ease, box-shadow .25s ease; box-shadow:0 6px 18px rgba(227,254,85,.2); }
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 0 30px rgba(227,254,85,.9), 0 8px 22px rgba(227,254,85,.45); }
+.q-actions { display:flex; justify-content:flex-end; margin-top:26px; }
+.btn-ghost { display:inline-flex; align-items:center; gap:8px; background:var(--wine); border:none; color:var(--cream); font-family:var(--sans); font-size:14px; font-weight:700; padding:14px 28px; border-radius:40px; cursor:pointer; box-shadow:0 6px 18px rgba(85,30,41,.18); transition:transform .2s ease, box-shadow .25s ease; }
+.btn-ghost:hover { transform:translateY(-2px); box-shadow:0 0 30px rgba(85,30,41,.85), 0 8px 22px rgba(85,30,41,.55); }
+
+/* INTRO */
+#intro-section { display:none; min-height:100vh; padding-top:var(--nav-h); }
+.intro-inner { padding:60px 0; }
+.section-title { font-family:var(--serif); font-size:clamp(28px,5vw,46px); font-weight:400; line-height:1.08; letter-spacing:-0.01em; color:var(--zeus); margin-bottom:30px; }
+.section-title span { color:var(--orange); }
+.rules { display:flex; flex-direction:column; gap:10px; margin-bottom:36px; }
+.rules .rule { display:flex; gap:16px; align-items:flex-start; padding:20px 22px; background:#fff; border:1px solid var(--border); border-radius:16px; }
+.rule-num { font-family:var(--serif); font-size:30px; font-weight:500; color:var(--orange); line-height:1; flex-shrink:0; }
+.rule-text { font-size:14px; line-height:1.65; color:var(--armadillo); padding-top:4px; }
+.rule-text strong { color:var(--zeus); font-weight:600; }
+
+/* QUIZ */
+#quiz-section { display:none; min-height:100vh; padding-top:var(--nav-h); }
+.quiz-inner { padding:48px 0; }
+.progress-wrap { margin-bottom:48px; }
+.progress-meta { display:flex; justify-content:space-between; font-size:11px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:var(--olive); margin-bottom:8px; }
+.progress-track { height:3px; background:rgba(74,69,61,0.12); border-radius:2px; }
+.progress-fill { height:100%; background:var(--orange); border-radius:2px; transition:width 0.5s ease; }
+.question-block { animation:fadeUp 0.4s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.q-category { font-size:11px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--orange); margin-bottom:16px; }
+.q-text { font-family:var(--serif); font-size:clamp(24px,4vw,36px); font-weight:400; line-height:1.15; letter-spacing:-0.01em; color:var(--zeus); margin-bottom:12px; }
+.q-hint { font-size:14px; line-height:1.7; color:var(--olive); margin-bottom:22px; }
+.q-textarea { width:100%; background:#fff; border:1.5px solid var(--border); border-radius:14px; color:var(--zeus); font-family:var(--sans); font-size:15px; line-height:1.7; padding:18px; resize:none; min-height:150px; outline:none; transition:border-color 0.2s, box-shadow 0.2s; display:block; }
+.q-textarea:focus { border-color:var(--orange); box-shadow:0 0 0 3px rgba(255,156,52,0.15); }
+.q-textarea::placeholder { color:var(--nomad); }
+
+/* LOADING */
+#loading-section { display:none; min-height:100vh; padding-top:var(--nav-h); align-items:center; justify-content:center; flex-direction:column; gap:20px; text-align:center; }
+.loader-ring { width:44px; height:44px; border:3px solid var(--border); border-top-color:var(--orange); border-radius:50%; animation:spin 0.9s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.loading-text { font-family:var(--serif); font-size:22px; font-weight:400; color:var(--zeus); }
+.loading-sub { font-size:13px; color:var(--olive); }
+
+/* FREE RESULT */
+#result-section { display:none; padding-top:var(--nav-h); }
+#result-section .wrap { max-width:940px; }
+.result-inner { padding:72px 0 40px; }
+
+/* Result hero: four circles converge into the Venn, the user's words ride in with them */
+.rh{position:relative;min-height:100vh;display:flex;flex-direction:column;overflow:hidden;padding-top:var(--nav-h);
+  background:radial-gradient(125% 105% at 80% 16%,#dce7e2 0%,#e7e6d6 34%,var(--merino) 66%,var(--cream) 100%)}
+.rh-blobs{position:absolute;inset:0;z-index:0;pointer-events:none}
+.rh-blob{position:absolute;left:50%;top:52%;width:400px;height:400px;margin:-200px 0 0 -200px;border-radius:50%;filter:blur(40px);opacity:.85;will-change:translate,scale}
+.rh-b1{background:radial-gradient(closest-side,rgba(116,184,232,.62) 66%,rgba(116,184,232,0) 100%);animation:rhc1 3.4s var(--ease) both,breathe1 10s ease-in-out 3.4s infinite}
+.rh-b2{background:radial-gradient(closest-side,rgba(206,236,86,.58) 66%,rgba(206,236,86,0) 100%);animation:rhc2 3.4s var(--ease) .08s both,breathe2 11s ease-in-out 3.48s infinite}
+.rh-b3{background:radial-gradient(closest-side,rgba(255,150,50,.62) 66%,rgba(255,150,50,0) 100%);animation:rhc3 3.4s var(--ease) .16s both,breathe3 12s ease-in-out 3.56s infinite}
+.rh-b4{background:radial-gradient(closest-side,rgba(140,58,74,.62) 66%,rgba(140,58,74,0) 100%);animation:rhc4 3.4s var(--ease) .12s both,breathe4 11.5s ease-in-out 3.52s infinite}
+@keyframes rhc1{from{translate:-360px -175px}to{translate:-135px -130px}}
+@keyframes rhc2{from{translate:360px -175px}to{translate:135px -130px}}
+@keyframes rhc3{from{translate:-360px 175px}to{translate:-135px 130px}}
+@keyframes rhc4{from{translate:360px 175px}to{translate:135px 130px}}
+.rh-cards{position:absolute;left:50%;top:52%;z-index:3;pointer-events:none}
+.rh-pos{position:absolute;left:-90px;top:-32px}
+.rh-card{display:flex;flex-direction:column;gap:3px;padding:12px 18px 12px 16px;border-radius:12px;border-left:3px solid;
+  background:rgba(251,247,238,.85);box-shadow:0 12px 40px -18px rgba(26,23,20,.35);backdrop-filter:blur(14px)}
+.rh-card .lbl{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:var(--olive);font-weight:700}
+.rh-card .val{font-family:var(--serif);font-size:19px;font-weight:500;color:var(--zeus);white-space:nowrap}
+.rh-c1{rotate:-4deg;animation:rhk1 3.4s var(--ease) both}      .rh-c1 .rh-card{border-color:var(--cornflower);animation:rhfloat 10s ease-in-out 3.4s infinite}
+.rh-c2{rotate:3deg;animation:rhk2 3.4s var(--ease) .08s both}  .rh-c2 .rh-card{border-color:var(--sage);animation:rhfloat 11s ease-in-out 3.48s infinite}
+.rh-c3{rotate:2deg;animation:rhk3 3.4s var(--ease) .16s both}  .rh-c3 .rh-card{border-color:var(--orange);animation:rhfloat 12s ease-in-out 3.56s infinite}
+.rh-c4{rotate:-3deg;animation:rhk4 3.4s var(--ease) .12s both} .rh-c4 .rh-card{border-color:var(--wine);animation:rhfloat 11.5s ease-in-out 3.52s infinite}
+@keyframes rhk1{from{translate:-760px -380px}to{translate:-500px -250px}}
+@keyframes rhk2{from{translate:760px -380px}to{translate:500px -250px}}
+@keyframes rhk3{from{translate:-760px 380px}to{translate:-500px 235px}}
+@keyframes rhk4{from{translate:760px 380px}to{translate:500px 235px}}
+@keyframes rhfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.rh-copy{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px 80px;gap:30px}
+.rh-copy h1{max-width:1000px;font-family:var(--serif);font-weight:400;font-size:clamp(44px,6.4vw,92px);line-height:1.04;letter-spacing:-1.2px;text-wrap:balance;color:var(--zeus)}
+.rh-copy p{max-width:600px;font-size:17px;line-height:1.65;color:var(--armadillo);text-wrap:pretty}
+@media (max-width:1100px){.rh-cards{display:none}.rh-blob{width:300px;height:300px;margin:-150px 0 0 -150px}}
+@media (max-width:600px){.rh-copy h1{font-size:40px}}
+
+/* Free dimension cards */
+.dim-head { display:flex; flex-direction:column; align-items:center; text-align:center; gap:16px; margin:0 0 44px; }
+.dim-eyebrow { font-size:13px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--olive); }
+.dim-title { font-family:var(--serif); font-size:clamp(30px,4.6vw,48px); font-weight:400; line-height:1.05; letter-spacing:-0.02em; color:var(--zeus); }
+.cards { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:56px; }
+.card { background:#fff; border-radius:20px; border-top:4px solid transparent; padding:clamp(24px,3.4vw,34px);
+  display:flex; flex-direction:column; gap:9px; box-shadow:0 20px 50px rgba(74,69,61,0.08),0 1px 0 rgba(74,69,61,0.06); }
+.card:nth-child(1){border-top-color:var(--orange)} .card:nth-child(2){border-top-color:var(--cornflower)}
+.card:nth-child(3){border-top-color:var(--wine)} .card:nth-child(4){border-top-color:var(--sage)}
+.card-label { font-size:12px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--olive); }
+.card-title { font-family:var(--serif); font-size:29px; font-weight:500; line-height:1.1; }
+.card:nth-child(1) .card-title{color:var(--orange)} .card:nth-child(2) .card-title{color:var(--cornflower)}
+.card:nth-child(3) .card-title{color:var(--wine)} .card:nth-child(4) .card-title{color:var(--sage)}
+.card-text { font-size:15.5px; line-height:1.75; color:var(--armadillo); }
+
+/* PAYWALL */
+.paywall { position:relative; border-radius:24px; overflow:hidden; margin-bottom:20px; border:1px solid var(--border); background:#fff; }
+.paywall::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; z-index:2;
+  background:linear-gradient(90deg,var(--orange) 0 25%,var(--cornflower) 25% 50%,var(--wine) 50% 75%,var(--sage) 75% 100%); }
+.paywall-inner { padding:clamp(40px,6vw,64px) clamp(24px,4vw,48px); text-align:center; }
+.paywall-title { font-family:var(--serif); font-size:clamp(28px,4vw,42px); font-weight:400; line-height:1.1; letter-spacing:-0.02em; color:var(--zeus); margin-bottom:12px; }
+.paywall-sub { font-size:16px; line-height:1.6; color:var(--olive); max-width:420px; margin:0 auto 28px; }
+.paywall-list { list-style:none; text-align:left; max-width:430px; margin:0 auto 30px; padding:0; }
+.paywall-list li { position:relative; padding:0 0 14px 32px; font-size:15.5px; line-height:1.5; color:var(--armadillo); }
+.paywall-list li::before { content:''; position:absolute; left:0; top:1px; width:20px; height:20px; border-radius:50%; background:var(--orange); }
+.paywall-list li::after { content:''; position:absolute; left:7px; top:6px; width:6px; height:10px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg); }
+.paywall-price { font-family:var(--serif); font-size:44px; font-weight:500; color:var(--zeus); line-height:1; }
+.paywall-price small { font-family:var(--sans); font-size:13px; font-weight:500; color:var(--olive); display:block; margin-top:8px; letter-spacing:.02em; }
+.paywall-cta { margin:24px 0 14px; background:var(--wine); color:var(--cream); font-size:16px; padding:17px 36px; box-shadow:0 6px 18px rgba(85,30,41,.2); }
+.paywall-cta:hover { box-shadow:0 0 30px rgba(85,30,41,.7), 0 8px 22px rgba(85,30,41,.5); }
+.paywall-note { font-size:12.5px; color:var(--olive); letter-spacing:.02em; }
+.paywall-err { margin-top:14px; font-size:13px; color:var(--wine); font-weight:500; display:none; }
+
+.signature { display:flex; align-items:center; justify-content:space-between; padding:22px 0 40px; border-top:1px solid var(--border); }
+.foot-brand { display:flex; align-items:center; gap:8px; white-space:nowrap; }
+.foot-brand .mark { width:24px; height:24px; flex:none; color:var(--zeus); }
+.foot-brand .wm { font-family:var(--serif); font-weight:500; font-size:18px; line-height:1; color:var(--zeus); }
+.foot-brand .sub { font-family:var(--sans); font-weight:500; font-size:10px; letter-spacing:.4px; color:var(--olive); align-self:center; }
+.sig-sub { font-size:11px; color:var(--olive); letter-spacing:.02em; }
+
+@media(max-width:580px) {
+  .nav { padding:0 20px; }
+  .cards { grid-template-columns:1fr; }
+}
+/* ============ PAID RESULT (namespaced under #paid) ============ */
+#paid { display:none; }
+#paid.revealed { display:block; animation:fadeUp .6s ease; }
+
+/* chapter shell: alternate cream / merino */
+#paid .chapter{position:relative;overflow:clip;border-top:1px solid rgba(26,23,20,.08);background:var(--cream)}
+#paid .chapter:nth-of-type(even){background:var(--merino)}
+#paid .chapter .wrap{max-width:1200px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1fr;gap:64px}
+#paid .chapter .opener{padding-top:120px;padding-bottom:56px;align-items:end}
+#paid .chapter .figure{position:relative;height:420px}
+#paid .chapter .figure .blob{position:absolute;left:40px;top:-40px;width:380px;height:380px;border-radius:50%;filter:blur(44px);opacity:.85;
+  background:radial-gradient(closest-side,rgba(var(--rgb),.62) 66%,rgba(var(--rgb),0) 100%);animation:breathe var(--dur,10s) ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+#paid .chapter .numblock{position:absolute;left:0;bottom:0;display:flex;flex-direction:column;gap:10px}
+#paid .chapter .num{font-family:var(--serif);font-size:220px;line-height:.8;letter-spacing:-.05em;font-weight:400;color:var(--zeus)}
+#paid .chapter .tag{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;color:var(--olive)}
+#paid .chapter .tag i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+#paid .chapter .intro{display:flex;flex-direction:column;gap:22px;padding-bottom:12px}
+#paid .chapter .dimension{font-family:var(--serif);font-size:22px;color:var(--olive)}
+/* Zeus, not --c: orange is a shape color, never text on cream (brand rule) */
+#paid .chapter h2{font-family:var(--serif);font-weight:400;font-size:52px;line-height:1.08;letter-spacing:-.8px;text-wrap:balance;color:var(--zeus)}
+#paid .chapter .reading{padding-bottom:128px}
+#paid .chapter .rail{display:flex;flex-direction:column;gap:14px;align-self:start;position:sticky;top:96px}
+#paid .chapter .rail .rule{width:48px;height:3px;border-radius:2px;background:var(--c)}
+#paid .chapter .rail-label{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--olive)}
+#paid .chapter .words{display:flex;flex-wrap:wrap;gap:8px}
+#paid .chapter .words span{font-family:var(--serif);font-size:17px;padding:6px 14px;border-radius:40px;border:1px solid rgba(26,23,20,.14)}
+#paid .chapter .prose{display:flex;flex-direction:column;gap:28px;font-family:var(--serif);font-size:21px;line-height:1.6;color:var(--ink);text-wrap:pretty}
+#paid .chapter blockquote{margin:16px 0;padding:28px 0 28px 28px;border-left:3px solid var(--c);font-size:30px;line-height:1.3;letter-spacing:-.3px;color:var(--zeus);text-wrap:balance}
+#paid .passion{--c:var(--orange);--rgb:255,150,50;--dur:10s}
+#paid .vocation{--c:#74B8E8;--rgb:116,184,232;--dur:11s}
+#paid .mission{--c:var(--wine);--rgb:140,58,74;--dur:12s}
+#paid .profession{--c:var(--sage);--rgb:206,236,86;--dur:13s}
+
+/* WHERE IT ALL CONNECTS: overflow-x clip (not hidden) so the sticky word keeps working */
+#paid .cx{position:relative;background:var(--cream);color:var(--zeus);border-top:1px solid rgba(26,23,20,.08);overflow-x:clip}
+#paid .cx-kanji{position:absolute;right:-40px;top:520px;font-family:var(--serif);font-size:380px;line-height:.82;writing-mode:vertical-rl;color:rgba(26,23,20,.045);pointer-events:none;user-select:none}
+#paid .cx-wrap{position:relative;max-width:1280px;margin:0 auto;padding:128px 48px 132px;display:flex;flex-direction:column;gap:88px}
+#paid .cx-open{display:flex;flex-direction:column;align-items:center;text-align:center;gap:28px}
+#paid .cx-eyebrow{display:flex;align-items:center;gap:12px;font-size:13px;letter-spacing:3.2px;text-transform:uppercase;font-weight:700;color:var(--olive)}
+#paid .cx-eyebrow::before,#paid .cx-eyebrow::after{content:"";width:36px;height:1px;background:rgba(26,23,20,.28)}
+#paid .cx-h2{max-width:920px;font-family:var(--serif);font-weight:400;font-size:52px;line-height:1.1;letter-spacing:-.8px;text-wrap:balance}
+#paid .cx-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1fr);gap:80px;align-items:start}
+#paid .cx-word{position:sticky;top:112px;display:flex;flex-direction:column;gap:18px}
+#paid .cx-word-text{font-family:var(--serif);font-weight:400;font-size:clamp(56px,7vw,104px);line-height:.92;letter-spacing:-4px;overflow-wrap:anywhere}
+#paid .cx-bar{height:12px;width:100%;background:#CEEC56;transform-origin:left;animation:cx-grow 1.1s var(--ease) .2s both}
+#paid .cx-def{font-family:var(--serif);font-size:22px;line-height:1.4;color:#5C564C}
+#paid .cx-note{margin-top:12px;font-size:16px;line-height:1.7;color:#5C564C;text-wrap:pretty}
+@keyframes cx-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+#paid .cx-list-head{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--olive);padding-bottom:14px;border-bottom:1px solid rgba(26,23,20,.2)}
+#paid .cx-row{display:flex;flex-direction:column;gap:6px;padding:24px 0;border-bottom:1px solid rgba(26,23,20,.1)}
+#paid .cx-who{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;font-weight:700;color:var(--olive)}
+#paid .cx-line{font-family:var(--serif);font-size:24px;line-height:1.35}
+#paid .cx-line em{font-style:normal;box-shadow:inset 0 -8px 0 rgba(206,236,86,.7)}
+#paid .cx-tension{margin-top:36px;font-family:var(--serif);font-size:20px;line-height:1.6;color:var(--ink);text-wrap:pretty}
+#paid .cx-trad{display:flex;flex-direction:column;gap:36px;padding-top:64px;border-top:1px solid rgba(26,23,20,.2)}
+#paid .cx-h3{max-width:860px;font-family:var(--serif);font-weight:400;font-size:36px;line-height:1.16;letter-spacing:-.5px;text-wrap:balance}
+#paid .cx-cols{columns:2;column-gap:72px;column-rule:1px solid rgba(26,23,20,.14);font-family:var(--serif);font-size:18px;line-height:1.68;color:var(--ink);text-align:justify;hyphens:auto;text-wrap:pretty}
+#paid .cx-cols p{margin:0 0 22px}#paid .cx-cols p:last-child{margin:0}
+#paid .cx-cols p:first-child::first-letter{float:left;font-size:72px;line-height:.78;padding:6px 12px 0 0;color:var(--zeus)}
+#paid .cx-terms{display:flex;gap:36px;flex-wrap:wrap;font-size:11px;letter-spacing:1.8px;text-transform:uppercase;font-weight:700;color:var(--olive)}
+#paid .cx-q{padding-top:48px;border-top:1px solid rgba(26,23,20,.2);display:flex;flex-direction:column;gap:20px}
+#paid .cx-q-label{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;color:var(--olive)}
+#paid .cx-q-text{max-width:1000px;font-family:var(--serif);font-weight:400;font-size:44px;line-height:1.2;letter-spacing:-.7px;text-wrap:balance}
+
+/* ROADMAP */
+#paid .roadmap{position:relative;overflow:hidden;background:var(--wine);color:var(--cream)}
+#paid .roadmap .rm-wrap{position:relative;max-width:1280px;margin:0 auto;padding:120px 48px 140px}
+#paid .roadmap .intro{display:grid;grid-template-columns:42% 1fr;gap:0 48px;align-items:start;margin-bottom:64px}
+#paid .roadmap .eyebrow{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;color:var(--lime)}
+#paid .roadmap .eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--lime)}
+#paid .roadmap .intro h2{margin-top:20px;font-family:var(--serif);font-weight:400;font-size:56px;line-height:1.04;letter-spacing:-1px;text-wrap:balance;color:var(--cream)}
+#paid .roadmap .intro p{padding-left:16%;padding-top:44px;font-size:17px;line-height:1.65;color:rgba(251,247,238,.6);max-width:400px;text-wrap:pretty}
+#paid .path{position:relative}
+#paid .spine{position:absolute;left:0;top:-300px;width:100%;pointer-events:none;overflow:visible}
+#paid .spine path{fill:none;stroke:url(#spineFade);stroke-width:1.5;vector-effect:non-scaling-stroke;
+  stroke-dasharray:6000;stroke-dashoffset:6000;animation:draw 3.5s var(--ease) .2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+#paid .steps{list-style:none;position:relative;display:flex;flex-direction:column;gap:72px}
+#paid .step{position:relative;display:flex;justify-content:flex-start;animation:rise .8s ease-out both}
+#paid .step:nth-child(even){justify-content:flex-end}
+#paid .step:nth-child(1){animation-delay:.2s}#paid .step:nth-child(2){animation-delay:.5s}#paid .step:nth-child(3){animation-delay:.8s}#paid .step:nth-child(4){animation-delay:1.1s}#paid .step:nth-child(5){animation-delay:1.4s}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+#paid .step .body{width:42%;display:flex;flex-direction:column;gap:18px}
+#paid .step .num{font-family:var(--serif);font-size:96px;line-height:.8;letter-spacing:-.05em;color:rgba(251,247,238,.35)}
+#paid .step .when{display:block;margin-top:14px;font-size:11px;letter-spacing:1.8px;text-transform:uppercase;font-weight:700;color:rgba(251,247,238,.45)}
+#paid .step h3{font-family:var(--serif);font-weight:400;font-size:36px;line-height:1.1;letter-spacing:-.5px;color:rgba(251,247,238,.92);text-wrap:balance}
+#paid .step p{font-size:16px;line-height:1.7;color:rgba(251,247,238,.55);text-wrap:pretty}
+#paid .ball{position:absolute;top:40px;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;filter:blur(22px);opacity:.55;background:var(--c);
+  animation:pop .8s cubic-bezier(.34,1.56,.64,1) both,drift var(--dur,10s) ease-in-out 1.3s infinite}
+#paid .step:nth-child(odd) .ball{left:46%}
+#paid .step:nth-child(even) .ball{left:54%}
+#paid .step:nth-child(1) .ball{--c:#FF9C34;--dur:9s;animation-delay:.5s,1.3s}
+#paid .step:nth-child(2) .ball{--c:#C96A82;--dur:10s;animation-delay:1.1s,1.9s}
+#paid .step:nth-child(3) .ball{--c:#74B8E8;--dur:11s;animation-delay:1.7s,2.5s}
+#paid .step:nth-child(4) .ball{--c:#CEEC56;--dur:12s;animation-delay:2.3s,3.1s}
+#paid .step:nth-child(5) .ball{--c:#B9A6E8;--dur:13s;animation-delay:2.9s,3.7s}
+@keyframes pop{from{opacity:0;transform:scale(.4)}to{opacity:.55;transform:scale(1)}}
+@keyframes drift{0%,100%{translate:0 0}50%{translate:10px -14px}}
+
+/* download + share + footer */
+#paid .download{background:var(--cream);padding:clamp(72px,9vw,112px) 24px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+#paid .download p{font-family:var(--serif);font-size:clamp(22px,2.6vw,28px);color:var(--armadillo);line-height:1.35;max-width:460px}
+#paid .btn-download{background:var(--cornflower);color:var(--zeus);border:none;border-radius:40px;padding:20px 44px;font-family:var(--sans);font-weight:700;font-size:17px;cursor:pointer;transition:transform .2s,box-shadow .2s}
+#paid .btn-download:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(156,203,236,.55)}
+#paid .share{background:var(--cream);padding:0 24px clamp(72px,9vw,112px)}
+#paid .share-box{max-width:800px;margin:0 auto;background:var(--wine);border-radius:28px;padding:clamp(48px,7vw,80px) clamp(28px,5vw,64px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px}
+#paid .share-box h2{font-family:var(--serif);font-size:clamp(30px,4vw,44px);font-weight:400;color:var(--cream);line-height:1.1;letter-spacing:-.02em}
+#paid .share-box p{font-size:16px;line-height:1.7;color:var(--nomad);max-width:440px}
+#paid .share-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+#paid .btn-share{background:rgba(255,255,255,.10);color:var(--cream);border:1.5px solid rgba(255,255,255,.22);border-radius:40px;padding:16px 30px;font-family:var(--sans);font-weight:700;font-size:15px;cursor:pointer;transition:all .2s}
+#paid .btn-share:hover{background:var(--lime);color:var(--zeus);border-color:var(--lime)}
+#paid .paid-footer{background:var(--cream);border-top:1px solid rgba(74,69,61,.12);padding:28px clamp(20px,4vw,48px);display:flex;align-items:center;justify-content:space-between}
+#paid .paid-footer span.txt{font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--olive)}
+#paid .paid-footer span.dot{width:8px;height:8px;border-radius:50%;background:var(--orange);display:block}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%) translateY(20px);z-index:300;
+  background:var(--zeus);color:var(--cream);font-size:14px;font-weight:500;padding:14px 24px;border-radius:40px;
+  opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (max-width:900px){
+  #paid .chapter .wrap{grid-template-columns:1fr;gap:32px}
+  #paid .chapter .opener{padding-top:72px}
+  #paid .chapter .figure{height:300px}
+  #paid .chapter .num{font-size:150px}
+  #paid .chapter .figure .blob{width:280px;height:280px;left:0}
+  #paid .chapter h2{font-size:36px}
+  #paid .chapter .rail{position:static}
+  #paid .chapter .prose{font-size:19px}
+  #paid .chapter blockquote{font-size:24px}
+  #paid .roadmap .rm-wrap{padding:80px 24px 96px}
+  #paid .roadmap .intro{grid-template-columns:1fr;gap:20px}
+  #paid .roadmap .intro p{padding:0}
+  #paid .roadmap .intro h2{font-size:40px}
+  #paid .spine{display:none}
+  #paid .step,#paid .step:nth-child(even){justify-content:flex-start}
+  #paid .step .body{width:100%}
+  #paid .step .num{font-size:72px}
+  #paid .step h3{font-size:28px}
+  #paid .ball{left:auto!important;right:0;top:0;width:80px;height:80px;margin:-20px -20px 0 0}
+  #paid .cx-wrap{padding:80px 24px 96px;gap:64px}
+  #paid .cx-h2{font-size:36px}#paid .cx-h3{font-size:28px}
+  #paid .cx-grid{grid-template-columns:1fr;gap:40px}#paid .cx-word{position:static}
+  #paid .cx-cols{columns:1;text-align:left}
+  #paid .cx-q-text{font-size:30px}#paid .cx-kanji{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .blobs .blob{animation:none !important}
+  .blobs .blob.b1{translate:calc(var(--tx) * -1) calc(var(--ty) * -1)}.blobs .blob.b2{translate:var(--tx) calc(var(--ty) * -1)}
+  .blobs .blob.b3{translate:calc(var(--tx) * -1) var(--ty)}.blobs .blob.b4{translate:var(--tx) var(--ty)}
+  #paid .chapter .figure .blob{animation:none}
+  .rh-blob,.rh-pos,.rh-card,#paid .cx-bar{animation:none!important}
+  .rh-b1{translate:-135px -130px}.rh-b2{translate:135px -130px}.rh-b3{translate:-135px 130px}.rh-b4{translate:135px 130px}
+  .rh-c1{translate:-500px -250px}.rh-c2{translate:500px -250px}.rh-c3{translate:-500px 235px}.rh-c4{translate:500px 235px}
+  #paid .spine path,#paid .step,#paid .ball{animation:none;stroke-dashoffset:0;opacity:1}
+}
+
+/* PRINT: this is what makes "Download PDF" real */
+@media print {
+  @page { margin:16mm; }
+  .nav,.paywall,.toast,#hero-section,#intro-section,#quiz-section,#loading-section,
+  #paid .download,#paid .share,.signature { display:none !important; }
+  html,body { background:#fff !important; }
+  #result-section { display:block !important; padding-top:0; }
+  #paid { display:block !important; }
+  #paid .chapter,#paid .cx,#paid .roadmap,#paid .paid-footer { break-inside:auto; }
+  #paid .chapter { page-break-before:always; border-top:none; background:#fff !important; }
+  #paid .chapter .wrap { grid-template-columns:1fr; gap:20px; padding:0; }
+  #paid .chapter .figure,#paid .ball,#paid .spine,.blobs { display:none !important; }
+  #paid .chapter .opener,#paid .chapter .reading { padding:0 0 24px; }
+  #paid .chapter .rail { position:static; }
+  #paid .roadmap { background:#fff !important; color:var(--zeus) !important; page-break-before:always; }
+  #paid .roadmap .rm-wrap { padding:0; }
+  #paid .roadmap .intro h2,#paid .step h3 { color:var(--zeus) !important; }
+  #paid .step p,#paid .step .num,#paid .step .when { color:var(--armadillo) !important; }
+  #paid .roadmap .eyebrow,#paid .roadmap .eyebrow i { color:var(--orange) !important; background:var(--orange); }
+  #paid .roadmap .eyebrow { background:none; }
+  #paid .step,#paid .step:nth-child(even) { justify-content:flex-start; }
+  #paid .step .body { width:100%; }
+  .rh { min-height:0; padding:0 0 24px; background:#fff !important; }
+  .rh-blobs,.rh-cards,#paid .cx-kanji { display:none !important; }
+  #paid .cx-word { position:static; }
+  .card { box-shadow:none; border:1px solid var(--border); }
+  * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="/" aria-label="Found by Ikigai">
+    <svg class="mark" viewBox="0 0 24 24" fill="none">
+      <path d="M2.16 5.52C7.92 8.4 10.8 10.56 12.96 12.48"/>
+      <path d="M22.32 4.08C16.56 7.92 14.4 10.32 12.96 12.48"/>
+      <path d="M3.6 21.84C9.36 17.52 11.28 14.88 12.96 12.48"/>
+      <path d="M21.84 21.6C16.8 17.52 14.64 14.64 12.96 12.48"/>
+      <circle class="core" cx="12.96" cy="12.48" r="1.68"/>
+    </svg>
+    <span class="wm">Found</span><span class="sub">by Ikigai</span>
+  </a>
+</nav>
+
+<section id="hero-section">
+  <div class="blobs">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+  </div>
+  <div class="hero-wrap">
+    <div class="hero">
+      <h1>Find your<br>Ikigai</h1>
+      <p class="hero-desc">A tool to help you find clarity on the path you actually want to take.</p>
+      <button class="btn-primary" onclick="showIntro()">
+        Get started
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section id="intro-section">
+  <div class="wrap">
+    <div class="intro-inner">
+      <div class="section-title">Before we start,<br><span>read this</span></div>
+      <div class="rules">
+        <div class="rule"><div class="rule-num">1</div><div class="rule-text"><strong>Answer like you are talking to your best friend.</strong> No right or wrong answers. Nobody is judging. The more honest you are, the more useful the result.</div></div>
+        <div class="rule"><div class="rule-num">2</div><div class="rule-text"><strong>If you do not know something, say so.</strong> But write the first thing that comes to mind. That instinctive answer often says more than a perfect one.</div></div>
+        <div class="rule"><div class="rule-num">3</div><div class="rule-text"><strong>Context matters.</strong> This tool works better with depth. It is not about filling a form. It is about getting to know yourself a little better.</div></div>
+        <div class="rule"><div class="rule-num">4</div><div class="rule-text"><strong>It might ask a few more questions.</strong> If your answers need more context, the tool will dig deeper. That is normal.</div></div>
+      </div>
+      <button class="btn-primary" onclick="startQuiz()">
+        Let us go
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section id="quiz-section">
+  <div class="wrap">
+    <div class="quiz-inner">
+      <div class="progress-wrap">
+        <div class="progress-meta"><span id="progress-text">Question 1</span><span id="progress-pct">0%</span></div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+      <div id="questions-container"></div>
+    </div>
+  </div>
+</section>
+
+<section id="loading-section">
+  <div class="loader-ring"></div>
+  <div class="loading-text" id="loading-text">Reading your answers</div>
+  <div class="loading-sub" id="loading-sub">This takes a few seconds</div>
+</section>
+
+<section id="result-section">
+  <header class="rh">
+    <div class="rh-blobs" aria-hidden="true">
+      <div class="rh-blob rh-b1"></div><div class="rh-blob rh-b2"></div><div class="rh-blob rh-b3"></div><div class="rh-blob rh-b4"></div>
+    </div>
+    <div class="rh-cards" aria-hidden="true">
+      <div class="rh-pos rh-c1"><div class="rh-card"><span class="lbl">Vocation</span><span class="val" id="rh-vocation"></span></div></div>
+      <div class="rh-pos rh-c2"><div class="rh-card"><span class="lbl">Profession</span><span class="val" id="rh-profession"></span></div></div>
+      <div class="rh-pos rh-c3"><div class="rh-card"><span class="lbl">Passion</span><span class="val" id="rh-passion"></span></div></div>
+      <div class="rh-pos rh-c4"><div class="rh-card"><span class="lbl">Mission</span><span class="val" id="rh-mission"></span></div></div>
+    </div>
+    <div class="rh-copy">
+      <h1 id="ikigai-phrase"></h1>
+      <p id="result-sub"></p>
+    </div>
+  </header>
+  <div class="wrap">
+    <div class="result-inner">
+      <div class="dim-head">
+        <div class="dim-eyebrow">Here is what we found</div>
+        <h2 class="dim-title">Four dimensions. One you.</h2>
+      </div>
+      <div class="cards" id="result-cards"></div>
+
+      <div class="paywall" id="paywall">
+        <div class="paywall-inner">
+          <h2 class="paywall-title">Want to go deeper?</h2>
+          <p class="paywall-sub">You have seen the patterns. Now unlock the full picture:</p>
+          <ul class="paywall-list">
+            <li>A deep read of each dimension, written from your own words</li>
+            <li>How your result connects to the Japanese Ikigai tradition</li>
+            <li>The one thread running through every answer you gave</li>
+            <li>A personalized roadmap for the next 90 days, plus a PDF to keep</li>
+          </ul>
+          <div class="paywall-price">$4.99<small>One time. No subscription.</small></div>
+          <button class="btn-primary paywall-cta" id="unlock-btn" onclick="unlockReport()">Reveal my full analysis</button>
+          <div class="paywall-note">Secure payment. Instant access.</div>
+          <div class="paywall-err" id="paywall-err"></div>
+        </div>
+      </div>
+
+      <div class="signature">
+        <a class="foot-brand" href="/" aria-label="Found by Ikigai">
+          <svg class="mark" viewBox="0 0 24 24" fill="none">
+            <path d="M2.16 5.52C7.92 8.4 10.8 10.56 12.96 12.48"/>
+            <path d="M22.32 4.08C16.56 7.92 14.4 10.32 12.96 12.48"/>
+            <path d="M3.6 21.84C9.36 17.52 11.28 14.88 12.96 12.48"/>
+            <path d="M21.84 21.6C16.8 17.52 14.64 14.64 12.96 12.48"/>
+            <circle class="core" cx="12.96" cy="12.48" r="1.68"/>
+          </svg>
+          <span class="wm">Found</span><span class="sub">by Ikigai</span>
+        </a>
+        <div class="sig-sub">foundbyikigai.com · 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="paid">
+  <div id="chapters"></div>
+
+  <section class="cx">
+    <span class="cx-kanji" aria-hidden="true">生き甲斐</span>
+    <div class="cx-wrap">
+      <div class="cx-open">
+        <div class="cx-eyebrow">Where it all connects</div>
+        <h2 class="cx-h2" id="cx-opening"></h2>
+      </div>
+      <div class="cx-grid">
+        <div class="cx-word">
+          <span class="cx-word-text" id="cx-word"></span>
+          <div class="cx-bar"></div>
+          <span class="cx-def" id="cx-def"></span>
+          <p class="cx-note" id="cx-note"></p>
+        </div>
+        <div>
+          <div class="cx-list-head">What you are actually seeing</div>
+          <div id="cx-evidence"></div>
+          <p class="cx-tension" id="cx-tension"></p>
+        </div>
+      </div>
+      <div class="cx-trad">
+        <h3 class="cx-h3" id="cx-trad-h"></h3>
+        <div class="cx-cols" id="cx-trad"></div>
+        <div class="cx-terms" id="cx-terms"></div>
+      </div>
+      <div class="cx-q">
+        <span class="cx-q-label">The question to sit with</span>
+        <p class="cx-q-text" id="cx-question"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="roadmap">
+    <div class="rm-wrap">
+      <div class="intro">
+        <div>
+          <div class="eyebrow"><i></i>Your personalized roadmap</div>
+          <h2>Five things you could explore in the next 90 days.</h2>
+        </div>
+        <p>Not a plan to follow perfectly. A set of experiments, drawn from your own answers, to test where your ikigai actually lives.</p>
+      </div>
+      <div class="path">
+        <svg class="spine" id="spine" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="spineFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#FBF7EE" stop-opacity="0"/>
+              <stop offset=".12" stop-color="#FBF7EE" stop-opacity=".28"/>
+              <stop offset="1" stop-color="#FBF7EE" stop-opacity=".28"/>
+            </linearGradient>
+          </defs>
+          <path id="spinePath" d=""/>
+        </svg>
+        <ol class="steps" id="steps"></ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="download">
+    <p>Keep this somewhere you will see it again.</p>
+    <button class="btn-download" onclick="downloadPDF()">Download PDF</button>
+  </section>
+
+  <section class="share">
+    <div class="share-box">
+      <h2>Was this useful?</h2>
+      <p>If this helped you see things a little more clearly, share it. Someone in your circle might need exactly this right now.</p>
+      <div class="share-btns">
+        <button class="btn-share" onclick="shareTo('instagram')">Share on Instagram</button>
+        <button class="btn-share" onclick="shareTo('tiktok')">Share on TikTok</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="paid-footer">
+    <span class="txt">Found by Ikigai · 2026</span>
+    <span class="dot"></span>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+/* ============================================================
+   Found by Ikigai - complete tool
+   Flow: hero > intro > quiz > loading > free result > paywall > paid result
+   ============================================================ */
+
+const IS_LOCAL = ['localhost','127.0.0.1','::1',''].includes(location.hostname);
+const MODEL = 'claude-haiku-4-5-20251001';
+const NO_DASH = 'Never use hyphens, dashes, or em dashes anywhere in your writing. Use commas or separate sentences instead.';
+
+const baseQuestions = [
+  { id:'q1', category:'01 · What you love', text:'What activities make you lose track of time?', hint:'It is okay if you do not have a clear answer. Write the first thing that comes to mind. Answer like you are talking to your best friend.' },
+  { id:'q2', category:'02 · What you love', text:'If money were no object, what would your ideal week look like?', hint:'Who would you be with, where, what would you do. Be as specific as you can.' },
+  { id:'q3', category:'03 · What you are good at', text:'What things come naturally to you?', hint:'No false modesty. Skills, ways of thinking, how you treat people. What others recognize in you or what you do effortlessly.' },
+  { id:'q4', category:'04 · What you are good at', text:'Who do you admire and what exactly do you admire about them?', hint:'Could be someone close or a public figure. Be specific about the why.' },
+  { id:'q5', category:'05 · What the world needs', text:'What things in the world bother or hurt you?', hint:'What do you see around you and think that someone should do something about it.' },
+  { id:'q6', category:'06 · What you can be paid for', text:'What have people paid you for, or would they pay you for?', hint:'Include everything even if you are not passionate about all of it.' },
+  { id:'q7', category:'07 · Your legacy', text:'How do you want to be remembered?', hint:'It does not have to be grand. What would the people who matter most to you say?' }
+];
+
+let allQuestions = [...baseQuestions];
+let answers = {};
+let currentIndex = 0;
+let freeData = null;
+let paidData = null;
+let isUnlocked = false;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function toast(msg, ms) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('on'), ms || 3200);
+}
+
+/* ---------- navigation ---------- */
+function showIntro() {
+  $('hero-section').style.display = 'none';
+  $('intro-section').style.display = 'block';
+}
+function startQuiz() {
+  $('intro-section').style.display = 'none';
+  $('quiz-section').style.display = 'block';
+  renderQuestion(0);
+}
+
+function renderQuestion(index) {
+  const q = allQuestions[index];
+  const isLast = index === allQuestions.length - 1;
+  $('questions-container').innerHTML = `
+    <div class="question-block">
+      <div class="q-category">${esc(q.category)}</div>
+      <div class="q-text">${esc(q.text)}</div>
+      <p class="q-hint">${esc(q.hint)}</p>
+      <textarea class="q-textarea" id="current-answer" placeholder="Write here..."></textarea>
+      <div class="q-actions">
+        <button class="btn-ghost" onclick="handleNext()">${isLast ? 'Continue' : 'Next'}</button>
+      </div>
+    </div>`;
+  const prev = answers[q.id];
+  if (prev) $('current-answer').value = prev;
+  // Follow ups have no fixed count, so they sit near the end and never move the bar backwards.
+  const base = baseQuestions.length;
+  const pct = index < base ? Math.round((index / base) * 85) : Math.min(97, 88 + (index - base) * 2);
+  $('progress-fill').style.width = pct + '%';
+  $('progress-text').textContent = index < base ? 'Question ' + (index + 1) : 'A few more questions';
+  $('progress-pct').textContent = pct + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  $('current-answer').focus();
+}
+
+async function handleNext() {
+  const ta = $('current-answer');
+  const val = ta.value.trim();
+  if (!val) {
+    ta.style.borderColor = 'var(--orange)';
+    ta.placeholder = 'Write something, even if brief...';
+    return;
+  }
+  answers[allQuestions[currentIndex].id] = val;
+  currentIndex++;
+  if (currentIndex < allQuestions.length) renderQuestion(currentIndex);
+  else await checkFollowUps();
+}
+
+/* ---------- loading ---------- */
+let loadingInterval;
+function showLoading(msgs) {
+  const list = msgs || ['Reading your answers','Finding patterns','Connecting the dots','Almost there'];
+  $('quiz-section').style.display = 'none';
+  $('result-section').style.display = 'none';
+  const ls = $('loading-section');
+  ls.style.display = 'flex';
+  $('loading-text').textContent = list[0];
+  let i = 0;
+  clearInterval(loadingInterval);
+  loadingInterval = setInterval(() => { i = (i + 1) % list.length; $('loading-text').textContent = list[i]; }, 2200);
+  window.scrollTo({ top: 0 });
+}
+function hideLoading() {
+  clearInterval(loadingInterval);
+  $('loading-section').style.display = 'none';
+}
+
+/* ---------- API ---------- */
+async function callClaude(prompt, maxTokens) {
+  const res = await fetch('/api/claude', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: MODEL, max_tokens: maxTokens || 800, messages: [{ role: 'user', content: prompt }] })
+  });
+  if (!res.ok) throw new Error('API returned ' + res.status);
+  const data = await res.json();
+  if (!data.content) throw new Error('Malformed API response');
+  return data.content.map(i => i.text || '').join('').replace(/```json|```/g, '').trim();
+}
+
+function answersText() {
+  return allQuestions.filter(q => answers[q.id]).map(q => `${q.text}\n"${answers[q.id]}"`).join('\n\n');
+}
+
+/* ---------- follow ups ----------
+   PRODUCT RULE (read before changing anything here):
+   The whole point of this tool is a result that is accurate and true for
+   this specific person. So the quiz keeps asking follow up questions for as
+   long as it is still missing information it needs for that, and stops as
+   soon as it has enough. There is deliberately NO fixed number of follow ups:
+   someone who answered in depth may get none, someone who answered "idk" may
+   get several. Do not replace this with a fixed count.
+
+   What must never happen: a question that repeats or rephrases an earlier
+   one, or a loop that never ends. That is guarded three ways:
+   1. Claude is shown every follow up already asked and told never to repeat
+      or circle back, and to ask only about the weakest missing area.
+   2. tooSimilar() compares each new question with all earlier ones; if it
+      overlaps too much, we treat that as "we have enough" and move on.
+   3. FOLLOWUP_SAFETY_LIMIT is an emergency brake against a runaway loop
+      (a model error, an API glitch). It is not a target and should never be
+      reached in normal use; in testing, real rounds ended at 0 to 3. */
+const FOLLOWUP_SAFETY_LIMIT = 8;
+let followUpCount = 0;
+
+const STOP = new Set('a an and are as at be but by do does for from have how i if in is it its me my of on or so that the their them they this to was what when where which who why with would you your yours'.split(' '));
+function contentWords(t) {
+  return new Set(String(t).toLowerCase().replace(/[^a-z\s]/g, ' ').split(/\s+/).filter(w => w.length > 2 && !STOP.has(w)));
+}
+function tooSimilar(text) {
+  const a = contentWords(text);
+  if (!a.size) return true;
+  return allQuestions.some(q => {
+    const b = contentWords(q.text);
+    const shared = [...a].filter(w => b.has(w)).length;
+    return shared / Math.min(a.size, b.size || 1) >= 0.6;
+  });
+}
+
+async function checkFollowUps() {
+  if (followUpCount >= FOLLOWUP_SAFETY_LIMIT) { await generateResult(); return; }
+  showLoading(['Reading your answers','Checking if anything needs more context']);
+  const asked = allQuestions.slice(baseQuestions.length).map(q => '- ' + q.text).join('\n') || '(none yet)';
+  try {
+    const raw = await callClaude(`You are a warm, perceptive facilitator helping someone find their Ikigai. The goal of this tool is a result that is accurate and genuinely true for this person, so it must be built on real information about them. Your job right now is only to decide whether you already have enough to write that result, and if not, to ask the single most useful next question. Ask as many rounds as that takes, but never a question that is not needed.
+
+You have enough when you have concrete, personal material (real activities, people, examples, feelings, not generic words) for ALL of these:
+1. What they love
+2. What they are good at
+3. What the world needs, in their eyes
+4. What they can be or have been paid for
+5. What they want their life to mean
+
+RULES:
+- If all five are covered concretely, say it is enough. Do not ask just to ask.
+- If something is missing or vague, ask ONE question about the weakest area only.
+- Never repeat, rephrase, or circle back to a question already asked, including the follow ups listed below. Never ask about something they already answered, even implicitly.
+- Each question must open new ground: a different area, or a genuinely new angle they have not touched.
+- Build on their own words so it feels like a conversation, not a form.
+- Do not ask about trauma or sensitive topics.
+- ${NO_DASH}
+
+Follow up questions already asked:
+${asked}
+
+Everything they have answered:
+${answersText()}
+
+Reply ONLY in JSON, one of:
+{"enough":true}
+{"enough":false,"area":"which of the five is missing","question":{"text":"the question","hint":"one short sentence on why you are asking"}}`, 400);
+    const parsed = JSON.parse(raw);
+    hideLoading();
+    const q = parsed && !parsed.enough && parsed.question;
+    if (q && q.text && !tooSimilar(q.text)) {
+      followUpCount++;
+      allQuestions = [...allQuestions, { id: 'fq' + followUpCount, category: 'One more question', text: q.text, hint: q.hint || '' }];
+      $('quiz-section').style.display = 'block';
+      renderQuestion(currentIndex);
+      return;
+    }
+  } catch (e) {
+    hideLoading();
+  }
+  await generateResult();
+}
+
+/* ---------- free result ---------- */
+async function generateResult() {
+  showLoading();
+  try {
+    const raw = await callClaude(`You are an honest, direct guide. Speak like a friend who tells the truth with respect. Natural English, no cliches.
+RULES: Base everything only on what the person wrote. Present unclear things as possibilities not certainties. ${NO_DASH}
+
+Person's answers:
+${answersText()}
+
+Reply ONLY in JSON:
+{
+  "ikigai_central": "Short phrase max 10 words describing their ikigai, sentence case",
+  "subtitle": "One sentence starting with 'Where your' that names the four threads converging.",
+  "words": {"passion":"one word","vocation":"one word","mission":"one word","profession":"one word"},
+  "what_you_love": "2 specific sentences based on THEIR answers.",
+  "what_you_are_good_at": "2 sentences about their real strengths.",
+  "what_the_world_needs": "2 sentences about how their sensitivity connects with the world.",
+  "what_you_can_be_paid_for": "2 sentences about their real professional value."
+}`, 900);
+    freeData = JSON.parse(raw);
+  } catch (e) {
+    hideLoading();
+    if (IS_LOCAL) { toast('No backend locally. Showing demo content.'); freeData = DEMO.free; }
+    else { renderError(); return; }
+  }
+  hideLoading();
+  renderResult(freeData);
+}
+
+function renderError() {
+  $('result-section').style.display = 'block';
+  $('ikigai-phrase').textContent = 'Something went wrong on our side';
+  $('result-sub').textContent = 'Your answers still have value. Read them slowly. You can refresh and try again in a moment.';
+  document.querySelector('.rh-cards').style.display = 'none';
+  $('result-cards').innerHTML = '';
+  $('paywall').style.display = 'none';
+  document.querySelector('.dim-head').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderResult(r) {
+  $('result-section').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  $('ikigai-phrase').textContent = r.ikigai_central || '';
+  $('result-sub').textContent = r.subtitle || '';
+  const w = r.words || {};
+  const cap = v => v ? v.charAt(0).toUpperCase() + v.slice(1) : '';
+  ['passion','vocation','mission','profession'].forEach(k => { $('rh-' + k).textContent = cap(w[k]); });
+  document.querySelector('.rh-cards').style.visibility = ['passion','vocation','mission','profession'].every(k => w[k]) ? '' : 'hidden';
+  const cards = [
+    { label:'What you love', title:'Passion', text:r.what_you_love },
+    { label:'What you are good at', title:'Vocation', text:r.what_you_are_good_at },
+    { label:'What the world needs', title:'Mission', text:r.what_the_world_needs },
+    { label:'What you can be paid for', title:'Profession', text:r.what_you_can_be_paid_for }
+  ];
+  $('result-cards').innerHTML = cards.map(c => `
+    <article class="card">
+      <div class="card-label">${esc(c.label)}</div>
+      <h3 class="card-title">${esc(c.title)}</h3>
+      <p class="card-text">${esc(c.text)}</p>
+    </article>`).join('');
+}
+
+/* ============================================================
+   PAYWALL
+   Stripe is NOT wired yet. startCheckout() is the single seam:
+   swap its body for a real Checkout redirect, and call
+   deliverFullReport() only from the success return.
+   ============================================================ */
+async function unlockReport() {
+  const btn = $('unlock-btn');
+  const err = $('paywall-err');
+  err.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Preparing your analysis';
+  try {
+    await startCheckout();
+    await deliverFullReport();
+  } catch (e) {
+    err.textContent = 'We could not build your full analysis right now. You have not been charged. Try again in a moment.';
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Reveal my full analysis';
+  }
+}
+
+async function startCheckout() {
+  // TODO Stripe: replace with
+  //   const r = await fetch('/api/create-checkout', {method:'POST'});
+  //   window.location = (await r.json()).url;
+  // and call deliverFullReport() on the success redirect instead.
+  return Promise.resolve();
+}
+
+async function deliverFullReport() {
+  showLoading(['Writing your deep analysis','Reading between your answers','Connecting it to the Ikigai tradition','Building your roadmap']);
+  try {
+    paidData = await generatePaidResult();
+  } catch (e) {
+    hideLoading();
+    if (IS_LOCAL) { toast('No backend locally. Showing demo content.'); paidData = DEMO.paid; }
+    else throw e;
+  }
+  hideLoading();
+  $('result-section').style.display = 'block';
+  renderPaid(paidData);
+  isUnlocked = true;
+  $('paywall').style.display = 'none';
+  $('paid').classList.add('revealed');
+  requestAnimationFrame(() => {
+    drawSpine();
+    $('paid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+/* The paid analysis is written in three parts that run at the same time.
+   One single request takes about 40 seconds, and the hosting provider cuts
+   function calls at about 30, so each part must stay well under that.
+   Every part sees all the answers, so the voice stays consistent. */
+function paidPreamble() {
+  return `You are writing part of a personal, editorial analysis for someone who just completed an Ikigai discovery tool. This is the paid result, so it must feel like a letter from someone who truly understands them, not a report.
+
+VOICE RULES:
+- Flow like conversation, never like an academic paper
+- Weave in real psychology, Jungian ideas, and coaching insight naturally, never as citations
+- Connect emotionally. Be specific to THEM
+- Do NOT invent facts. Base everything only on their answers
+- No motivational cliches, no flattery
+- ${NO_DASH}
+
+Their answers:
+${answersText()}
+
+Their Ikigai phrase: "${(freeData && freeData.ikigai_central) || ''}"
+`;
+}
+const CHAPTER_SHAPE = '{"heading":"one or two sentences, the thesis of this chapter","words":["3 to 5 short words or phrases they actually used"],"paragraphs":["para 1","para 2","para 3"],"quote":"one pull quote, placed between paragraph 2 and 3"}';
+
+function chaptersPrompt(a, b) {
+  return paidPreamble() + `
+Write ONLY the chapters for ${a} and ${b}. Passion is what they love, vocation is what they are good at, mission is what the world needs, profession is what they can be paid for.
+
+Reply ONLY in JSON with this exact shape:
+{"${a}": ${CHAPTER_SHAPE}, "${b}": ${CHAPTER_SHAPE}}`;
+}
+
+function connectsPrompt() {
+  return paidPreamble() + `
+Write ONLY the closing synthesis and the roadmap.
+
+Reply ONLY in JSON with this exact shape:
+{
+  "connects": {
+    "opening":"one or two sentences that set up the single thread running through every answer, e.g. There is one word that runs through every answer you gave. You probably cannot see it because you are inside it.",
+    "word":"ONE word naming that thread, capitalized",
+    "definition":"one short sentence defining the word as it applies to them",
+    "note":"one or two sentences on what this reveals about what they are drawn to",
+    "evidence":[{"who":"a person or thing from their answers, e.g. a person they admire, or Your mother","lead":"the sentence up to the two highlighted ideas, e.g. Your mother's love is congruence between","a":"first idea, one or two words","b":"second idea, one or two words"}],
+    "tension":"one paragraph naming where they are not yet aligned and why that discomfort points forward",
+    "tradition_heading":"one or two sentences connecting their result to the Japanese Ikigai tradition, not the westernized four circles version",
+    "tradition":["para 1","para 2","para 3"],
+    "terms":[{"japanese":"Japanese script of one Ikigai related concept used in the tradition paragraphs","meaning":"its meaning in 2 to 5 words"}],
+    "question":"ONE powerful closing question addressed to them"
+  },
+  "next_steps": [
+    {"when":"This week","title":"...","detail":"2 to 3 sentences referencing their answers"},
+    {"when":"Week 1","title":"...","detail":"..."},
+    {"when":"Weeks 2 to 4","title":"...","detail":"..."},
+    {"when":"One weekend","title":"...","detail":"..."},
+    {"when":"Day 90","title":"...","detail":"..."}
+  ]
+}
+Give 3 to 5 evidence rows, each drawn from their own answers, and 1 or 2 terms.`;
+}
+
+// One retry per part, so a single slow or malformed reply does not sink the whole report.
+async function paidPart(prompt, maxTokens) {
+  for (let attempt = 0; ; attempt++) {
+    try { return JSON.parse(await callClaude(prompt, maxTokens)); }
+    catch (e) { if (attempt >= 1) throw e; }
+  }
+}
+
+async function generatePaidResult() {
+  const [ab, cd, rest] = await Promise.all([
+    paidPart(chaptersPrompt('passion', 'vocation'), 2000),
+    paidPart(chaptersPrompt('mission', 'profession'), 2000),
+    paidPart(connectsPrompt(), 2200)
+  ]);
+  return { deep: { ...ab, ...cd }, connects: rest.connects, next_steps: rest.next_steps };
+}
+
+/* ---------- render paid ---------- */
+const CHAPTERS = [
+  { key:'passion',    num:'01', tag:'What you love',            dimension:'Passion' },
+  { key:'vocation',   num:'02', tag:'What you are good at',     dimension:'Vocation' },
+  { key:'mission',    num:'03', tag:'What the world needs',     dimension:'Mission' },
+  { key:'profession', num:'04', tag:'What you can be paid for', dimension:'Profession' }
+];
+
+function proseHTML(d) {
+  const paras = (d.paragraphs || []).map(p => `<p>${esc(p)}</p>`);
+  if (d.quote && paras.length > 2) paras.splice(2, 0, `<blockquote>${esc(d.quote)}</blockquote>`);
+  else if (d.quote) paras.push(`<blockquote>${esc(d.quote)}</blockquote>`);
+  return paras.join('');
+}
+
+function renderPaid(d) {
+  const deep = d.deep || {};
+  $('chapters').innerHTML = CHAPTERS.map(c => {
+    const ch = deep[c.key] || {};
+    return `
+    <section class="chapter ${c.key}">
+      <div class="wrap opener">
+        <div class="figure">
+          <div class="blob"></div>
+          <div class="numblock">
+            <span class="num">${c.num}</span>
+            <div class="tag"><i></i>${esc(c.tag)}</div>
+          </div>
+        </div>
+        <div class="intro">
+          <span class="dimension">${esc(c.dimension)}</span>
+          <h2>${esc(ch.heading)}</h2>
+        </div>
+      </div>
+      <div class="wrap reading">
+        <aside class="rail">
+          <div class="rule"></div>
+          <span class="rail-label">In your words</span>
+          <div class="words">${(ch.words || []).map(w => `<span>${esc(w)}</span>`).join('')}</div>
+        </aside>
+        <div class="prose">${proseHTML(ch)}</div>
+      </div>
+    </section>`;
+  }).join('');
+
+  const cx = d.connects || {};
+  $('cx-opening').textContent = cx.opening || '';
+  $('cx-word').textContent = cx.word || '';
+  $('cx-def').textContent = cx.definition || '';
+  $('cx-note').textContent = cx.note || '';
+  $('cx-evidence').innerHTML = (cx.evidence || []).map(e => `
+    <div class="cx-row"><span class="cx-who">${esc(e.who)}</span>
+      <span class="cx-line">${esc(e.lead)} <em>${esc(e.a)}</em> and <em>${esc(e.b)}</em></span></div>`).join('');
+  $('cx-tension').textContent = cx.tension || '';
+  $('cx-trad-h').textContent = cx.tradition_heading || '';
+  $('cx-trad').innerHTML = (cx.tradition || []).map(p => `<p>${esc(p)}</p>`).join('');
+  $('cx-terms').innerHTML = [{ japanese:'生き甲斐', meaning:'a reason for being' }]
+    .concat((cx.terms || []).filter(t => t.japanese && t.japanese !== '生き甲斐'))
+    .map(t => `<span>${esc(t.japanese)} · ${esc(t.meaning)}</span>`).join('');
+  $('cx-question').textContent = cx.question || '';
+
+  $('steps').innerHTML = (d.next_steps || []).map((s, i) => `
+    <li class="step"><span class="ball"></span>
+      <div class="body">
+        <div><span class="num">${String(i + 1).padStart(2, '0')}</span><span class="when">${esc(s.when)}</span></div>
+        <h3>${esc(s.title)}</h3>
+        <p>${esc(s.detail)}</p>
+      </div>
+    </li>`).join('');
+}
+
+/* ---------- roadmap spine ---------- */
+function drawSpine() {
+  const ol = $('steps'), svg = $('spine'), path = $('spinePath');
+  if (!ol || !ol.children.length) return;
+  const rows = [...ol.children];
+  const box = ol.getBoundingClientRect();
+  const top = box.top, H = box.height, PAD = 300;
+  const Y = rows.map(li => li.getBoundingClientRect().top - top + 40);
+  const X = rows.map((_, i) => i % 2 === 0 ? 46 : 54);
+  let d = `M ${X[0]} ${-PAD} L ${X[0]} ${Y[0]}`;
+  for (let i = 1; i < Y.length; i++) {
+    const my = (Y[i - 1] + Y[i]) / 2;
+    d += ` C ${X[i - 1]} ${my}, ${X[i]} ${my}, ${X[i]} ${Y[i]}`;
+  }
+  d += ` L ${X[Y.length - 1]} ${H}`;
+  svg.setAttribute('viewBox', `0 ${-PAD} 100 ${H + PAD}`);
+  svg.setAttribute('height', H + PAD);
+  path.setAttribute('d', d);
+}
+new ResizeObserver(() => { if (isUnlocked) drawSpine(); }).observe(document.documentElement);
+window.addEventListener('resize', () => { if (isUnlocked) drawSpine(); });
+if (document.fonts) document.fonts.ready.then(() => { if (isUnlocked) drawSpine(); });
+
+/* ---------- download ---------- */
+function downloadPDF() {
+  toast('Choose "Save as PDF" in the print dialog');
+  setTimeout(() => window.print(), 400);
+}
+
+/* ---------- share ---------- */
+function shareCaption() {
+  const phrase = freeData && freeData.ikigai_central ? freeData.ikigai_central : null;
+  return phrase
+    ? `I just found my Ikigai:\n\n"${phrase}"\n\nIf you want to find yours: https://foundbyikigai.com`
+    : `If you feel like you are running on autopilot and want clarity on your path, this helped me: https://foundbyikigai.com`;
+}
+
+async function shareTo(platform) {
+  const text = shareCaption();
+  if (navigator.share) {
+    try { await navigator.share({ title: 'Found by Ikigai', text, url: 'https://foundbyikigai.com' }); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  try {
+    await navigator.clipboard.writeText(text);
+    toast('Caption copied. Paste it in ' + (platform === 'tiktok' ? 'TikTok' : 'Instagram') + '.', 4000);
+  } catch (e) {
+    toast('Copy this: ' + text.split('\n')[0], 4000);
+  }
+  setTimeout(() => {
+    window.open(platform === 'tiktok' ? 'https://www.tiktok.com/upload' : 'https://www.instagram.com/', '_blank', 'noopener');
+  }, 900);
+}
+
+/* ============================================================
+   DEMO CONTENT
+   Only used on localhost when the /api/claude function is not reachable,
+   so the full flow can be reviewed without a backend.
+   In production a failed call shows a real error instead.
+   ============================================================ */
+const DEMO = {
+  free: {
+    ikigai_central: 'Inspire others to live with intention through creating',
+    subtitle: 'Where your passion for creating, your gift for connection, your frustration with autopilot living, and your professional skills all converge.',
+    words: { passion:'Creating', vocation:'Empathy', mission:'Authenticity', profession:'Marketing' },
+    what_you_love: 'You light up when you are creating, moving, and exploring the outdoors. The word "create" came out almost by accident, which usually means it is deeply real.',
+    what_you_are_good_at: 'Empathy, trust, and discipline in one person is a rare combination. People feel safe around you and that opens doors most technical skills cannot.',
+    what_the_world_needs: 'You see people living on autopilot and it bothers you deeply. That frustration is not random; it points directly to where your energy wants to go.',
+    what_you_can_be_paid_for: 'Marketing, strategy, content, and building tools with technology. These are your vehicles, not your destination.'
+  },
+  paid: {
+    deep: {
+      passion: {
+        heading: 'You are not just someone who likes staying active. You are someone who needs to feel alive.',
+        words: ['Sports','Photography','Birdwatching','Travel','Creating'],
+        paragraphs: [
+          'There is a reason you listed sports, photography, birdwatching, travel, and creating in the same breath. On the surface they look like separate hobbies. But underneath, they share something: every one of them demands your full presence. You cannot photograph a bird while thinking about tomorrow’s meeting. You cannot lift a heavy weight while mentally somewhere else. These activities are not escapes from your life. They are the moments when you are most in it.',
+          'People who are drawn to this kind of engagement tend to have a deep, often unspoken, need for doing things because the doing itself is the reward. Not for the post. Not for the result. For the feeling of being completely absorbed. You have probably had moments training or shooting photos where an hour felt like ten minutes. That is not a coincidence. That is your nervous system telling you: this is where you belong.',
+          'When something is so close to who we are, we often struggle to name it. It feels too obvious, too simple, too much like breathing to be important. But that is precisely what makes it significant. The things you have to convince yourself to care about are hobbies. The things you cannot stop doing, even when nobody is watching, even when there is no reward: those are the things that matter. Creating, for you, falls in that second category. The question is not whether you are creative. The question is what happens when you finally take that seriously.'
+        ],
+        quote: 'You said "I think I like creating" almost as a throwaway line. But that hesitation is the most honest thing in all your answers.'
+      },
+      vocation: {
+        heading: 'Your real strength is not a skill. It is how you make people feel.',
+        words: ['Empathetic','Trustworthy','Noble','Disciplined','Physically intelligent'],
+        paragraphs: [
+          'You described yourself as empathetic, trustworthy, noble, creative, disciplined, and physically intelligent. That is a striking list, and what makes it striking is not any single trait but the combination. Most people who are deeply empathetic struggle with discipline. Most people who are highly disciplined come across as rigid. You somehow hold both, and that combination is rarer than you probably realize.',
+          'Think about the people you admire. Every single one of them embodies this same duality. They are warm and relentless at the same time. Loving and uncompromising. That is not a random pattern of admiration. We are drawn to people who mirror what is already inside us, especially the parts we have not fully expressed yet.',
+          'Here is something worth sitting with, though. People with high empathy and a strong desire to be seen as trustworthy sometimes develop a pattern that is invisible to them but obvious to everyone else: they prioritize other people’s needs so consistently that their own creative impulses get pushed to later. Later becomes next month. Next month becomes next year. Your discipline proves you can commit to hard things. The question is whether you are willing to commit to yourself with the same intensity you bring to your training and your work.'
+        ],
+        quote: 'The people we admire most are never random. They are mirrors of the self we are still becoming.'
+      },
+      mission: {
+        heading: 'Your frustration with the world is not anger. It is a calling you have not answered yet.',
+        words: ['Dishonesty','Access to education','Autopilot living'],
+        paragraphs: [
+          'You said three things bother you: dishonest people, lack of access to education, and people living on autopilot. At first glance these seem unrelated. But look closer. Dishonesty is when someone is not being real with others. Poor education access is when systems prevent people from becoming who they could be. Autopilot living is when someone is not being real with themselves. All three are variations of the same wound: inauthenticity.',
+          'What is revealing is how you framed it. You did not say it makes you angry. You said it makes you sad. That distinction matters more than you might think. People driven by anger want to correct the world. People driven by sadness want to heal it. Your mission is not to shake people and tell them to wake up. It is to live so intentionally that your example becomes the invitation.',
+          'The things that frustrate us most in the world are often the things we are most called to transform. Not because we have all the answers, but because we feel the gap between what is and what could be with unusual clarity. Your sensitivity to autopilot living is not a weakness or a complaint. It is the compass pointing to your most meaningful work.'
+        ],
+        quote: 'You do not want to fix people. You want to show them, by how you live, that another way is possible.'
+      },
+      profession: {
+        heading: 'Your professional value is not in what you know. It is in what you combine.',
+        words: ['Campaigns','Design','Editing','Strategy','Warmth'],
+        paragraphs: [
+          'You described your professional skills almost apologetically: you can execute every aspect of a marketing campaign, maybe not at the same level as a specialist designer or editor, but you manage. Reading that, it is clear you are evaluating yourself on individual skills when your actual value lies in the integration of all of them with something most professionals lack entirely: genuine human warmth.',
+          'In a market increasingly flooded with technically competent people, the ones who build lasting careers are not the most skilled. They are the most trusted. Trust is not a skill you learn in a course. It comes from who you are. And based on everything you shared, who you are is someone people naturally open up to, believe in, and want to work with.',
+          'The shift that changes everything: right now your skills serve other people’s visions. There is nothing wrong with that. But your Ikigai is pointing toward something different. Not abandoning your skills, but redirecting them. The same ability that helps you build a client’s campaign can help you build your own platform. The same empathy that helps you understand a client’s customer can help you connect with your own audience. The tools are the same. The direction is what changes.'
+        ],
+        quote: 'Nobody will ever pay you for Photoshop skills. They will pay you because you understand what they need before they can articulate it, and you know how to build it.'
+      }
+    },
+    connects: {
+      opening: 'There is one word that runs through every answer you gave. You probably cannot see it because you are inside it.',
+      word: 'Congruence',
+      definition: 'Living in alignment with who you actually are.',
+      note: 'You are not drawn to success. You are drawn to wholeness, to people who are the same person in private as they are in public.',
+      evidence: [
+        { who:'Ronaldo', lead:'Ronaldo\u2019s discipline is congruence between', a:'ambition', b:'action' },
+        { who:'Hormozi', lead:'Hormozi\u2019s energy is congruence between', a:'intelligence', b:'output' },
+        { who:'Hinman', lead:'Hinman\u2019s lifestyle is congruence between', a:'values', b:'daily choices' },
+        { who:'Your father', lead:'Your father\u2019s sacrifice is congruence between', a:'love', b:'behavior' },
+        { who:'Your mother', lead:'Your mother\u2019s love is congruence between', a:'feeling', b:'expression' }
+      ],
+      tension: 'Your professional self and your aspirational self are not yet fully aligned. That discomfort is not a problem to solve. It is a compass pointing forward, and it does not require you to blow up your life. Take the same skills, the same discipline, the same empathy you already have, and point some of that energy toward your own voice.',
+      tradition_heading: 'In the Japanese tradition, this would not be called a career plan. It would be called a way of being.',
+      tradition: [
+        'The original concept of Ikigai is not about finding the perfect intersection of four circles. It is about the small daily things that make life feel worth living. For you, that translates to something specific: the feeling of creating something honest and watching it resonate with another person. That is your Ikigai in its purest form. Not a product, not a brand, not a career move. A feeling.',
+        'What is interesting about your particular combination is that it mirrors a principle the Japanese call Kodawari: an uncompromising devotion to the craft of living well. Your discipline in training, your care in building things for clients, your frustration with people who live unconsciously. These are all expressions of the same instinct: a refusal to do things halfway.',
+        'In Japan, this quality is not seen as ambition. It is seen as respect. Respect for the work, for the people it serves, and for yourself. Your Ikigai does not need a perfect launch or a large audience to be real. It needs consistency and honesty. You already have it. You keep looking past it because you think it needs to be bigger.'
+      ],
+      terms: [{ japanese:'こだわり', meaning:'doing it properly' }],
+      question: 'If the people you admire most could see how you spend your average Tuesday, would they see someone living by the same values you admire in them?'
+    },
+    next_steps: [
+      { when:'This week', title:'Start your weekly practice', detail:'You said you like creating but you have not committed to it yet. Pick one format: writing, photography, or short video. Publish something once a week for 8 weeks. Do not optimize. Do not strategize. Just document what you are thinking, learning, or experiencing. Your marketing brain will want to make it perfect. Resist that.' },
+      { when:'Week 1', title:'Audit your congruence', detail:'Spend 30 minutes this week writing down how you actually spend your time versus how you want to spend it. You admire people who live with discipline and intention. Map where your own daily actions align with that, and where they do not. No judgment, just clarity.' },
+      { when:'Weeks 2 to 4', title:'Have three real conversations', detail:'You mentioned empathy and connection as core strengths. Use them intentionally. Reach out to three people whose path you find interesting and ask them one honest question: what made you start? Not for networking. Not for advice. For perspective.' },
+      { when:'One weekend', title:'Build one thing that is yours', detail:'You know how to build tools, automate systems, and create content for other people. Take one weekend and build something small that represents your own perspective. It does not matter what it is. What matters is that it has your name on it and it reflects what you actually think.' },
+      { when:'Day 90', title:'Revisit this in 90 days', detail:'Save this result. Put a reminder for 90 days from now. Retake the test. Compare your answers. The shifts in language, priorities, and frustrations will tell you more about your growth than any productivity metric ever could.' }
+    ]
+  }
+};
+
+/* Preview shortcuts: ?demo=free jumps to the free result, ?demo=paid to the full one. */
+(function () {
+  const mode = new URLSearchParams(location.search).get('demo');
+  if (!mode) return;
+  freeData = DEMO.free;
+  paidData = DEMO.paid;
+  $('hero-section').style.display = 'none';
+  renderResult(freeData);
+  if (mode === 'paid') {
+    renderPaid(paidData);
+    isUnlocked = true;
+    $('paywall').style.display = 'none';
+    $('paid').classList.add('revealed');
+    requestAnimationFrame(drawSpine);
+  }
+})();
+</script>
+</body>
+</html>
