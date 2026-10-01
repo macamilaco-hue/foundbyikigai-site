@@ -1033,7 +1033,9 @@ function renderPaid(d) {
 
   const cx = d.connects || {};
   $('cx-opening').textContent = cx.opening || '';
-  $('cx-word').textContent = cx.word || '';
+  // The design sets the word as "Congruence"; the model sometimes returns "CONGRUENCE".
+  const word = String(cx.word || '').trim();
+  $('cx-word').textContent = word ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : '';
   $('cx-def').textContent = cx.definition || '';
   $('cx-note').textContent = cx.note || '';
   $('cx-evidence').innerHTML = (cx.evidence || []).map(e => `
