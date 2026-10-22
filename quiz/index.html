@@ -1,7 +1,14 @@
-<meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Found by Ikigai</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="icon" type="image/png" href="/ikigai-symbol.png">
+<link rel="apple-touch-icon" href="/ikigai-symbol.png">
+<!-- Paddle -->
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{overflow-x:hidden;scroll-behavior:smooth}
@@ -13,44 +20,39 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
   --merino:#F3EDDD;--armadillo:#4A453D;--olive:#8A8270;
   --nomad:#B7AFA0;--cornflower:#9CCBEC;--sage:#AEBBA0;
   --pearl:#E7E0D2;--border:rgba(74,69,61,0.14);
-  --nav-h:72px;
-  --ease-rh:cubic-bezier(.22,.61,.36,1);--ink:#2E2A25;
-  --cornflower-dd:#74B8E8;--muted-cx:#5C564C;--lime-cx:#CEEC56;--green-cx:#62734F;
+  --nav-h:72px;--serif:'Newsreader',Georgia,serif;--sans:'Inter',system-ui,sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);--ink:#2E2A25;
 }
 
 /* NAV */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  height:var(--nav-h);padding:0 max(24px,calc((100% - 1280px)/2));
+  height:var(--nav-h);padding:0 max(24px,calc((100% - 720px)/2));
   display:flex;align-items:center;
-  background:var(--cream);
-  transition:background .35s ease,box-shadow .35s ease;
+  background:transparent;
+  transition:background .35s ease,box-shadow .35s ease,backdrop-filter .35s ease;
 }
-.nav.scrolled{box-shadow:0 1px 0 rgba(0,0,0,0.05)}
-.nav-logo{display:flex;align-items:center;gap:8px}
-.nav-logo svg{width:22px;height:22px;flex-shrink:0}
-.nav-logo span{font-family:'Newsreader',serif;font-size:17px;font-weight:500;color:var(--zeus);letter-spacing:-.2px}
+.nav.scrolled{background:rgba(251,247,238,0.85);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(0,0,0,0.05)}
+.nav-logo{height:26px;display:block}
 
 .wrap{max-width:720px;margin:0 auto;padding:0 24px}
-.serif{font-family:'Newsreader',serif}
+.serif{font-family:var(--serif)}
 
 /* BUTTONS */
 .btn-lime{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
   background:var(--lime);color:var(--zeus);
-  font-family:'Inter',sans-serif;font-size:15px;font-weight:700;
+  font-family:var(--sans);font-size:15px;font-weight:700;
   padding:16px 32px;border:none;border-radius:40px;cursor:pointer;
   text-decoration:none;white-space:nowrap;
   transition:transform .25s ease,box-shadow .25s ease;
 }
 .btn-lime:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(227,254,85,0.9)}
-.btn-orange{background:var(--orange);color:var(--zeus);box-shadow:0 4px 24px rgba(255,156,52,0.4)}
-.btn-orange:hover{box-shadow:0 0 30px rgba(255,156,52,0.7)}
 
 .btn-wine{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
   background:var(--wine);color:var(--cream);
-  font-family:'Inter',sans-serif;font-size:15px;font-weight:700;
+  font-family:var(--sans);font-size:15px;font-weight:700;
   padding:16px 32px;border:none;border-radius:40px;cursor:pointer;
   text-decoration:none;white-space:nowrap;
   transition:transform .25s ease,box-shadow .25s ease;
@@ -60,7 +62,7 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
 .btn-outline{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   background:transparent;border:1.5px solid var(--border);color:var(--zeus);
-  font-family:'Inter',sans-serif;font-size:14px;font-weight:700;
+  font-family:var(--sans);font-size:14px;font-weight:700;
   padding:14px 26px;border-radius:40px;cursor:pointer;
   text-decoration:none;white-space:nowrap;transition:border-color .2s;
 }
@@ -69,29 +71,52 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
 .btn-ghost-wine{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   background:transparent;border:1.5px solid rgba(255,255,255,0.35);color:var(--cream);
-  font-family:'Inter',sans-serif;font-size:14px;font-weight:700;
+  font-family:var(--sans);font-size:14px;font-weight:700;
   padding:14px 26px;border-radius:40px;cursor:pointer;
   text-decoration:none;transition:border-color .2s;
 }
 .btn-ghost-wine:hover{border-color:#fff}
 
-.eyebrow{
-  font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--olive);
+.btn-cornflower{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--cornflower);color:var(--zeus);
+  font-family:var(--sans);font-size:15px;font-weight:700;
+  padding:16px 32px;border:none;border-radius:40px;cursor:pointer;
+  text-decoration:none;transition:transform .25s ease,box-shadow .25s ease;
 }
+.btn-cornflower:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(156,203,236,0.5)}
+
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--olive)}
 
 /* ═══════ HERO ═══════ */
 #hero-section{min-height:100vh;display:flex;align-items:center;padding-top:var(--nav-h)}
-.hero{padding:30px 0 30px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:0}
-.hero h1{font-family:'Newsreader',serif;font-size:clamp(44px,7vw,78px);font-weight:400;line-height:1.02;letter-spacing:-.02em;margin:24px 0 28px}
+.hero{padding:30px 0;text-align:center;display:flex;flex-direction:column;align-items:center}
+.hero h1{font-family:var(--serif);font-size:clamp(44px,7vw,78px);font-weight:400;line-height:1.02;letter-spacing:-.02em;margin:24px 0 28px}
 .hero-title{color:var(--zeus);transition:color .4s ease}
 .hero-sub{font-size:17px;font-weight:400;line-height:1.7;color:var(--armadillo);max-width:500px;margin:0 auto 28px}
-.hero-meta{margin-top:24px;display:flex;gap:28px;flex-wrap:wrap;justify-content:center;font-size:12px;color:var(--olive);font-weight:500;opacity:0;animation:heroTitleIn .5s cubic-bezier(.22,.61,.36,1) .9s forwards}
+.hero-meta{margin-top:24px;display:flex;gap:28px;flex-wrap:wrap;justify-content:center;font-size:12px;color:var(--olive);font-weight:500}
 .hero-meta span::before{content:'· ';color:var(--orange)}
+
+/* hero animation */
+.hero-anim{position:relative;width:100%;max-width:300px;margin:0 auto;aspect-ratio:500/430}
+.hero-svg{width:100%;height:auto;display:block}
+.hero-path{stroke-dasharray:500;stroke-dashoffset:500;animation:drawPath .5s var(--ease) forwards}
+.hero-path:nth-child(2){animation-delay:.02s}
+.hero-path:nth-child(3){animation-delay:.04s}
+.hero-path:nth-child(4){animation-delay:.06s}
+@keyframes drawPath{to{stroke-dashoffset:0}}
+
+.hero-dot{opacity:0}
+.hero-core{visibility:hidden;animation:coreIgnite .4s cubic-bezier(.3,1.5,.4,1) .4s forwards}
+@keyframes coreIgnite{from{r:0;visibility:visible}to{r:36;visibility:visible}}
+.hero-core-glow{visibility:hidden;animation:coreGlowIgnite .4s cubic-bezier(.3,1.5,.4,1) .4s forwards,corePulse 2.6s ease-in-out .8s infinite}
+@keyframes coreGlowIgnite{from{r:0;visibility:visible;opacity:0}to{r:52;visibility:visible;opacity:0.4}}
+@keyframes corePulse{0%,100%{r:52;opacity:0.35}50%{r:58;opacity:0.5}}
 
 /* ═══════ INTRO on WINE ═══════ */
 #intro-section{display:none;padding-top:var(--nav-h);background:var(--wine);color:var(--cream)}
 .intro-inner{padding:110px 0 80px}
-.intro-title{font-family:'Newsreader',serif;font-size:clamp(30px,3.8vw,46px);font-weight:400;line-height:1.14;letter-spacing:-.6px;margin:20px 0 36px;color:var(--cream)}
+.intro-title{font-family:var(--serif);font-size:clamp(30px,3.8vw,46px);font-weight:400;line-height:1.14;letter-spacing:-.6px;margin:20px 0 36px;color:var(--cream)}
 .intro-eyebrow{color:var(--lime)}
 .rules{display:flex;flex-direction:column;gap:12px;margin-bottom:44px}
 .rule{
@@ -100,7 +125,7 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
   transition:background .3s ease;
 }
 .rule:hover{background:rgba(255,255,255,0.1)}
-.rule-num{font-family:'Newsreader',serif;font-size:32px;font-weight:600;color:var(--lime);line-height:1;flex-shrink:0}
+.rule-num{font-family:var(--serif);font-size:32px;font-weight:600;color:var(--lime);line-height:1;flex-shrink:0}
 .rule-text{font-size:15px;line-height:1.7;color:var(--nomad);padding-top:4px}
 .rule-text strong{color:var(--cream);font-weight:600}
 
@@ -111,10 +136,10 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
 .progress-meta{display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--armadillo);margin-bottom:10px}
 .progress-track{height:3px;background:rgba(26,23,20,0.1);border-radius:2px}
 .progress-fill{height:100%;background:var(--orange);border-radius:2px;transition:width .6s ease}
-.question-block{animation:fadeUp .6s cubic-bezier(.22,.61,.36,1)}
+.question-block{animation:fadeUp .6s var(--ease)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 .q-category{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:20px}
-.q-text{font-family:'Newsreader',serif;font-size:clamp(26px,3.6vw,42px);font-weight:400;line-height:1.18;letter-spacing:-.5px;margin-bottom:16px;color:var(--zeus)}
+.q-text{font-family:var(--serif);font-size:clamp(26px,3.6vw,42px);font-weight:400;line-height:1.18;letter-spacing:-.5px;margin-bottom:16px;color:var(--zeus)}
 .q-hint{font-size:15px;line-height:1.7;color:var(--armadillo);margin-bottom:32px;max-width:560px}
 .q-input-wrap{position:relative;width:100%}
 .mic-btn{
@@ -135,7 +160,7 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
 .mic-status.show{opacity:1}
 .q-textarea{
   width:100%;background:#fff;border:1.5px solid rgba(74,69,61,0.12);border-radius:14px;
-  color:var(--zeus);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7;
+  color:var(--zeus);font-family:var(--sans);font-size:15px;line-height:1.7;
   padding:20px;resize:none;min-height:160px;outline:none;
   transition:border-color .2s,box-shadow .2s;
 }
@@ -150,358 +175,212 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
 }
 .loader-ring{width:44px;height:44px;border:3px solid rgba(255,255,255,0.15);border-top-color:var(--orange);border-radius:50%;animation:spin .9s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-family:'Newsreader',serif;font-size:22px;font-weight:400;color:var(--cream)}
+.loading-text{font-family:var(--serif);font-size:22px;font-weight:400;color:var(--cream)}
 .loading-sub{font-size:13px;color:var(--nomad)}
 
 /* ═══════ RESULT ═══════ */
-#result-section{display:none;padding-top:var(--nav-h)}
+#result-section{display:none}
 
-/* Diagram on merino band */
-.diagram-band{background:var(--merino);padding:56px 0}
-.ikigai-diagram{position:relative;width:100%;max-width:720px;margin:0 auto}
-.diagram-inner{position:relative;width:100%}
+/* Result hero with blobs */
+.res-hero{position:relative;min-height:100vh;display:flex;flex-direction:column;overflow:hidden;
+  background:radial-gradient(125% 105% at 80% 16%,#dce7e2 0%,#e7e6d6 34%,var(--merino) 66%,var(--cream) 100%)}
+.res-blobs{position:absolute;inset:0;z-index:0;pointer-events:none}
+.res-blob{position:absolute;left:50%;top:52%;width:400px;height:400px;margin:-200px 0 0 -200px;border-radius:50%;filter:blur(40px);opacity:.85;will-change:transform}
+.rb1{background:radial-gradient(closest-side,rgba(116,184,232,.62) 66%,rgba(116,184,232,0) 100%);animation:rb1c 3.4s var(--ease) both,rbr1 10s ease-in-out 3.4s infinite}
+.rb2{background:radial-gradient(closest-side,rgba(206,236,86,.58) 66%,rgba(206,236,86,0) 100%);animation:rb2c 3.4s var(--ease) .08s both,rbr2 11s ease-in-out 3.48s infinite}
+.rb3{background:radial-gradient(closest-side,rgba(255,150,50,.62) 66%,rgba(255,150,50,0) 100%);animation:rb3c 3.4s var(--ease) .16s both,rbr3 12s ease-in-out 3.56s infinite}
+.rb4{background:radial-gradient(closest-side,rgba(140,58,74,.62) 66%,rgba(140,58,74,0) 100%);animation:rb4c 3.4s var(--ease) .12s both,rbr4 11.5s ease-in-out 3.52s infinite}
+@keyframes rb1c{from{transform:translate(-360px,-175px)}to{transform:translate(-135px,-130px)}}
+@keyframes rb2c{from{transform:translate(360px,-175px)}to{transform:translate(135px,-130px)}}
+@keyframes rb3c{from{transform:translate(-360px,175px)}to{transform:translate(-135px,130px)}}
+@keyframes rb4c{from{transform:translate(360px,175px)}to{transform:translate(135px,130px)}}
+@keyframes rbr1{0%,100%{transform:translate(-135px,-130px) scale(1)}50%{transform:translate(-135px,-130px) scale(1.035)}}
+@keyframes rbr2{0%,100%{transform:translate(135px,-130px) scale(1)}50%{transform:translate(135px,-130px) scale(1.045)}}
+@keyframes rbr3{0%,100%{transform:translate(-135px,130px) scale(1)}50%{transform:translate(-135px,130px) scale(1.04)}}
+@keyframes rbr4{0%,100%{transform:translate(135px,130px) scale(1)}50%{transform:translate(135px,130px) scale(1.05)}}
 
-/* Cards on cream */
-.cards-section{padding:56px 0}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.card{
-  padding:26px;background:#fff;border:1px solid var(--border);border-radius:16px;
-  border-top:3px solid transparent;cursor:pointer;position:relative;
-  transition:box-shadow .3s ease,transform .3s ease;
-}
-.card:hover,.card:focus-visible{box-shadow:0 12px 40px rgba(74,69,61,0.07);transform:translateY(-2px)}
-.card:focus-visible{outline:2px solid var(--wine);outline-offset:2px}
-.card:nth-child(1){border-top-color:var(--orange)}
-.card:nth-child(2){border-top-color:var(--cornflower)}
-.card:nth-child(3){border-top-color:var(--wine)}
-.card:nth-child(4){border-top-color:var(--sage)}
-.card-label{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--olive);margin-bottom:6px}
-.card-title{font-family:'Newsreader',serif;font-size:22px;font-weight:500;margin-bottom:8px;line-height:1.15;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.card-arrow{font-size:15px;color:var(--olive);transition:transform .2s ease}
-.card:hover .card-arrow,.card:focus-visible .card-arrow{transform:translateX(3px)}
-.card-text{font-size:14px;color:var(--armadillo);line-height:1.7}
-
-/* ═══════ RESULT HERO (redesign) ═══════ */
-.rh{position:relative;min-height:100vh;display:flex;flex-direction:column;overflow:hidden;padding-top:var(--nav-h);
-  background:radial-gradient(125% 105% at 80% 16%,#dce7e2 0%,#e7e6d6 34%,var(--merino) 66%,var(--cream) 100%);}
-.rh-blobs{position:absolute;inset:0;z-index:0;pointer-events:none}
-.rh-blob{position:absolute;left:50%;top:52%;width:400px;height:400px;margin:-200px 0 0 -200px;border-radius:50%;filter:blur(40px);opacity:.85;will-change:translate,scale}
-.rh-b1{background:radial-gradient(closest-side,rgba(116,184,232,.62) 66%,rgba(116,184,232,0) 100%);animation:rhconv1 3.4s var(--ease-rh) both,rhbr1 10s ease-in-out 3.4s infinite}
-.rh-b2{background:radial-gradient(closest-side,rgba(206,236,86,.58) 66%,rgba(206,236,86,0) 100%);animation:rhconv2 3.4s var(--ease-rh) .08s both,rhbr2 11s ease-in-out 3.48s infinite}
-.rh-b3{background:radial-gradient(closest-side,rgba(255,150,50,.62) 66%,rgba(255,150,50,0) 100%);animation:rhconv3 3.4s var(--ease-rh) .16s both,rhbr3 12s ease-in-out 3.56s infinite}
-.rh-b4{background:radial-gradient(closest-side,rgba(140,58,74,.62) 66%,rgba(140,58,74,0) 100%);animation:rhconv4 3.4s var(--ease-rh) .12s both,rhbr4 11.5s ease-in-out 3.52s infinite}
-@keyframes rhconv1{from{translate:-360px -175px}to{translate:-85px -80px}}
-@keyframes rhconv2{from{translate:360px -175px}to{translate:85px -80px}}
-@keyframes rhconv3{from{translate:-360px 175px}to{translate:-85px 80px}}
-@keyframes rhconv4{from{translate:360px 175px}to{translate:85px 80px}}
-@keyframes rhbr1{0%,100%{scale:1}50%{scale:1.035}}
-@keyframes rhbr2{0%,100%{scale:1}50%{scale:1.045}}
-@keyframes rhbr3{0%,100%{scale:1}50%{scale:1.04}}
-@keyframes rhbr4{0%,100%{scale:1}50%{scale:1.05}}
-
-.rh-cards{position:absolute;left:50%;top:52%;z-index:3;pointer-events:none}
-.rh-card-pos{position:absolute;left:-90px;top:-32px}
-.rh-card{display:flex;flex-direction:column;gap:3px;padding:12px 18px 12px 16px;border-radius:12px;border-left:3px solid;
+/* floating cards */
+.res-cards{position:absolute;left:50%;top:52%;z-index:3;pointer-events:none}
+.rc-pos{position:absolute;left:-90px;top:-32px}
+.rc{display:flex;flex-direction:column;gap:3px;padding:12px 18px 12px 16px;border-radius:12px;border-left:3px solid;
   background:rgba(251,247,238,.85);box-shadow:0 12px 40px -18px rgba(26,23,20,.35);backdrop-filter:blur(14px)}
-.rh-card .lbl{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:var(--olive);font-weight:700}
-.rh-card .val{font-family:'Newsreader',serif;font-size:19px;font-weight:500;color:var(--zeus);white-space:nowrap}
-.rh-c1{rotate:-4deg;animation:rhcard1 3.4s var(--ease-rh) both}       .rh-c1 .rh-card{border-color:var(--cornflower);animation:rhfloat 10s ease-in-out 3.4s infinite}
-.rh-c2{rotate:3deg;animation:rhcard2 3.4s var(--ease-rh) .08s both}   .rh-c2 .rh-card{border-color:var(--sage);animation:rhfloat 11s ease-in-out 3.48s infinite}
-.rh-c3{rotate:2deg;animation:rhcard3 3.4s var(--ease-rh) .16s both}   .rh-c3 .rh-card{border-color:var(--orange);animation:rhfloat 12s ease-in-out 3.56s infinite}
-.rh-c4{rotate:-3deg;animation:rhcard4 3.4s var(--ease-rh) .12s both}  .rh-c4 .rh-card{border-color:var(--wine);animation:rhfloat 11.5s ease-in-out 3.52s infinite}
-@keyframes rhcard1{from{translate:-760px -380px}to{translate:-500px -250px}}
-@keyframes rhcard2{from{translate:760px -380px}to{translate:500px -250px}}
-@keyframes rhcard3{from{translate:-760px 380px}to{translate:-500px 235px}}
-@keyframes rhcard4{from{translate:760px 380px}to{translate:500px 235px}}
-@keyframes rhfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.rc .lbl{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:var(--olive);font-weight:700}
+.rc .val{font-family:var(--serif);font-size:19px;font-weight:500;color:var(--zeus);white-space:nowrap}
+.rc1{transform:rotate(-4deg);animation:rc1a 3.4s var(--ease) both} .rc1 .rc{border-color:var(--orange);animation:rcfloat 10s ease-in-out 3.4s infinite}
+.rc2{transform:rotate(3deg);animation:rc2a 3.4s var(--ease) .08s both} .rc2 .rc{border-color:var(--cornflower);animation:rcfloat 11s ease-in-out 3.48s infinite}
+.rc3{transform:rotate(2deg);animation:rc3a 3.4s var(--ease) .16s both} .rc3 .rc{border-color:var(--wine);animation:rcfloat 12s ease-in-out 3.56s infinite}
+.rc4{transform:rotate(-3deg);animation:rc4a 3.4s var(--ease) .12s both} .rc4 .rc{border-color:var(--sage);animation:rcfloat 11.5s ease-in-out 3.52s infinite}
+@keyframes rc1a{from{transform:rotate(-4deg) translate(-760px,-380px)}to{transform:rotate(-4deg) translate(-500px,-250px)}}
+@keyframes rc2a{from{transform:rotate(3deg) translate(760px,-380px)}to{transform:rotate(3deg) translate(500px,-250px)}}
+@keyframes rc3a{from{transform:rotate(2deg) translate(-760px,380px)}to{transform:rotate(2deg) translate(-500px,235px)}}
+@keyframes rc4a{from{transform:rotate(-3deg) translate(760px,380px)}to{transform:rotate(-3deg) translate(500px,235px)}}
+@keyframes rcfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
-.rh-copy{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px 80px;gap:30px}
-.rh-copy h1{max-width:1000px;font-family:'Newsreader',serif;font-weight:400;font-size:clamp(40px,6vw,84px);line-height:1.04;letter-spacing:-1.2px;text-wrap:balance;color:var(--zeus)}
-.rh-copy p{max-width:600px;font-size:17px;line-height:1.65;color:var(--armadillo);text-wrap:pretty}
+.res-copy{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px 80px;gap:30px}
+.res-copy h1{max-width:1000px;font-family:var(--serif);font-weight:400;font-size:clamp(44px,6.4vw,92px);line-height:1.04;letter-spacing:-1.2px;text-wrap:balance;color:var(--zeus)}
+.res-copy p{max-width:600px;font-size:17px;line-height:1.65;color:var(--armadillo);text-wrap:pretty}
 
-@media (prefers-reduced-motion:reduce){
-  .rh-blob,.rh-card-pos,.rh-card{animation:none!important}
-  .rh-b1{translate:-85px -80px}.rh-b2{translate:85px -80px}.rh-b3{translate:-85px 80px}.rh-b4{translate:85px 80px}
-  .rh-c1{translate:-500px -250px}.rh-c2{translate:500px -250px}.rh-c3{translate:-500px 235px}.rh-c4{translate:500px 235px}
-}
-@media (max-width:1100px){.rh-cards{display:none}.rh-blob{width:300px;height:300px;margin:-150px 0 0 -150px}}
+/* Result nav brand */
+.res-nav{position:relative;z-index:2;display:flex;align-items:center;padding:28px 48px}
+.brand{display:flex;align-items:center;gap:8px;color:var(--zeus);text-decoration:none}
+.brand svg{width:26px;height:26px;flex:none}
+.brand path{stroke:currentColor;stroke-width:.96;stroke-linecap:round;fill:none}
+.brand .core{fill:var(--orange)}
+.brand .wm{font-family:var(--serif);font-weight:500;font-size:19px;line-height:1}
+.brand .bsub{font-weight:500;font-size:10px;letter-spacing:.4px;color:var(--olive)}
 
-/* ═══════ DEEP DIVE CHAPTERS (redesign) ═══════ */
-.chapter{position:relative;overflow:hidden;border-top:1px solid rgba(26,23,20,.08);background:var(--cream)}
-.chapter:nth-of-type(even){background:var(--merino)}
-.dd-wrap{max-width:1200px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1fr;gap:64px}
-
-.dd-opener{padding-top:120px;padding-bottom:56px;align-items:end}
-.dd-figure{position:relative;height:420px}
-.dd-blob{position:absolute;left:40px;top:-40px;width:380px;height:380px;border-radius:50%;filter:blur(44px);opacity:.85;
-  background:radial-gradient(closest-side,rgba(var(--rgb),.62) 66%,rgba(var(--rgb),0) 100%);animation:ddbreathe var(--dur,10s) ease-in-out infinite}
-@keyframes ddbreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-.dd-numblock{position:absolute;left:0;bottom:0;display:flex;flex-direction:column;gap:10px}
-.dd-num{font-family:'Newsreader',serif;font-size:220px;line-height:.8;letter-spacing:-.05em;font-weight:400}
-.dd-tag{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;color:var(--olive)}
-.dd-tag i{width:8px;height:8px;border-radius:50%;background:var(--c)}
-.dd-intro{display:flex;flex-direction:column;gap:22px;padding-bottom:12px}
-.dd-dimension{font-family:'Newsreader',serif;font-style:italic;font-size:22px;color:var(--olive)}
-.chapter h2{font-family:'Newsreader',serif;font-weight:400;font-size:52px;line-height:1.08;letter-spacing:-.8px;text-wrap:balance}
-
-.dd-reading{padding-bottom:128px}
-.dd-rail{display:flex;flex-direction:column;gap:14px;align-self:start;position:sticky;top:96px}
-.dd-rule{width:48px;height:3px;border-radius:2px;background:var(--c)}
-.dd-rail-label{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--olive)}
-.dd-words{display:flex;flex-wrap:wrap;gap:8px}
-.dd-words span{font-family:'Newsreader',serif;font-size:17px;padding:6px 14px;border-radius:40px;border:1px solid rgba(26,23,20,.14)}
-.dd-prose{display:flex;flex-direction:column;gap:28px;font-family:'Newsreader',serif;font-size:21px;line-height:1.6;color:var(--ink);text-wrap:pretty}
-.chapter blockquote{margin:16px 0;padding:28px 0 28px 28px;border-left:3px solid var(--c);font-size:30px;line-height:1.3;letter-spacing:-.3px;font-style:italic;color:var(--zeus);text-wrap:balance}
-
-.passion{--c:var(--orange);--rgb:255,150,50;--dur:10s}
-.vocation{--c:var(--cornflower-dd);--rgb:116,184,232;--dur:11s}
-.mission{--c:var(--wine);--rgb:140,58,74;--dur:12s}
-.profession{--c:var(--sage);--rgb:206,236,86;--dur:13s}
-
-@media (max-width:900px){
-  .dd-wrap{grid-template-columns:1fr;gap:32px}
-  .dd-opener{padding-top:72px}
-  .dd-figure{height:300px}.dd-num{font-size:150px}.dd-blob{width:280px;height:280px;left:0}
-  .chapter h2{font-size:36px}
-  .dd-rail{position:static}
-  .dd-prose{font-size:19px}.chapter blockquote{font-size:24px}
-}
-@media (prefers-reduced-motion:reduce){.dd-blob{animation:none}}
-
-/* ═══════ WHERE IT ALL CONNECTS (redesign) ═══════ */
-.cx{position:relative;background:var(--cream);color:var(--zeus);font-family:'Inter',sans-serif;border-top:1px solid rgba(26,23,20,.08);overflow-x:clip}
-.cx-kanji{position:absolute;right:-40px;top:520px;font-family:'Newsreader',serif;font-size:380px;line-height:.82;writing-mode:vertical-rl;color:rgba(26,23,20,.045);pointer-events:none;user-select:none}
-.cx-wrap{position:relative;max-width:1280px;margin:0 auto;padding:128px 48px 132px;display:flex;flex-direction:column;gap:88px}
-
-.cx-open{display:flex;flex-direction:column;align-items:center;text-align:center;gap:28px}
-.cx-eyebrow{font-size:13px;letter-spacing:3.2px;text-transform:uppercase;font-weight:700;color:var(--green-cx)}
-.cx-h2{max-width:920px;font-family:'Newsreader',serif;font-weight:400;font-size:52px;line-height:1.1;letter-spacing:-.8px;text-wrap:balance}
-
-.cx-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1fr);gap:40px;align-items:start}
-.cx-word{position:sticky;top:112px;display:flex;flex-direction:column;gap:18px}
-.cx-word-label{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;color:var(--olive)}
-.cx-word-text{font-family:'Newsreader',serif;font-weight:400;font-size:clamp(56px,7vw,104px);line-height:.92;letter-spacing:-4px}
-.cx-bar{height:12px;width:100%;background:var(--lime-cx);transform-origin:left;animation:cxgrow 1.1s cubic-bezier(.22,.61,.36,1) .2s both}
-.cx-def{font-family:'Newsreader',serif;font-style:italic;font-size:22px;line-height:1.4;color:var(--muted-cx)}
-.cx-note{margin-top:12px;font-size:16px;line-height:1.7;color:var(--muted-cx);text-wrap:pretty}
-@keyframes cxgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-
-.cx-evidence-panel{border-left:1px solid rgba(26,23,20,.14);padding-left:40px}
-.cx-list-head{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--olive);padding-bottom:14px;border-bottom:1px solid rgba(26,23,20,.2)}
-.cx-row{display:flex;flex-direction:column;gap:6px;padding:24px 0;border-bottom:1px solid rgba(26,23,20,.1)}
-.cx-who{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;font-weight:700;color:var(--olive)}
-.cx-line{font-family:'Newsreader',serif;font-size:24px;line-height:1.35}
-.cx-line em{font-style:normal;box-shadow:inset 0 -8px 0 rgba(206,236,86,.7)}
-.cx-tension-label{margin-top:40px;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--olive)}
-.cx-tension{margin-top:14px;padding:26px 28px;background:rgba(26,23,20,.035);border-left:3px solid var(--lime-cx);border-radius:0 12px 12px 0;font-family:'Newsreader',serif;font-size:20px;line-height:1.6;color:var(--ink);text-wrap:pretty}
-
-.cx-trad{display:flex;flex-direction:column;gap:36px;padding-top:64px;border-top:1px solid rgba(26,23,20,.2)}
-.cx-trad-head{display:flex;flex-direction:column;gap:14px}
-.cx-trad-label{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;color:var(--olive)}
-.cx-h3{max-width:860px;font-family:'Newsreader',serif;font-weight:400;font-size:36px;line-height:1.16;letter-spacing:-.5px;text-wrap:balance}
-.cx-cols{columns:2;column-gap:72px;column-rule:1px solid rgba(26,23,20,.14);font-family:'Newsreader',serif;font-size:18px;line-height:1.68;color:var(--ink);text-align:justify;hyphens:auto;text-wrap:pretty}
-.cx-cols p{margin:0 0 22px}.cx-cols p:last-child{margin:0}
-.cx-cols p:first-child::first-letter{float:left;font-size:72px;line-height:.78;padding:6px 12px 0 0;color:var(--zeus)}
-.cx-terms{display:flex;gap:36px;flex-wrap:wrap;font-size:11px;letter-spacing:1.8px;text-transform:uppercase;font-weight:700;color:var(--olive)}
-
-.cx-q{
-  padding:88px 24px 24px;margin-top:16px;border-top:1px solid rgba(26,23,20,.2);
-  display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;
-  position:relative;overflow:hidden;
-}
-.cx-q-blob{
-  position:absolute;left:50%;top:-40px;width:520px;height:340px;margin-left:-260px;
-  background:radial-gradient(closest-side,rgba(255,150,50,.16) 0%,rgba(255,150,50,0) 70%),
-             radial-gradient(closest-side,rgba(116,184,232,.14) 0%,rgba(116,184,232,0) 70%) 70% 30%/60% 60% no-repeat,
-             radial-gradient(closest-side,rgba(206,236,86,.14) 0%,rgba(206,236,86,0) 70%) 30% 70%/60% 60% no-repeat;
-  filter:blur(50px);pointer-events:none;z-index:0;
-}
-.cx-q-mark{position:relative;z-index:1;font-family:'Newsreader',serif;font-size:120px;line-height:1;color:var(--green-cx);opacity:.3}
-.cx-q-label{position:relative;z-index:1;font-size:12px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;color:var(--olive);margin-top:-28px}
-.cx-q-text{position:relative;z-index:1;max-width:880px;margin-top:20px;font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:clamp(28px,4vw,46px);line-height:1.28;letter-spacing:-.7px;text-wrap:balance;color:var(--zeus)}
-
-@media (max-width:900px){
-  .cx-wrap{padding:80px 24px 96px;gap:64px}
-  .cx-h2{font-size:36px}.cx-h3{font-size:28px}
-  .cx-grid{grid-template-columns:1fr;gap:40px}.cx-word{position:static}
-  .cx-evidence-panel{border-left:none;padding-left:0}
-  .cx-cols{columns:1;text-align:left}
-  .cx-q-text{font-size:30px}.cx-kanji{display:none}
-}
-@media (prefers-reduced-motion:reduce){.cx-bar{animation:none}}
-
-/* ═══════ ROADMAP (redesign) ═══════ */
-.roadmap{position:relative;overflow:hidden;background:var(--wine);color:var(--cream)}
-.rm-wrap{position:relative;max-width:1280px;margin:0 auto;padding:120px 48px 140px}
-
-.rm-intro{display:grid;grid-template-columns:42% 1fr;gap:0 48px;align-items:start;margin-bottom:64px}
-.rm-intro-l{display:flex;flex-direction:column;gap:20px}
-.rm-eyebrow{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;color:var(--lime)}
-.rm-intro h2{font-family:'Newsreader',serif;font-weight:400;font-size:56px;line-height:1.04;letter-spacing:-1px;text-wrap:balance}
-.rm-intro-r{padding-left:16%;padding-top:44px}
-.rm-intro-r p{font-size:17px;line-height:1.65;color:rgba(251,247,238,.6);text-wrap:pretty;max-width:400px}
-
-.track{position:relative}
-.spine{position:absolute;inset:0;pointer-events:none}
-.spine svg{position:absolute;left:0;top:0;width:100%;overflow:visible}
-.ball{position:absolute;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;opacity:.55;filter:blur(22px);
-  animation:rmpop .8s cubic-bezier(.34,1.56,.64,1) both,rmdrift var(--dur,7s) ease-in-out var(--d2,1.3s) infinite}
-.steps{list-style:none;padding:0;position:relative;display:flex;flex-direction:column;gap:72px}
-.step{position:relative;display:flex;animation:rmrise .8s ease-out both}
-.step:nth-child(even){justify-content:flex-end}
-.step-body{width:42%;display:flex;flex-direction:column;gap:18px}
-.step-head{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
-.num{font-family:'Newsreader',serif;font-size:96px;line-height:.8;letter-spacing:-.05em;color:rgba(251,247,238,.35)}
-.when{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;font-weight:700;color:rgba(251,247,238,.45);white-space:nowrap}
-.step h3{font-family:'Newsreader',serif;font-weight:400;font-size:36px;line-height:1.1;letter-spacing:-.5px;color:rgba(251,247,238,.92);text-wrap:balance}
-.step p{font-size:16px;line-height:1.7;color:rgba(251,247,238,.55);text-wrap:pretty}
-
-@keyframes rmdraw{to{stroke-dashoffset:0}}
-@keyframes rmpop{from{opacity:0;transform:scale(.4)}to{opacity:.55;transform:scale(1)}}
-@keyframes rmrise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes rmdrift{0%,100%{translate:0 0;scale:1}50%{translate:var(--dx,10px) var(--dy,-14px);scale:1.2}}
-
-@media (max-width:900px){
-  .rm-wrap{padding:80px 24px 96px}
-  .rm-intro{grid-template-columns:1fr;gap:20px}.rm-intro-r{padding:0}.rm-intro h2{font-size:40px}
-}
-@media (max-width:640px){
-  .step-body{width:100%}.step:nth-child(even){justify-content:flex-start}
-  .num{font-size:72px}.step h3{font-size:28px}
-  .spine{display:none}
-}
-@media (prefers-reduced-motion:reduce){.ball,.step,.spine path{animation:none}}
-
-/* Share section (redesign): multi-platform */
-.share-section{padding:0 0 56px}
-.share-block{padding:56px 40px;background:var(--merino);border-radius:20px;text-align:center;position:relative;overflow:hidden}
-.share-h2{font-family:'Newsreader',serif;font-size:clamp(24px,3.6vw,38px);font-weight:400;color:var(--zeus);margin-bottom:12px;line-height:1.14;position:relative}
-.share-sub{font-size:15px;color:var(--armadillo);line-height:1.7;margin-bottom:36px;max-width:440px;margin-left:auto;margin-right:auto;position:relative}
-
-.share-icons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
-.share-icon-btn{
-  position:relative;width:52px;height:52px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(74,69,61,0.05);border:1.5px solid rgba(74,69,61,0.18);color:var(--zeus);
-  cursor:pointer;transition:background .2s ease,border-color .2s ease,transform .2s ease;
-}
-.share-icon-btn svg{width:20px;height:20px;flex-shrink:0}
-.share-icon-btn:hover,.share-icon-btn:focus-visible{background:rgba(74,69,61,0.1);border-color:rgba(74,69,61,0.4);transform:translateY(-3px)}
-.share-icon-btn:focus-visible{outline:2px solid var(--wine);outline-offset:2px}
-.share-icon-btn::after{
-  content:attr(data-tip);position:absolute;bottom:calc(100% + 10px);left:50%;
-  transform:translateX(-50%) translateY(4px);
-  font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:.03em;white-space:nowrap;
-  color:var(--cream);background:var(--zeus);padding:5px 10px;border-radius:6px;
-  opacity:0;pointer-events:none;transition:opacity .15s ease,transform .15s ease;
-}
-.share-icon-btn:hover::after,.share-icon-btn:focus-visible::after{opacity:1;transform:translateX(-50%) translateY(0)}
-
-.share-status{font-size:12px;color:var(--wine);opacity:0;transition:opacity .25s;position:relative;min-height:16px;margin-top:8px}
-.share-status.show{opacity:1}
-
-.share-download-block{margin-top:8px;padding-top:28px;border-top:1px solid rgba(74,69,61,.16);position:relative;display:flex;flex-direction:column;align-items:center;gap:18px}
-.share-download-note{font-size:13px;color:var(--olive)}
+/* Four dimensions */
+.four-dims{padding:0 24px clamp(88px,11vw,150px)}
+.four-dims .fd-inner{max-width:1040px;margin:0 auto}
+.four-dims .fd-header{display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;margin-bottom:clamp(48px,6vw,80px)}
+.four-dims .fd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(20px,3vw,28px)}
+.fd-card{background:#fff;border-radius:20px;border-top:4px solid;padding:clamp(28px,4vw,40px);display:flex;flex-direction:column;gap:10px;box-shadow:0 20px 50px rgba(74,69,61,0.08),0 1px 0 rgba(74,69,61,0.06)}
+.fd-card .fd-label{font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--olive)}
+.fd-card h3{font-family:var(--serif);font-size:32px;font-weight:500;line-height:1.1}
+.fd-card p{font-size:16px;line-height:1.75;color:var(--armadillo)}
 
 /* Paywall */
-.paywall-section{position:relative;padding:0 0 56px;overflow:hidden;
-  background:radial-gradient(120% 90% at 50% 0%,rgba(255,150,50,.07) 0%,rgba(116,184,232,.05) 45%,rgba(251,247,238,0) 75%)}
+.paywall{padding:0 24px 56px}
+.pw-box{background:#fff;border:2px solid var(--border);border-radius:20px;padding:48px 36px;text-align:center;position:relative;overflow:hidden;max-width:720px;margin:0 auto}
+.pw-box::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--wine),var(--orange),var(--cornflower),var(--sage))}
+.pw-lock{margin-bottom:20px;color:var(--wine)}
+.pw-title{font-family:var(--serif);font-size:clamp(24px,3.4vw,36px);font-weight:400;margin-bottom:10px;color:var(--zeus)}
+.pw-sub{font-size:16px;color:var(--armadillo);margin-bottom:28px}
+.pw-features{display:flex;flex-direction:column;gap:12px;max-width:380px;margin:0 auto 32px;text-align:left}
+.pw-feat{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--armadillo)}
+.pw-feat svg{flex-shrink:0;color:var(--orange)}
+.pw-price{margin-bottom:24px}
+.pw-amount{font-size:clamp(36px,5vw,52px);font-weight:500;color:var(--zeus);display:block;line-height:1}
+.pw-once{font-size:13px;color:var(--olive);margin-top:4px;display:block}
+.pw-btn{font-size:17px;padding:18px 40px}
+.pw-note{font-size:12px;color:var(--olive);margin-top:12px}
 
-/* Blurred real teaser: their own first chapter, faded into the paywall box */
-.paywall-teaser{max-width:680px;margin:0 auto;padding:64px 24px 0;filter:blur(5px);opacity:.85;user-select:none;pointer-events:none}
-.pt-tag{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;color:var(--olive);margin-bottom:14px}
-.pt-tag i{width:7px;height:7px;border-radius:50%;background:var(--orange);flex-shrink:0}
-.pt-heading{font-family:'Newsreader',serif;font-size:clamp(26px,3.6vw,38px);font-weight:400;line-height:1.18;margin-bottom:14px;color:var(--zeus)}
-.pt-text{font-size:16px;line-height:1.65;color:var(--armadillo)}
-.paywall-fade{position:absolute;left:0;right:0;bottom:0;height:280px;
-  background:linear-gradient(to bottom,rgba(251,247,238,0) 0%,var(--cream) 75%);pointer-events:none}
+/* ═══════ EDITORIAL CHAPTERS ═══════ */
+.ch{position:relative;overflow:hidden;border-top:1px solid rgba(26,23,20,.08);background:var(--cream)}
+.ch:nth-of-type(even){background:var(--merino)}
+.ch-wrap{max-width:1200px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1fr;gap:64px}
+.ch-opener{padding-top:120px;padding-bottom:56px;align-items:end}
+.ch-figure{position:relative;height:420px}
+.ch-blob{position:absolute;left:40px;top:-40px;width:380px;height:380px;border-radius:50%;filter:blur(44px);opacity:.85;
+  background:radial-gradient(closest-side,rgba(var(--rgb),.62) 66%,rgba(var(--rgb),0) 100%);animation:chBreathe var(--dur,10s) ease-in-out infinite}
+@keyframes chBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.ch-numblock{position:absolute;left:0;bottom:0;display:flex;flex-direction:column;gap:10px}
+.ch-num{font-family:var(--serif);font-size:220px;line-height:.8;letter-spacing:-.05em;font-weight:400;color:var(--zeus)}
+.ch-tag{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;color:var(--olive)}
+.ch-tag i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.ch-intro{display:flex;flex-direction:column;gap:22px;padding-bottom:12px}
+.ch-dimension{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--olive)}
+.ch h2{font-family:var(--serif);font-weight:400;font-size:52px;line-height:1.08;letter-spacing:-.8px;text-wrap:balance}
+.ch-reading{padding-bottom:128px}
+.ch-rail{display:flex;flex-direction:column;gap:14px;align-self:start;position:sticky;top:96px}
+.ch-rule{width:48px;height:3px;border-radius:2px;background:var(--c)}
+.ch-rail-label{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--olive)}
+.ch-words{display:flex;flex-wrap:wrap;gap:8px}
+.ch-words span{font-family:var(--serif);font-size:17px;padding:6px 14px;border-radius:40px;border:1px solid rgba(26,23,20,.14)}
+.ch-prose{display:flex;flex-direction:column;gap:28px;font-family:var(--serif);font-size:21px;line-height:1.6;color:var(--ink);text-wrap:pretty}
+.ch blockquote{margin:16px 0;padding:28px 0 28px 28px;border-left:3px solid var(--c);font-size:30px;line-height:1.3;letter-spacing:-.3px;font-style:italic;color:var(--zeus);text-wrap:balance}
 
-.paywall-box{
-  position:relative;z-index:1;overflow:hidden;text-align:center;
-  background:rgba(255,255,255,.74);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:48px 36px;
-  box-shadow:0 24px 60px -24px rgba(74,69,61,.3);
-}
-.paywall-box::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--wine),var(--orange),var(--cornflower),var(--sage))}
-.paywall-lock{margin-bottom:20px;color:var(--wine)}
-.paywall-word{font-size:14px;color:var(--armadillo);margin-bottom:20px;line-height:1.6}
-.paywall-word-value{filter:blur(5px);font-weight:700;font-style:italic;font-family:'Newsreader',serif;color:var(--wine);user-select:none}
-.paywall-title{font-size:clamp(24px,3.4vw,36px);font-weight:400;margin-bottom:10px;color:var(--zeus)}
-.paywall-sub{font-size:16px;color:var(--armadillo);margin-bottom:28px}
-.paywall-features{display:flex;flex-direction:column;gap:16px;max-width:460px;margin:0 auto 32px;text-align:left}
-.paywall-feature{display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.5;color:var(--armadillo)}
-.paywall-feature svg{flex-shrink:0;margin-top:3px}
-.paywall-feature strong{color:var(--zeus);font-weight:600}
-.paywall-price{margin-bottom:24px}
-.paywall-amount{font-size:clamp(36px,5vw,52px);font-weight:500;color:var(--zeus);display:block;line-height:1}
-.paywall-once{font-size:13px;color:var(--olive);margin-top:4px;display:block}
-.paywall-btn{font-size:17px;padding:18px 40px}
-.paywall-note{font-size:12px;color:var(--olive);margin-top:12px}
+.ch.passion{--c:var(--orange);--rgb:255,150,50;--dur:10s}
+.ch.vocation{--c:#74B8E8;--rgb:116,184,232;--dur:11s}
+.ch.mission{--c:var(--wine);--rgb:140,58,74;--dur:12s}
+.ch.profession{--c:var(--sage);--rgb:206,236,86;--dur:13s}
 
-/* Footer on cream */
-.footer-section{background:var(--cream);padding:28px 0}
-.footer{display:flex;align-items:center;justify-content:space-between}
+/* What ties it all together */
+.philosophy-section{background:var(--cream);padding:clamp(80px,10vw,130px) 24px}
+.philosophy-section .ph-inner{max-width:720px;margin:0 auto}
+.philosophy-section h2{font-family:var(--serif);font-size:clamp(34px,4.6vw,56px);font-weight:400;line-height:1.05;letter-spacing:-.02em;margin-bottom:48px}
+.ph-prose{font-family:var(--serif);font-size:21px;line-height:1.6;color:var(--ink)}
+.ph-prose p{margin-bottom:28px}
+
+/* Where it all connects (blue band) */
+.connect-section{background:var(--blue);padding:clamp(80px,10vw,130px) 24px}
+.connect-section .cn-inner{max-width:720px;margin:0 auto}
+.connect-section h2{font-family:var(--serif);font-size:clamp(34px,4.6vw,56px);font-weight:400;line-height:1.05;letter-spacing:-.02em;margin-bottom:48px}
+.cn-prose{font-family:var(--serif);font-size:21px;line-height:1.6;color:var(--ink)}
+.cn-prose p{margin-bottom:28px}
+
+/* ═══════ ROADMAP ═══════ */
+.roadmap{position:relative;overflow:hidden;background:var(--wine);color:var(--cream)}
+.rm-wrap{position:relative;max-width:1280px;margin:0 auto;padding:120px 48px 140px}
+.rm-intro{display:grid;grid-template-columns:42% 1fr;gap:0 48px;align-items:start;margin-bottom:64px}
+.rm-eyebrow{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;color:var(--lime)}
+.rm-eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--lime)}
+.rm-intro h2{margin-top:20px;font-family:var(--serif);font-weight:400;font-size:56px;line-height:1.04;letter-spacing:-1px;text-wrap:balance}
+.rm-intro p{padding-left:16%;padding-top:44px;font-size:17px;line-height:1.65;color:rgba(251,247,238,.6);max-width:400px;text-wrap:pretty}
+
+.rm-path{position:relative}
+.rm-steps{list-style:none;position:relative;display:flex;flex-direction:column;gap:72px}
+.rm-step{position:relative;display:flex;justify-content:flex-start;animation:rmRise .8s ease-out both}
+.rm-step:nth-child(even){justify-content:flex-end}
+.rm-step:nth-child(1){animation-delay:.2s}.rm-step:nth-child(2){animation-delay:.5s}.rm-step:nth-child(3){animation-delay:.8s}.rm-step:nth-child(4){animation-delay:1.1s}.rm-step:nth-child(5){animation-delay:1.4s}
+@keyframes rmRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.rm-body{width:42%;display:flex;flex-direction:column;gap:18px}
+.rm-num{font-family:var(--serif);font-size:96px;line-height:.8;letter-spacing:-.05em;color:rgba(251,247,238,.35)}
+.rm-when{display:block;margin-top:14px;font-size:11px;letter-spacing:1.8px;text-transform:uppercase;font-weight:700;color:rgba(251,247,238,.45)}
+.rm-step h3{font-family:var(--serif);font-weight:400;font-size:36px;line-height:1.1;letter-spacing:-.5px;color:rgba(251,247,238,.92);text-wrap:balance}
+.rm-step p{font-size:16px;line-height:1.7;color:rgba(251,247,238,.55);text-wrap:pretty}
+
+.rm-ball{position:absolute;top:40px;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;filter:blur(22px);opacity:.55;
+  animation:rmPop .8s cubic-bezier(.34,1.56,.64,1) both,rmDrift var(--dur,10s) ease-in-out 1.3s infinite}
+.rm-step:nth-child(odd) .rm-ball{left:46%}
+.rm-step:nth-child(even) .rm-ball{left:54%}
+@keyframes rmPop{from{opacity:0;transform:scale(.4)}to{opacity:.55;transform:scale(1)}}
+@keyframes rmDrift{0%,100%{transform:translate(0,0)}50%{transform:translate(10px,-14px)}}
+
+/* Download */
+.download-section{background:var(--cream);padding:clamp(60px,8vw,100px) 24px;text-align:center}
+.dl-inner{max-width:600px;margin:0 auto}
+.dl-inner p{font-family:var(--serif);font-size:19px;color:var(--olive);margin-bottom:28px;font-style:italic}
+
+/* CTA */
+.cta-section{padding:0 24px 56px}
+.cta-block{padding:56px 40px;background:var(--wine);border-radius:28px;text-align:center;position:relative;overflow:hidden;max-width:720px;margin:0 auto}
+.cta-h2{font-family:var(--serif);font-size:clamp(24px,3.6vw,38px);font-weight:400;color:var(--cream);margin-bottom:12px;line-height:1.14;position:relative}
+.cta-sub{font-size:15px;color:var(--nomad);line-height:1.7;margin-bottom:32px;max-width:420px;margin-left:auto;margin-right:auto;position:relative}
+.cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* Footer */
+.footer-section{background:var(--cream);padding:28px 0;border-top:1px solid var(--border)}
+.footer{display:flex;align-items:center;justify-content:space-between;max-width:720px;margin:0 auto;padding:0 24px}
 .footer-text{font-size:11px;color:var(--olive);letter-spacing:1.76px;text-transform:uppercase}
+.footer-core{width:8px;height:8px;border-radius:50%;background:var(--orange)}
 
-/* ═══════ HERO ANIMATION ═══════ */
-.hero-anim{position:relative;width:100%;max-width:300px;margin:0 auto;aspect-ratio:500/430}
-.hero-svg{width:100%;height:auto;display:block}
-.hero-path{stroke-dasharray:500;stroke-dashoffset:500;animation:drawPath .5s cubic-bezier(.22,.61,.36,1) forwards}
-.hero-path:nth-child(2){animation-delay:.02s}
-.hero-path:nth-child(3){animation-delay:.04s}
-.hero-path:nth-child(4){animation-delay:.06s}
-@keyframes drawPath{to{stroke-dashoffset:0}}
-
-.hero-dot{opacity:0;animation:dotTravel 1s ease-in-out forwards}
-.dot-1{animation-delay:0s}
-.dot-2{animation-delay:0s}
-.dot-3{animation-delay:0s}
-.dot-4{animation-delay:0s}
-@keyframes dotTravel{0%{opacity:1;offset-distance:0%}100%{opacity:1;offset-distance:100%}}
-
-.hero-core{visibility:hidden;animation:coreIgnite .4s cubic-bezier(.3,1.5,.4,1) .4s forwards}
-@keyframes coreIgnite{from{r:0;visibility:visible}to{r:36;visibility:visible}}
-.hero-core-glow{visibility:hidden;animation:coreGlowIgnite .4s cubic-bezier(.3,1.5,.4,1) .4s forwards,corePulse 2.6s ease-in-out .8s infinite}
-@keyframes coreGlowIgnite{from{r:0;visibility:visible;opacity:0}to{r:52;visibility:visible;opacity:0.4}}
-@keyframes corePulse{0%,100%{r:52;opacity:0.35}50%{r:58;opacity:0.5}}
-
-.hero-label{position:absolute;opacity:0;animation:labelFade .6s ease forwards;font-size:clamp(13px,2vw,18px);font-weight:500;color:var(--zeus);line-height:1.15}
-.hl-cat{font-family:'Inter',sans-serif;font-size:clamp(7px,1vw,10px);font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--olive);margin-top:2px;display:inline-block}
-.hl-tl{top:5%;left:5%;animation-delay:2.6s}
-.hl-tr{top:5%;right:5%;text-align:right;animation-delay:2.7s}
-.hl-bl{bottom:8%;left:5%;animation-delay:2.8s}
-.hl-br{bottom:8%;right:5%;text-align:right;animation-delay:2.9s}
-@keyframes labelFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-.hero-center-text{position:absolute;top:56%;left:50%;transform:translate(-50%,0);text-align:center;opacity:0;animation:labelFade .6s ease 3s forwards}
-.hct-ikigai{font-family:'Inter',sans-serif;font-size:clamp(10px,1.5vw,14px);font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
-.hct-sub{font-size:clamp(12px,1.6vw,18px);color:var(--olive);margin-top:2px}
-
+/* ═══════ RESPONSIVE ═══════ */
+@media(max-width:1100px){.res-cards{display:none}.res-blob{width:300px;height:300px;margin:-150px 0 0 -150px}}
+@media(max-width:900px){
+  .ch-wrap{grid-template-columns:1fr;gap:32px;padding:0 24px}
+  .ch-opener{padding-top:72px}
+  .ch-figure{height:300px}.ch-num{font-size:150px}.ch-blob{width:280px;height:280px;left:0}
+  .ch h2{font-size:36px}
+  .ch-rail{position:static}
+  .ch-prose{font-size:19px}.ch blockquote{font-size:24px}
+  .rm-wrap{padding:80px 24px 96px}
+  .rm-intro{grid-template-columns:1fr;gap:20px}.rm-intro p{padding:0}.rm-intro h2{font-size:40px}
+  .rm-step,.rm-step:nth-child(even){justify-content:flex-start}
+  .rm-body{width:100%}.rm-num{font-size:72px}.rm-step h3{font-size:28px}
+  .rm-ball{left:auto!important;right:0;top:0;width:80px;height:80px;margin:-20px -20px 0 0}
+}
 @media(max-width:640px){
-  .cards{grid-template-columns:1fr}
-  .share-icons{gap:10px}
-  .share-icon-btn{width:46px;height:46px}
-  .share-icon-btn::after{display:none}
-  .hero-meta{flex-direction:column;gap:6px}
+  .four-dims .fd-grid{grid-template-columns:1fr}
+  .cta-buttons{flex-direction:column}
   .hero-anim{max-width:220px}
-  .share-block{padding:44px 24px}
+  .cta-block{padding:44px 24px}
+  .res-copy h1{font-size:clamp(36px,8vw,60px)}
+  .res-nav{padding:20px 24px}
+}
+@media(prefers-reduced-motion:reduce){
+  .res-blob,.rc-pos,.rc,.ch-blob,.rm-step,.rm-ball{animation:none!important}
+  .rb1{transform:translate(-135px,-130px)}.rb2{transform:translate(135px,-130px)}.rb3{transform:translate(-135px,130px)}.rb4{transform:translate(135px,130px)}
 }
 </style>
+</head>
+<body>
 
 <nav class="nav" id="main-nav">
-  <div class="nav-logo">
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2.16 5.52C7.92 8.4 10.8 10.56 12.96 12.48" stroke="#551E29" stroke-width="0.96" stroke-linecap="round"/>
-      <path d="M22.32 4.08C16.56 7.92 14.4 10.32 12.96 12.48" stroke="#551E29" stroke-width="0.96" stroke-linecap="round"/>
-      <path d="M3.6 21.84C9.36 17.52 11.28 14.88 12.96 12.48" stroke="#551E29" stroke-width="0.96" stroke-linecap="round"/>
-      <path d="M21.84 21.6C16.8 17.52 14.64 14.64 12.96 12.48" stroke="#551E29" stroke-width="0.96" stroke-linecap="round"/>
-      <path d="M12.96 14.16C13.8878 14.16 14.64 13.4078 14.64 12.48C14.64 11.5522 13.8878 10.8 12.96 10.8C12.0322 10.8 11.28 11.5522 11.28 12.48C11.28 13.4078 12.0322 14.16 12.96 14.16Z" fill="#FF9C34"/>
-    </svg>
-    <span>Found by Ikigai</span>
-  </div>
+  <img src="/ikigai-logo.png" alt="Found by Ikigai" class="nav-logo">
 </nav>
 
-<!-- HERO with animated diagram -->
+<!-- ═══════ HERO ═══════ -->
 <section id="hero-section">
   <div class="wrap">
     <div class="hero">
@@ -518,25 +397,19 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
           <circle class="hero-core" cx="250" cy="225" r="0" fill="url(#heroCore)"/>
           <circle class="hero-core-glow" cx="250" cy="225" r="0" fill="url(#heroCore)" filter="url(#coreBlur)"/>
           <defs>
-            <radialGradient id="heroCore" cx="40%" cy="35%">
-              <stop offset="0%" stop-color="#FFE0AD"/>
-              <stop offset="100%" stop-color="#FF9C34"/>
-            </radialGradient>
+            <radialGradient id="heroCore" cx="40%" cy="35%"><stop offset="0%" stop-color="#FFE0AD"/><stop offset="100%" stop-color="#FF9C34"/></radialGradient>
             <filter id="coreBlur"><feGaussianBlur stdDeviation="8"/></filter>
           </defs>
         </svg>
       </div>
-
       <h1 class="serif hero-title" id="hero-title" style="margin-top:16px">Find your Ikigai</h1>
       <p class="hero-sub">A tool to help you find clarity on the path you actually want to take. Answer a few honest questions and get a personalized analysis.</p>
       <a href="javascript:void(0)" class="btn-wine" onclick="showIntro()">Find my Ikigai</a>
-      <a href="javascript:void(0)" id="preview-link" hidden onclick="previewSampleResult()" style="margin-top:18px;font-size:13px;color:var(--olive);text-decoration:underline;text-underline-offset:3px">Preview sample result</a>
-
     </div>
   </div>
 </section>
 
-<!-- INTRO on wine -->
+<!-- ═══════ INTRO on WINE ═══════ -->
 <section id="intro-section">
   <div class="wrap">
     <div class="intro-inner">
@@ -556,7 +429,7 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
   </div>
 </section>
 
-<!-- QUIZ on blue -->
+<!-- ═══════ QUIZ on BLUE ═══════ -->
 <section id="quiz-section">
   <div class="wrap">
     <div class="quiz-inner">
@@ -569,288 +442,288 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
   </div>
 </section>
 
-<!-- LOADING on wine -->
+<!-- ═══════ LOADING on WINE ═══════ -->
 <section id="loading-section">
   <div class="loader-ring"></div>
   <div class="loading-text serif" id="loading-text">Reading your answers</div>
-  <div class="loading-sub" id="loading-sub">This takes a few seconds...</div>
-  <button class="btn-lime" id="loading-retry" hidden onclick="generateResult()">Try again</button>
+  <div class="loading-sub">This takes a few seconds...</div>
 </section>
 
-<!-- RESULT -->
+<!-- ═══════ RESULT ═══════ -->
 <section id="result-section">
-  <!-- Result hero (redesign): blobs converge, cards float, headline + summary -->
-  <section class="rh" id="result-hero">
-    <div class="rh-blobs">
-      <div class="rh-blob rh-b1"></div><div class="rh-blob rh-b2"></div><div class="rh-blob rh-b3"></div><div class="rh-blob rh-b4"></div>
-    </div>
-    <div class="rh-cards" id="rh-cards"></div>
-    <div class="rh-copy">
-      <h1 class="serif" id="rh-statement">Your Ikigai</h1>
-      <p id="rh-summary"></p>
-    </div>
-  </section>
 
-  <!-- Cards on cream -->
-  <div class="cards-section">
-    <div class="wrap">
-      <div class="cards" id="result-cards"></div>
+  <!-- Result hero with blobs -->
+  <div class="res-hero">
+    <div class="res-blobs"><div class="res-blob rb1"></div><div class="res-blob rb2"></div><div class="res-blob rb3"></div><div class="res-blob rb4"></div></div>
+    <div class="res-cards" id="res-cards">
+      <!-- populated by JS -->
+    </div>
+    <header class="res-nav">
+      <a class="brand" href="https://foundbyikigai.com">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M2.16 5.52C7.92 8.4 10.8 10.56 12.96 12.48"/><path d="M22.32 4.08C16.56 7.92 14.4 10.32 12.96 12.48"/><path d="M3.6 21.84C9.36 17.52 11.28 14.88 12.96 12.48"/><path d="M21.84 21.6C16.8 17.52 14.64 14.64 12.96 12.48"/><circle class="core" cx="12.96" cy="12.48" r="1.68"/></svg>
+        <span class="wm">Found</span><span class="bsub">by Ikigai</span>
+      </a>
+    </header>
+    <div class="res-copy">
+      <h1 id="res-ikigai-phrase"></h1>
+      <p id="res-ikigai-sub"></p>
     </div>
   </div>
 
-  <!-- Paywall: gates the deep dives, connects, roadmap and PDF download -->
-  <div class="paywall-section" id="paywall-section">
-    <div class="paywall-teaser" id="paywall-teaser" aria-hidden="true">
-      <div class="pt-tag"><i></i><span id="pt-tag"></span></div>
-      <h3 class="pt-heading serif" id="pt-heading"></h3>
-      <p class="pt-text" id="pt-text"></p>
-    </div>
-    <div class="paywall-fade"></div>
-    <div class="wrap">
-      <div class="paywall-box">
-        <div class="paywall-lock">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-        </div>
-        <p class="paywall-word">The one word that connects everything you said: <span class="paywall-word-value" id="paywall-word-value"></span></p>
-        <h2 class="paywall-title serif">You've only seen the surface.</h2>
-        <p class="paywall-sub">The rest was written for no one but you, and it will not be generated again.</p>
-        <div class="paywall-features">
-          <div class="paywall-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--wine)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> <span><strong>Four deep dive chapters</strong>, one for Passion, Vocation, Mission and Profession, each with a psychological breakdown and a pull quote from your own words</span></div>
-          <div class="paywall-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--wine)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> <span><strong>Where it all connects</strong>, the single word that ties everything together, the evidence behind it, the Japanese philosophy it comes from, and one closing question</span></div>
-          <div class="paywall-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--wine)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> <span><strong>A personalized 90 day roadmap</strong>, five concrete steps from this week to day 90</span></div>
-          <div class="paywall-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--wine)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> <span><strong>A PDF of your complete result</strong>, yours to keep and revisit</span></div>
-        </div>
-        <div class="paywall-price">
-          <span class="paywall-amount">$4.99</span>
-          <span class="paywall-once">Less than your coffee this morning. One time, no subscription.</span>
-        </div>
-        <button class="btn-wine paywall-btn" onclick="unlockFullReport()">Reveal my full analysis</button>
-        <p class="paywall-note">Payment is not connected in this preview, this button unlocks the report directly.</p>
+  <!-- FREE: Four dimensions -->
+  <div class="four-dims" id="free-preview">
+    <div class="fd-inner">
+      <div class="fd-header">
+        <div class="eyebrow">Here is what we found</div>
+        <h2 class="serif" style="font-size:clamp(34px,4.6vw,56px);line-height:1.05;letter-spacing:-.02em">Four dimensions. One you.</h2>
+      </div>
+      <div class="fd-grid" id="fd-grid">
+        <!-- populated by JS -->
       </div>
     </div>
   </div>
 
-  <div id="locked-content" style="display:none">
-  <!-- Deep dive chapters (redesign): one section per dimension -->
-  <div id="chapters-container"></div>
-
-  <!-- Where it all connects (redesign) -->
-  <section class="cx" id="connects-section">
-    <span class="cx-kanji" aria-hidden="true">生き甲斐</span>
-    <div class="cx-wrap">
-      <div class="cx-open">
-        <div class="cx-eyebrow">Where it all connects</div>
-        <h2 class="cx-h2" id="cx-opening"></h2>
+  <!-- PAYWALL -->
+  <div class="paywall" id="paywall-section">
+    <div class="pw-box">
+      <div class="pw-lock">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
       </div>
-      <div class="cx-grid">
-        <div class="cx-word">
-          <span class="cx-word-label">The pattern</span>
-          <span class="cx-word-text" id="cx-word"></span>
-          <div class="cx-bar"></div>
-          <span class="cx-def" id="cx-def"></span>
-          <p class="cx-note" id="cx-note"></p>
-        </div>
-        <div class="cx-evidence-panel">
-          <div class="cx-list-head">What you are actually seeing</div>
-          <div id="cx-evidence"></div>
-          <div class="cx-tension-label">What this means</div>
-          <p class="cx-tension" id="cx-tension"></p>
-        </div>
+      <h2 class="pw-title serif">Want to go deeper?</h2>
+      <p class="pw-sub">Your free preview shows what we found. The full analysis explains why it matters and what to do next.</p>
+      <div class="pw-features">
+        <div class="pw-feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Deep psychological analysis of each dimension</div>
+        <div class="pw-feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Connection to Ikigai philosophy and Jungian psychology</div>
+        <div class="pw-feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Intersection analysis: the thread that connects everything</div>
+        <div class="pw-feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>5 personalized next steps based on your answers</div>
+        <div class="pw-feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>PDF download to keep forever</div>
       </div>
-      <div class="cx-trad">
-        <div class="cx-trad-head">
-          <span class="cx-trad-label">Through the Ikigai lens</span>
-          <h3 class="cx-h3" id="cx-trad-heading"></h3>
-        </div>
-        <div class="cx-cols" id="cx-trad-cols"></div>
-        <div class="cx-terms"><span>生き甲斐 &middot; a reason for being</span><span>こだわり &middot; doing it properly</span></div>
+      <div class="pw-price">
+        <span class="pw-amount serif">$4.99</span>
+        <span class="pw-once">One time payment. No subscriptions.</span>
       </div>
-      <div class="cx-q">
-        <div class="cx-q-blob" aria-hidden="true"></div>
-        <span class="cx-q-mark" aria-hidden="true">?</span>
-        <span class="cx-q-label">The question to sit with</span>
-        <p class="cx-q-text" id="cx-question"></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Roadmap (redesign): replaces the old next-steps list -->
-  <section class="roadmap">
-    <div class="rm-wrap">
-      <div class="rm-intro">
-        <div class="rm-intro-l">
-          <div class="rm-eyebrow">Your personalized roadmap</div>
-          <h2 class="serif">Five things you could explore in the next 90 days.</h2>
-        </div>
-        <div class="rm-intro-r">
-          <p>Not a plan to follow perfectly. A set of experiments, drawn from your own answers, to test where your ikigai actually lives.</p>
-        </div>
-      </div>
-      <div class="track">
-        <div class="spine" id="spine"></div>
-        <ol class="steps" id="steps"></ol>
-      </div>
-    </div>
-  </section>
-  </div>
-
-  <!-- Share section (redesign): multi-platform -->
-  <div class="share-section">
-    <div class="wrap">
-      <div class="share-block">
-        <h2 class="share-h2 serif">Was this useful?</h2>
-        <p class="share-sub">If this helped you see things a little more clearly, share it. Someone in your network might need exactly this right now.</p>
-        <div class="share-icons">
-          <button class="share-icon-btn" onclick="shareTo('instagram')" aria-label="Share on Instagram" data-tip="Instagram">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
-          </button>
-          <button class="share-icon-btn" onclick="shareTo('tiktok')" aria-label="Share on TikTok" data-tip="TikTok">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.4 2 1.8 3.6 3.8 4v3.1c-1.5 0-2.9-.4-4.1-1.2v6.4c0 3.3-2.7 6-6 6a6 6 0 0 1-2.1-11.6v3.3a2.8 2.8 0 1 0 3.5 2.7V3h4.9z"/></svg>
-          </button>
-          <button class="share-icon-btn" onclick="shareTo('x')" aria-label="Share on X" data-tip="X">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.3 3h3.1l-6.8 7.8L22.6 21h-6.3l-4.9-6.4L5.7 21H2.6l7.3-8.3L1.9 3h6.4l4.5 5.9L18.3 3zm-1.1 16h1.7L7 4.9H5.2L17.2 19z"/></svg>
-          </button>
-          <button class="share-icon-btn" onclick="shareTo('linkedin')" aria-label="Share on LinkedIn" data-tip="LinkedIn">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.77V21h-4v-5.7c0-1.36-.02-3.1-1.9-3.1-1.9 0-2.2 1.48-2.2 3v5.8H9z"/></svg>
-          </button>
-          <button class="share-icon-btn" onclick="shareTo('facebook')" aria-label="Share on Facebook" data-tip="Facebook">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.2h2.4l.36-2.8h-2.76V9.1c0-.8.22-1.36 1.4-1.36h1.5V5.2c-.26-.03-1.14-.11-2.17-.11-2.15 0-3.62 1.31-3.62 3.72v2.08H8.2v2.8h2.4V21z"/></svg>
-          </button>
-        </div>
-        <div class="share-status" id="share-status"></div>
-        <div class="share-download-block" id="share-download-block" style="display:none">
-          <p class="share-download-note">Keep this somewhere you will see it again.</p>
-          <button class="btn-wine" onclick="downloadResult()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download result
-          </button>
-        </div>
-      </div>
+      <button class="btn-wine pw-btn" id="paddle-checkout-btn" onclick="openPaddleCheckout()">Reveal my full analysis</button>
+      <div class="pw-note">Secure checkout via Paddle. Instant access after payment.</div>
     </div>
   </div>
 
-  <!-- Footer on cream -->
-  <div class="footer-section">
-    <div class="wrap">
+  <!-- PAID: Full result (hidden until payment) -->
+  <div id="full-result" style="display:none">
+
+    <!-- Deep dive chapters (populated by JS) -->
+    <div id="chapters-container"></div>
+
+    <!-- What ties it all together -->
+    <div class="philosophy-section">
+      <div class="ph-inner">
+        <div class="eyebrow" style="margin-bottom:24px">The Ikigai philosophy</div>
+        <h2 class="serif">What ties it all together</h2>
+        <div class="ph-prose" id="philosophy-text"></div>
+      </div>
+    </div>
+
+    <!-- Where it all connects -->
+    <div class="connect-section">
+      <div class="cn-inner">
+        <div class="eyebrow" style="margin-bottom:24px;color:var(--armadillo)">Synthesis</div>
+        <h2 class="serif">Where it all connects</h2>
+        <div class="cn-prose" id="intersection-text"></div>
+      </div>
+    </div>
+
+    <!-- Roadmap -->
+    <div class="roadmap">
+      <div class="rm-wrap">
+        <div class="rm-intro">
+          <div>
+            <div class="rm-eyebrow"><i></i>Your roadmap</div>
+            <h2>Where you could go from here</h2>
+          </div>
+          <p>These are not instructions. They are invitations. Take the ones that resonate and leave the rest.</p>
+        </div>
+        <div class="rm-path">
+          <ol class="rm-steps" id="rm-steps">
+            <!-- populated by JS -->
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Download -->
+    <div class="download-section">
+      <div class="dl-inner">
+        <p>Keep this somewhere you will see it again</p>
+        <button class="btn-cornflower" onclick="downloadResult()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <div class="cta-block">
+        <h2 class="cta-h2 serif">Was this useful?</h2>
+        <p class="cta-sub">If this helped you see things a little more clearly, share it. Someone in your network might need exactly this right now.</p>
+        <div class="cta-buttons">
+          <button class="btn-lime" onclick="shareResult('instagram')" style="color:var(--zeus)">Share on Instagram</button>
+          <button class="btn-ghost-wine" onclick="shareResult('tiktok')">Share on TikTok</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-section">
       <div class="footer">
         <div class="footer-text">Found by Ikigai &middot; 2026</div>
+        <div class="footer-core"></div>
       </div>
     </div>
   </div>
+
 </section>
 
 <script>
-window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>40)});
+/* ═══════ PADDLE INIT (v2 SDK) ═══════ */
+let hasPaid = false;
 
-// Animate dots along paths
-function heroAnimation(){
-  const svg=document.getElementById('hero-svg');
-  if(!svg)return;
-  const paths=svg.querySelectorAll('.hero-path');
-  const dots=svg.querySelectorAll('.hero-dot');
-  const core=svg.querySelector('.hero-core');
-  const glow=svg.querySelector('.hero-core-glow');
-  const title=document.getElementById('hero-title');
-  const DOT_DURATION=950;
-  let pulseAnim=null;
+Paddle.Initialize({
+  token: 'live_8961e3d5d6b7b1e6ffb729c73b9',
+  eventCallback: function(event) {
+    if (event.name === 'checkout.completed') {
+      hasPaid = true;
+      unlockFullResult();
+    }
+  }
+});
 
-  function reset(){
-    paths.forEach(p=>{p.classList.remove('draw');p.style.strokeDashoffset='500'});
-    dots.forEach(d=>{d.style.opacity='0'});
-    core.style.opacity='0';core.setAttribute('r','0');
-    glow.style.opacity='0';glow.setAttribute('r','0');
-    if(title)title.style.color='var(--zeus)';
-    if(pulseAnim)cancelAnimationFrame(pulseAnim);
+function openPaddleCheckout() {
+  if (typeof Paddle === 'undefined' || !Paddle.Checkout) {
+    alert('Payment system is loading. Please try again in a moment.');
+    return;
+  }
+  Paddle.Checkout.open({
+    items: [{ priceId: 'pri_01m3t9menzy9cjhx429eg6bvy9', quantity: 1 }],
+    settings: {
+      displayMode: 'overlay',
+      theme: 'light'
+    }
+  });
+}
+
+function unlockFullResult() {
+  document.getElementById('paywall-section').style.display = 'none';
+  document.getElementById('full-result').style.display = 'block';
+  window.scrollTo({ top: document.getElementById('full-result').offsetTop - 40, behavior: 'smooth' });
+}
+
+/* ═══════ NAV SCROLL ═══════ */
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ═══════ HERO ANIMATION ═══════ */
+function heroAnimation() {
+  const svg = document.getElementById('hero-svg');
+  if (!svg) return;
+  const paths = svg.querySelectorAll('.hero-path');
+  const dots = svg.querySelectorAll('.hero-dot');
+  const core = svg.querySelector('.hero-core');
+  const glow = svg.querySelector('.hero-core-glow');
+  const title = document.getElementById('hero-title');
+  const DOT_DURATION = 950;
+  let pulseAnim = null;
+
+  function reset() {
+    paths.forEach(p => { p.classList.remove('draw'); p.style.strokeDashoffset = '500'; });
+    dots.forEach(d => { d.style.opacity = '0'; });
+    core.style.opacity = '0'; core.setAttribute('r', '0');
+    glow.style.opacity = '0'; glow.setAttribute('r', '0');
+    if (title) title.style.color = 'var(--zeus)';
+    if (pulseAnim) clearTimeout(pulseAnim);
   }
 
-  function run(){
+  function run() {
     reset();
-
-    requestAnimationFrame(()=>{
-      paths.forEach(p=>{p.style.strokeDashoffset='';p.classList.add('draw')});
+    requestAnimationFrame(() => {
+      paths.forEach(p => { p.style.strokeDashoffset = ''; p.classList.add('draw'); });
     });
 
-    const startTime=performance.now();
-    dots.forEach((dot,i)=>{
-      const path=paths[i];
-      if(!path)return;
-      const len=path.getTotalLength();
-
-      function animDot(now){
-        const t=Math.min(1,(now-startTime)/DOT_DURATION);
-        const ease=t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
-        const pt=path.getPointAtLength(ease*len);
-        dot.setAttribute('cx',pt.x);
-        dot.setAttribute('cy',pt.y);
-        dot.style.opacity=t>0.75?String(1-((t-0.75)/0.25)):'1';
-        if(t<1)requestAnimationFrame(animDot);
-        else dot.style.opacity='0';
+    const startTime = performance.now();
+    dots.forEach((dot, i) => {
+      const path = paths[i];
+      if (!path) return;
+      const len = path.getTotalLength();
+      function animDot(now) {
+        const t = Math.min(1, (now - startTime) / DOT_DURATION);
+        const ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        const pt = path.getPointAtLength(ease * len);
+        dot.setAttribute('cx', pt.x);
+        dot.setAttribute('cy', pt.y);
+        dot.style.opacity = t > 0.75 ? String(1 - ((t - 0.75) / 0.25)) : '1';
+        if (t < 1) requestAnimationFrame(animDot);
+        else dot.style.opacity = '0';
       }
       requestAnimationFrame(animDot);
     });
 
-    setTimeout(()=>{
-      core.style.opacity='1';
-      core.setAttribute('r','36');
-      core.style.transition='r .3s cubic-bezier(.3,1.5,.4,1),opacity .2s';
-      glow.style.opacity='0.4';
-      glow.setAttribute('r','52');
-      glow.style.transition='r .3s cubic-bezier(.3,1.5,.4,1),opacity .2s';
+    setTimeout(() => {
+      core.style.opacity = '1';
+      core.setAttribute('r', '36');
+      core.style.transition = 'r .3s cubic-bezier(.3,1.5,.4,1),opacity .2s';
+      glow.style.opacity = '0.4';
+      glow.setAttribute('r', '52');
+      glow.style.transition = 'r .3s cubic-bezier(.3,1.5,.4,1),opacity .2s';
+      if (title) title.style.color = 'var(--orange)';
 
-      if(title)title.style.color='var(--orange)';
-
-      let pulseUp=true;
-      function pulse(){
-        const r=pulseUp?58:52;
-        const o=pulseUp?0.5:0.35;
-        glow.setAttribute('r',String(r));
-        glow.style.opacity=String(o);
-        pulseUp=!pulseUp;
-        pulseAnim=setTimeout(()=>requestAnimationFrame(pulse),1300);
+      let pulseUp = true;
+      function pulse() {
+        const r = pulseUp ? 58 : 52;
+        const o = pulseUp ? 0.5 : 0.35;
+        glow.setAttribute('r', String(r));
+        glow.style.opacity = String(o);
+        pulseUp = !pulseUp;
+        pulseAnim = setTimeout(() => requestAnimationFrame(pulse), 1300);
       }
-      setTimeout(pulse,400);
-    },DOT_DURATION);
+      setTimeout(pulse, 400);
+    }, DOT_DURATION);
   }
 
   run();
-  setInterval(run,3000);
+  setInterval(run, 3000);
 }
+window.addEventListener('load', heroAnimation);
 
-window.addEventListener('load',heroAnimation);
-
-const IS_LOCAL=['localhost','127.0.0.1','::1',''].includes(location.hostname);
-const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-if(IS_LOCAL){const pl=document.getElementById('preview-link');if(pl)pl.hidden=false;}
-
-const baseQuestions=[
-  {id:'q1',category:'What you love',text:'What activities make you lose track of time?',hint:"It is okay if you do not have a clear answer. Write the first thing that comes to mind. Answer like you are talking to your best friend."},
-  {id:'q2',category:'What you love',text:'If money were no object, what would your ideal week look like?',hint:'Who would you be with, where, what would you do. Be as specific as you can.'},
-  {id:'q3',category:'What you are good at',text:'What things come naturally to you?',hint:'No false modesty. Skills, ways of thinking, how you treat people. What others recognize in you or what you do effortlessly.'},
-  {id:'q4',category:'What you are good at',text:'Who do you admire and what exactly do you admire about them?',hint:'Could be someone close or a public figure. Be specific about the why.'},
-  {id:'q5',category:'What the world needs',text:'What things in the world bother or hurt you?',hint:'What do you see around you and think "someone should do something about that."'},
-  {id:'q6',category:'What you can be paid for',text:'What have people paid you for, or would they pay you for?',hint:'Include everything even if you are not passionate about all of it.'},
-  {id:'q7',category:'Your legacy',text:'How do you want to be remembered?',hint:"It does not have to be grand. What would the people who matter most to you say?"}
+/* ═══════ QUIZ LOGIC ═══════ */
+const baseQuestions = [
+  { id: 'q1', category: 'What you love', text: 'What activities make you lose track of time?', hint: "It is okay if you do not have a clear answer. Write the first thing that comes to mind. Answer like you are talking to your best friend." },
+  { id: 'q2', category: 'What you love', text: 'If money were no object, what would your ideal week look like?', hint: 'Who would you be with, where, what would you do. Be as specific as you can.' },
+  { id: 'q3', category: 'What you are good at', text: 'What things come naturally to you?', hint: 'No false modesty. Skills, ways of thinking, how you treat people. What others recognize in you or what you do effortlessly.' },
+  { id: 'q4', category: 'What you are good at', text: 'Who do you admire and what exactly do you admire about them?', hint: 'Could be someone close or a public figure. Be specific about the why.' },
+  { id: 'q5', category: 'What the world needs', text: 'What things in the world bother or hurt you?', hint: 'What do you see around you and think "someone should do something about that."' },
+  { id: 'q6', category: 'What you can be paid for', text: 'What have people paid you for, or would they pay you for?', hint: 'Include everything even if you are not passionate about all of it.' },
+  { id: 'q7', category: 'Your legacy', text: 'How do you want to be remembered?', hint: "It does not have to be grand. What would the people who matter most to you say?" }
 ];
 
-let allQuestions=[...baseQuestions],answers={},currentIndex=0,resultData=null;
+let allQuestions = [...baseQuestions], answers = {}, currentIndex = 0, resultData = null;
 
-function showIntro(){
-  document.getElementById('hero-section').style.display='none';
-  document.getElementById('intro-section').style.display='block';
-  window.scrollTo({top:0,behavior:'smooth'});
+function showIntro() {
+  document.getElementById('hero-section').style.display = 'none';
+  document.getElementById('intro-section').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-function startQuiz(){
-  document.getElementById('intro-section').style.display='none';
-  document.getElementById('quiz-section').style.display='block';
+function startQuiz() {
+  document.getElementById('intro-section').style.display = 'none';
+  document.getElementById('quiz-section').style.display = 'block';
   renderQuestion(0);
 }
-function renderQuestion(index){
-  const q=allQuestions[index],isLast=index===allQuestions.length-1;
-  document.getElementById('questions-container').innerHTML=`
+function renderQuestion(index) {
+  const q = allQuestions[index], isLast = index === allQuestions.length - 1;
+  document.getElementById('questions-container').innerHTML = `
     <div class="question-block">
-      <div class="q-category">${esc(q.category)}</div>
-      <div class="q-text serif">${esc(q.text)}</div>
-      <p class="q-hint">${esc(q.hint)}</p>
+      <div class="q-category">${q.category}</div>
+      <div class="q-text serif">${q.text}</div>
+      <p class="q-hint">${q.hint}</p>
       <div class="q-input-wrap">
         <textarea class="q-textarea" id="current-answer" placeholder="Write or tap the mic to speak..."></textarea>
         <div class="mic-status" id="mic-status">Listening...</div>
@@ -859,138 +732,78 @@ function renderQuestion(index){
         </button>
       </div>
       <div style="margin-top:24px;">
-        <button class="btn-wine" onclick="handleNext()">${isLast?'Continue':'Next'} &rarr;</button>
+        <button class="btn-wine" onclick="handleNext()">${isLast ? 'See my Ikigai' : 'Next'} &rarr;</button>
       </div>
     </div>`;
-  if(recognition)recognition.stop();
-  // Follow ups have no fixed count, so they sit near the end and never move the bar backwards.
-  const base=baseQuestions.length;
-  const pct=index<base?Math.round((index/base)*85):Math.min(97,88+(index-base)*2);
-  document.getElementById('progress-fill').style.width=pct+'%';
-  document.getElementById('progress-text').textContent=index<base?'Question '+(index+1):'A few more questions';
-  document.getElementById('progress-pct').textContent=pct+'%';
-  window.scrollTo({top:0,behavior:'smooth'});
+  if (recognition) recognition.stop();
+  const total = Math.max(allQuestions.length, 7), pct = Math.round((index / total) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = 'Question ' + (index + 1);
+  document.getElementById('progress-pct').textContent = pct + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-async function handleNext(){
-  const val=document.getElementById('current-answer').value.trim();
-  if(!val){document.getElementById('current-answer').style.borderColor='var(--orange)';document.getElementById('current-answer').placeholder='Say something, even if brief...';return}
-  answers[allQuestions[currentIndex].id]=val;currentIndex++;
-  if(currentIndex<allQuestions.length)renderQuestion(currentIndex);
+async function handleNext() {
+  const val = document.getElementById('current-answer').value.trim();
+  if (!val) { document.getElementById('current-answer').style.borderColor = 'var(--orange)'; document.getElementById('current-answer').placeholder = 'Say something, even if brief...'; return; }
+  answers[allQuestions[currentIndex].id] = val;
+  currentIndex++;
+  if (currentIndex < allQuestions.length) renderQuestion(currentIndex);
   else await checkFollowUps();
 }
 
-const loadingMsgs=['Reading your answers...','Finding patterns...','Connecting the dots...','Almost there...'];
+const loadingMsgs = ['Reading your answers...', 'Finding patterns...', 'Connecting the dots...', 'Almost there...'];
 let loadingInterval;
-function showLoading(){
-  document.getElementById('quiz-section').style.display='none';
-  document.getElementById('loading-section').style.display='flex';
-  document.getElementById('loading-retry').hidden=true;
-  document.querySelector('#loading-section .loader-ring').style.display='';
-  document.getElementById('loading-text').textContent='Reading your answers...';
-  document.getElementById('loading-sub').textContent='This takes a few seconds...';
-  clearInterval(loadingInterval);
-  let i=0;loadingInterval=setInterval(()=>{i=(i+1)%loadingMsgs.length;document.getElementById('loading-text').textContent=loadingMsgs[i]},2200);
+
+function showLoading() {
+  document.getElementById('quiz-section').style.display = 'none';
+  document.getElementById('loading-section').style.display = 'flex';
+  let i = 0;
+  loadingInterval = setInterval(() => { i = (i + 1) % loadingMsgs.length; document.getElementById('loading-text').textContent = loadingMsgs[i]; }, 2200);
 }
-function hideLoading(){clearInterval(loadingInterval);document.getElementById('loading-section').style.display='none'}
+function hideLoading() { clearInterval(loadingInterval); document.getElementById('loading-section').style.display = 'none'; }
 
-async function callClaude(prompt,maxTokens){
-  const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:maxTokens||800,messages:[{role:'user',content:prompt}]})});
-  if(!res.ok)throw new Error('API returned '+res.status);
-  const data=await res.json();
-  return data.content.map(i=>i.text||'').join('').replace(/```json|```/g,'').trim();
+async function callClaude(prompt, maxTokens) {
+  const res = await fetch('/.netlify/functions/claude', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: maxTokens || 800, messages: [{ role: 'user', content: prompt }] })
+  });
+  const data = await res.json();
+  return data.content.map(i => i.text || '').join('').replace(/```json|```/g, '').trim();
 }
 
-/* ---------- follow ups ----------
-   PRODUCT RULE (read before changing anything here):
-   The whole point of this tool is a result that is accurate and true for
-   this specific person. So the quiz keeps asking follow up questions for as
-   long as it is still missing information it needs for that, and stops as
-   soon as it has enough. There is deliberately NO fixed number of follow ups:
-   someone who answered in depth may get none, someone who answered "idk" may
-   get several. Do not replace this with a fixed count.
-
-   What must never happen: a question that repeats or rephrases an earlier
-   one, or a loop that never ends. That is guarded three ways:
-   1. Claude is shown every follow up already asked and told never to repeat
-      or circle back, and to ask only about the weakest missing area.
-   2. tooSimilar() compares each new question with all earlier ones; if it
-      overlaps too much, we treat that as "we have enough" and move on.
-   3. FOLLOWUP_SAFETY_LIMIT is an emergency brake against a runaway loop
-      (a model error, an API glitch). It is not a target and should never be
-      reached in normal use; in testing, real rounds ended at 0 to 4. */
-const FOLLOWUP_SAFETY_LIMIT=8;
-let followUpCount=0;
-const STOP=new Set('a an and are as at be but by do does for from have how i if in is it its me my of on or so that the their them they this to was what when where which who why with would you your yours'.split(' '));
-function contentWords(t){return new Set(String(t).toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/).filter(w=>w.length>2&&!STOP.has(w)))}
-function tooSimilar(text){
-  const a=contentWords(text);
-  if(!a.size)return true;
-  return allQuestions.some(q=>{const b=contentWords(q.text);const shared=[...a].filter(w=>b.has(w)).length;return shared/Math.min(a.size,b.size||1)>=0.6});
-}
-function answersText(){return allQuestions.filter(q=>answers[q.id]).map(q=>`${q.text}\n"${answers[q.id]}"`).join('\n\n')}
-
-async function checkFollowUps(){
-  if(followUpCount>=FOLLOWUP_SAFETY_LIMIT){await generateResult();return}
+async function checkFollowUps() {
   showLoading();
-  const asked=allQuestions.slice(baseQuestions.length).map(q=>'- '+q.text).join('\n')||'(none yet)';
-  try{
-    const raw=await callClaude(`You are a warm, perceptive facilitator helping someone find their Ikigai. The goal of this tool is a result that is accurate and genuinely true for this person, so it must be built on real information about them. Your job right now is only to decide whether you already have enough to write that result, and if not, to ask the single most useful next question. Ask as many rounds as that takes, but never a question that is not needed.
-
-You have enough when you have concrete, personal material (real activities, people, examples, feelings, not generic words) for ALL of these:
-1. What they love
-2. What they are good at
-3. What the world needs, in their eyes
-4. What they can be or have been paid for
-5. What they want their life to mean
-
+  const at = allQuestions.filter(q => answers[q.id]).map(q => `${q.text}\n"${answers[q.id]}"`).join('\n\n');
+  try {
+    const raw = await callClaude(`You are a facilitator helping someone find their Ikigai.
 RULES:
-- If all five are covered concretely, say it is enough. Do not ask just to ask.
-- If something is missing or vague, ask ONE question about the weakest area only.
-- Never repeat, rephrase, or circle back to a question already asked, including the follow ups listed below. Never ask about something they already answered, even implicitly.
-- Each question must open new ground: a different area, or a genuinely new angle they have not touched.
-- Build on their own words so it feels like a conversation, not a form.
-- Do not ask about trauma or sensitive topics.
-- NEVER use hyphens or dashes of any kind. Use commas or separate sentences instead.
-
-Follow up questions already asked:
-${asked}
-
-Everything they have answered:
-${answersText()}
-
-Reply ONLY in JSON, one of:
-{"enough":true}
-{"enough":false,"area":"which of the five is missing","question":{"text":"the question","hint":"one short sentence on why you are asking"}}`,400);
-    const p=JSON.parse(raw);hideLoading();
-    const q=p&&!p.enough&&p.question;
-    if(q&&q.text&&!tooSimilar(q.text)){
-      followUpCount++;
-      allQuestions=[...allQuestions,{id:'fq'+followUpCount,category:'One more question',text:q.text,hint:q.hint||''}];
-      document.getElementById('quiz-section').style.display='block';
+- Ask follow up when a key answer is very short (under 15 words), vague, or says "I don't know" without developing
+- Key questions: what they love, ideal week, legacy. If any answered with little detail, ALWAYS dig deeper
+- Do NOT repeat what was already answered implicitly
+- Do NOT ask about trauma or sensitive topics
+- Max 2 follow up questions, make them specific
+- NEVER use hyphens or dashes of any kind
+Answers:\n${at}\nReply ONLY in JSON:
+{"needs_followup":false,"followup_questions":[]}
+or
+{"needs_followup":true,"followup_questions":[{"id":"fq1","category":"One more question","text":"specific question","hint":"why you are asking"}]}`, 400);
+    const p = JSON.parse(raw);
+    hideLoading();
+    if (p.needs_followup && p.followup_questions?.length) {
+      allQuestions = [...allQuestions, ...p.followup_questions];
+      document.getElementById('quiz-section').style.display = 'block';
       renderQuestion(currentIndex);
-      return;
-    }
-  }catch(e){hideLoading()}
-  await generateResult();
+    } else await generateResult();
+  } catch (e) { hideLoading(); await generateResult(); }
 }
 
-/* The result is written in four parts that run at the same time. One single
-   request takes about 45 seconds and Netlify cuts function calls at about 30
-   (measured: 504), so each part must stay well under that. Every part gets
-   the same voice rules and all the answers, so the result reads as one piece. */
-function resultPreamble(at){
-  return `You are an experienced psychologist and coach with deep knowledge of scientific psychology, Jungian psychology, and the Japanese philosophy of Ikigai, sitting across from this one person, talking directly to them. Natural English.
-
-VOICE RULES:
-- Write like a warm, experienced coach speaking to this one person, not like a report written about them. Talk to "you", never about "the person" or "this individual"
-- Warmth and honesty are not opposites. Say the true thing even when it is not flattering, the way a good coach tells a client something they need to hear because they are on their side, not to impress them
-- The goal is never to sound insightful. The goal is for this specific person to read it and think "how did it know that." If a sentence could not produce that reaction, cut it or rewrite it
-- Do not perform empathy with soft filler ("it makes sense that...", "it is completely valid to feel..."). Show you understand by being specific about them instead
-
-FRAMEWORK RULES (scientific psychology, Jungian psychology, Ikigai philosophy):
-- Never name a framework, theory, or archetype to sound credible. If you invoke Jungian shadow work, flow theory, multiple intelligences, an archetype, or any other concept, use it to say something specific and true about THIS person's actual answers, then move on. Do not explain the framework itself, do not define it, do not teach it
-- If a framework does not clearly fit what they wrote, leave it out entirely rather than force a loose connection
-- Self check before finalizing each paragraph: could this exact paragraph have been written about a different person who gave different answers? If yes, it is too generic, rewrite it using a detail only THIS person's answers would produce
+/* ═══════ GENERATE RESULT ═══════ */
+async function generateResult() {
+  showLoading();
+  const at = allQuestions.filter(q => answers[q.id]).map(q => `${q.text}\n"${answers[q.id]}"`).join('\n\n');
+  try {
+    const raw = await callClaude(`You are an honest, direct guide with deep knowledge of scientific psychology, Jungian psychology, and the Japanese philosophy of Ikigai. You speak like a wise friend who tells the truth with respect. Natural English.
 
 CRITICAL FORMATTING RULES:
 - NEVER use hyphens or dashes of any kind (no -, no --, no em dashes, no en dashes)
@@ -1001,637 +814,345 @@ CONTENT RULES:
 - Base everything ONLY on what the person wrote
 - Present unclear things as possibilities, not certainties
 - Be specific to THIS person, never generic
+- Write prose that flows like a conversation, not an academic paper
+- Weave psychology and coaching naturally into the narrative
+- Do NOT invent facts about the person
 
-Person's answers:\n${at}\n
+Person's answers:
+${at}
 
-Reply ONLY in JSON with this exact structure:
-`;
-}
-async function resultPart(prompt,maxTokens){
-  for(let attempt=0;;attempt++){
-    try{return JSON.parse(await callClaude(prompt,maxTokens))}
-    catch(e){if(attempt>=1)throw e}
-  }
-}
-async function generateResult(){
-  showLoading();
-  const at=answersText();
-  const P=resultPreamble(at);
-  try{
-    const [main,ch1,ch2,cx]=await Promise.all([
-      resultPart(P+`{
-  "hero":{
-    "statement":"A short punchy headline capturing their ikigai as a call to action, max 12 words, no quote marks",
-    "summary":"One sentence naming how their passion, vocation, mission and profession converge. Reference the actual four things briefly.",
-    "cards":[
-      {"dimension":"Vocation","value":"One or two words, their core strength"},
-      {"dimension":"Profession","value":"One or two words, their professional skill area"},
-      {"dimension":"Passion","value":"One or two words, what they love"},
-      {"dimension":"Mission","value":"One or two words, what drives them"}
-    ]
-  },
+Reply ONLY in valid JSON with this exact structure:
+
+{
+  "ikigai_central":"Short phrase max 10 words capturing their ikigai",
+  "ikigai_subtitle":"One sentence describing how their dimensions converge",
 
   "what_you_love":"2 specific sentences for the FREE preview. Based on THEIR answers.",
   "what_you_are_good_at":"2 sentences for the FREE preview. About their real strengths.",
   "what_the_world_needs":"2 sentences for the FREE preview. How their sensitivity connects with the world.",
   "what_you_can_be_paid_for":"2 sentences for the FREE preview. Their real professional value.",
 
-  "roadmap":{
-    "steps":[
-      {"when":"This week","title":"Short title for step 1","text":"2 to 3 sentences of deeply personalized, actionable advice referencing their specific answers"},
-      {"when":"Week 1","title":"Short title for step 2","text":"2 to 3 sentences, specific to them"},
-      {"when":"Weeks 2 to 4","title":"Short title for step 3","text":"2 to 3 sentences, specific to them"},
-      {"when":"One weekend","title":"Short title for step 4","text":"2 to 3 sentences, specific to them"},
-      {"when":"Day 90","title":"Short title for step 5","text":"2 to 3 sentences, specific to them"}
-    ]
-  }
-}
-Provide exactly 5 items in "roadmap.steps".`,1600),
-      resultPart(P+`{
   "chapters":[
-{
-      "heading":"A striking 1 sentence H2 for the Passion chapter, specific to them, not generic",
-      "words":["3 to 5 short words or phrases pulled directly from their own answers"],
-      "paragraphs":[
-        "Paragraph 1: what draws them to these specific activities, referencing what research on intrinsic motivation, flow states, and core psychological needs (autonomy, mastery, relatedness) says about people who engage this way. Specific to their answers, never generic.",
-        "Paragraph 2: connect this to whichever Jungian archetype clearly fits their pattern (Creator, Explorer, Sage, Lover, Caregiver, Rebel, Ruler, Innocent, etc). Explain why that archetype fits based on what they actually wrote, not a textbook description of the archetype.",
-        "Paragraph 3: name the tension or the thing about this passion they have not taken seriously yet, and what changes if they finally do."
-      ],
-      "quote":"one striking sentence pulled or adapted from the paragraphs, to use as a pull quote"
+    {
+      "dimension":"passion",
+      "label":"What you love",
+      "name":"Passion",
+      "title":"A compelling editorial headline about their passion. Not generic.",
+      "keywords":["word1","word2","word3","word4","word5"],
+      "quote":"A striking pull quote from the analysis. One sentence. Powerful.",
+      "p1":"First paragraph. Deep psychological analysis. 80 to 120 words.",
+      "p2":"Second paragraph. Build on the first. Connect to research. 80 to 120 words.",
+      "p3":"Third paragraph. Make it personal. End with a question or insight. 80 to 120 words."
     },
-{
-      "heading":"A striking 1 sentence H2 for the Vocation chapter, about their natural strengths, specific to them, not generic and never just the dimension name",
-      "words":["3 to 5 short words or phrases pulled directly from their own answers"],
-      "paragraphs":[
-        "Paragraph 1: what their specific combination of strengths suggests about how their mind works, referencing whichever psychological framework actually fits (multiple intelligences, flow theory, or personality research), not a generic list of frameworks.",
-        "Paragraph 2: what pattern connects the specific people or traits they admire to their own strengths, and what that mirroring suggests psychologically about parts of themselves they have not fully claimed yet.",
-        "Paragraph 3: the blind spot that can come with these exact strengths, and whether they are willing to use them for themselves with the same intensity they use them for others."
-      ],
-      "quote":"one striking sentence pulled or adapted from the paragraphs, to use as a pull quote"
+    {
+      "dimension":"vocation",
+      "label":"What you are good at",
+      "name":"Vocation",
+      "title":"Editorial headline about their vocation.",
+      "keywords":["word1","word2","word3","word4","word5"],
+      "quote":"Pull quote.",
+      "p1":"Paragraph 1.",
+      "p2":"Paragraph 2.",
+      "p3":"Paragraph 3."
+    },
+    {
+      "dimension":"mission",
+      "label":"What the world needs",
+      "name":"Mission",
+      "title":"Editorial headline about their mission.",
+      "keywords":["word1","word2","word3","word4","word5"],
+      "quote":"Pull quote.",
+      "p1":"Paragraph 1.",
+      "p2":"Paragraph 2.",
+      "p3":"Paragraph 3."
+    },
+    {
+      "dimension":"profession",
+      "label":"What you can be paid for",
+      "name":"Profession",
+      "title":"Editorial headline about their profession.",
+      "keywords":["word1","word2","word3","word4","word5"],
+      "quote":"Pull quote.",
+      "p1":"Paragraph 1.",
+      "p2":"Paragraph 2.",
+      "p3":"Paragraph 3."
     }
+  ],
+
+  "ikigai_philosophy":"3 paragraphs separated by \\n\\n connecting their specific result to the original Japanese philosophy of Ikigai. Not the westernized Venn diagram but the deeper Japanese understanding: the small daily joys, the sense of being needed, the reason to get up. Reference Kodawari, Wabi Sabi, Blue Zones of Ogimi. Make it specific to this person.",
+
+  "intersection_analysis":"4 paragraphs separated by \\n\\n analyzing how all four dimensions converge. Where the tensions live. Where the harmony is. The one thread connecting everything. End with ONE powerful question that stays with them.",
+
+  "next_steps":[
+    {"title":"Short title","detail":"2 to 3 sentences. Deeply personalized. Not generic. Reference their specific answers.","when":"This week"},
+    {"title":"Short title","detail":"2 to 3 sentences.","when":"This month"},
+    {"title":"Short title","detail":"2 to 3 sentences.","when":"Next 3 months"},
+    {"title":"Short title","detail":"2 to 3 sentences.","when":"Next 6 months"},
+    {"title":"Short title","detail":"2 to 3 sentences.","when":"Ongoing"}
   ]
-}
-Provide exactly 2 items in "chapters", in this order: Passion, Vocation.`,2000),
-      resultPart(P+`{
-  "chapters":[
-{
-      "heading":"A striking 1 sentence H2 for the Mission chapter, about what the world needs from them, specific to them, not generic and never just the dimension name",
-      "words":["3 to 5 short words or phrases pulled directly from their own answers"],
-      "paragraphs":[
-        "Paragraph 1: why these specific things that bother them, not frustration in general, resonate with them psychologically. What the pattern across what they listed actually has in common.",
-        "Paragraph 2: apply Jungian shadow work here: what we react to most strongly in others or in the world is often connected to what we are personally called to address. Connect this directly to their specific answers, not a generic statement about shadow work.",
-        "Paragraph 3: reframe their frustration as a compass rather than a complaint, specific to what they said."
-      ],
-      "quote":"one striking sentence pulled or adapted from the paragraphs, to use as a pull quote"
-    },
-{
-      "heading":"A striking 1 sentence H2 for the Profession chapter, about their professional value, specific to them, not generic and never just the dimension name",
-      "words":["3 to 5 short words or phrases pulled directly from their own answers"],
-      "paragraphs":[
-        "Paragraph 1: where their real market value lies when their specific skills are combined with their passion and mission, not the skills alone.",
-        "Paragraph 2: what professional paths most people would overlook but are uniquely suited to their specific combination of skills, interests and mission.",
-        "Paragraph 3: the shift from using these skills only in service of other people's visions, to redirecting the same skills toward something of their own."
-      ],
-      "quote":"one striking sentence pulled or adapted from the paragraphs, to use as a pull quote"
-    }
-  ]
-}
-Provide exactly 2 items in "chapters", in this order: Mission, Profession.`,2000),
-      resultPart(P+`{
-  "connects":{
-    "opening":"1 sentence hook saying there is one word running through all their answers",
-    "word":"A single word capturing the pattern across all four dimensions, like Congruence or Integrity",
-    "definition":"A short italic style definition of that word as it applies to them specifically",
-    "note":"1 to 2 sentences expanding on the word",
-    "evidence":[
-      {"who":"Someone or something they mentioned admiring or referenced","line":"A sentence connecting that reference to the pattern word, wrapping exactly two key contrasting terms in double asterisks like **term one** and **term two**"}
-    ],
-    "tension":"A closing paragraph naming the tension between where they are and where this points, and the invitation forward",
-    "traditionHeading":"1 sentence H3 framing this through Japanese Ikigai tradition, not a career plan",
-    "tradition":["paragraph 1 on the real Japanese concept of Ikigai as applied to them, not the westernized Venn diagram","paragraph 2 on Kodawari or a related concept as it shows up in their answers","paragraph 3 on what this means in their daily life, not their career"],
-    "question":"ONE powerful closing question that stays with them"
-  }
-}
-Provide 3 to 5 items in "connects.evidence".`,1600)
-    ]);
-    resultData={...main,chapters:[...(ch1.chapters||[]),...(ch2.chapters||[])],connects:cx.connects};
-    hideLoading();renderResult(resultData);
-  }catch(e){
-    if(IS_LOCAL){hideLoading();renderResult(SAMPLE_RESULT);return}
-    // Never show the sample result to a real person as if it were theirs.
-    clearInterval(loadingInterval);
-    document.querySelector('#loading-section .loader-ring').style.display='none';
-    document.getElementById('loading-text').textContent='Something went wrong on our side.';
-    document.getElementById('loading-sub').textContent='Your answers are still here. Give it a moment and try again.';
-    document.getElementById('loading-retry').hidden=false;
+}`, 4000);
+    resultData = JSON.parse(raw);
+    hideLoading();
+    renderResult(resultData);
+  } catch (e) {
+    console.error('Result parse error:', e);
+    hideLoading();
+    alert('Something went wrong generating your result. Please try again.');
   }
 }
 
-function previewSampleResult(){
-  document.getElementById('hero-section').style.display='none';
-  renderResult(SAMPLE_RESULT);
-}
+/* ═══════ RENDER RESULT ═══════ */
+function renderResult(r) {
+  if (!r) return;
+  resultData = r;
+  document.getElementById('main-nav').style.display = 'none';
+  document.getElementById('result-section').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 
-const SAMPLE_RESULT={
-    hero:{
-      statement:"Inspire others to live with intention through creating",
-      summary:"Where your passion for creating, your gift for connection, your frustration with autopilot living, and your professional skills all converge.",
-      cards:[
-        {dimension:"Vocation",value:"Empathy"},
-        {dimension:"Profession",value:"Marketing"},
-        {dimension:"Passion",value:"Creating"},
-        {dimension:"Mission",value:"Authenticity"}
-      ]
-    },
-    what_you_love:"You listed sports, photography, birdwatching, travel, and creating almost as a random list of hobbies. They are not random. Every one of them demands your full presence.",
-    what_you_are_good_at:"You described yourself as empathetic, trustworthy, disciplined, and physically intelligent, a combination that is rarer than it sounds. Most people have one half of that pair, not both.",
-    what_the_world_needs:"Dishonesty, poor access to education, and people living on autopilot all bother you for the same reason: none of them are being real. That sensitivity is not a complaint, it is a compass.",
-    what_you_can_be_paid_for:"You can run every part of a marketing campaign and pair it with genuine warmth most specialists never build. That combination, not any single skill, is what people will actually pay for.",
-    chapters:[
-      {
-        heading:"You are not just someone who likes staying active. You are someone who needs to feel alive.",
-        words:["Sports","Photography","Birdwatching","Travel","Creating"],
-        paragraphs:[
-          "There is a reason you listed sports, photography, birdwatching, travel, and creating in the same breath. On the surface they look like separate hobbies. But underneath, they share something: every one of them demands your full presence. You cannot photograph a bird while thinking about tomorrow's meeting. You cannot lift a heavy weight while mentally somewhere else. These activities are not escapes from your life. They are the moments when you are most in it.",
-          "People who are drawn to this kind of engagement tend to have a deep, often unspoken, need for doing things because the doing itself is the reward. Not for the post. Not for the result. For the feeling of being completely absorbed. You have probably had moments training or shooting photos where an hour felt like ten minutes. That is not a coincidence. That is your nervous system telling you: this is where you belong.",
-          "When something is so close to who we are, we often struggle to name it. It feels too obvious, too simple, too much like breathing to be important. But that is precisely what makes it significant. The things you have to convince yourself to care about are hobbies. The things you cannot stop doing, even when nobody is watching, even when there is no reward: those are the things that matter. Creating, for you, falls in that second category. The question is not whether you are creative. The question is what happens when you finally take that seriously."
-        ],
-        quote:"You said \"I think I like creating\" almost as a throwaway line. But that hesitation is the most honest thing in all your answers."
-      },
-      {
-        heading:"Your real strength is not a skill. It is how you make people feel.",
-        words:["Empathetic","Trustworthy","Noble","Disciplined","Physically intelligent"],
-        paragraphs:[
-          "You described yourself as empathetic, trustworthy, noble, creative, disciplined, and physically intelligent. That is a striking list, and what makes it striking is not any single trait but the combination. Most people who are deeply empathetic struggle with discipline. Most people who are highly disciplined come across as rigid. You somehow hold both, and that combination is rarer than you probably realize.",
-          "Think about the people you admire: Ronaldo, Topuria, Hinman, Hormozi, your parents. Every single one of them embodies this same duality. They are warm and relentless at the same time. Loving and uncompromising. That is not a random pattern of admiration. We are drawn to people who mirror what is already inside us, especially the parts we have not fully expressed yet.",
-          "Here is something worth sitting with, though. People with high empathy and a strong desire to be seen as trustworthy sometimes develop a pattern that is invisible to them but obvious to everyone else: they prioritize other people's needs so consistently that their own creative impulses get pushed to \"later.\" Later becomes next month. Next month becomes next year. Your discipline proves you can commit to hard things. The question is whether you are willing to commit to yourself with the same intensity you bring to your training and your work."
-        ],
-        quote:"The people we admire most are never random. They are mirrors of the self we are still becoming."
-      },
-      {
-        heading:"Your frustration with the world is not anger. It is a calling you have not answered yet.",
-        words:["Dishonesty","Access to education","Autopilot living"],
-        paragraphs:[
-          "You said three things bother you: dishonest people, lack of access to education, and people living on autopilot. At first glance these seem unrelated. But look closer. Dishonesty is when someone is not being real with others. Poor education access is when systems prevent people from becoming who they could be. Autopilot living is when someone is not being real with themselves. All three are variations of the same wound: inauthenticity.",
-          "What is revealing is how you framed it. You did not say it makes you angry. You said it makes you sad. That distinction matters more than you might think. People driven by anger want to correct the world. People driven by sadness want to heal it. Your mission is not to shake people and tell them to wake up. It is to live so intentionally that your example becomes the invitation.",
-          "The things that frustrate us most in the world are often the things we are most called to transform. Not because we have all the answers, but because we feel the gap between what is and what could be with unusual clarity. Your sensitivity to autopilot living is not a weakness or a complaint. It is the compass pointing to your most meaningful work."
-        ],
-        quote:"You do not want to fix people. You want to show them, by how you live, that another way is possible."
-      },
-      {
-        heading:"Your professional value is not in what you know. It is in what you combine.",
-        words:["Campaigns","Design","Editing","Strategy","Warmth"],
-        paragraphs:[
-          "You described your professional skills almost apologetically: you can execute every aspect of a marketing campaign, maybe not at the same level as a specialist designer or editor, but you manage. Reading that, it is clear you are evaluating yourself on individual skills when your actual value lies in the integration of all of them with something most professionals lack entirely: genuine human warmth.",
-          "In a market increasingly flooded with technically competent people, the ones who build lasting careers are not the most skilled. They are the most trusted. Trust is not a skill you learn in a course. It comes from who you are. And based on everything you shared, who you are is someone people naturally open up to, believe in, and want to work with.",
-          "The shift that changes everything: right now your skills serve other people's visions. There is nothing wrong with that. But your Ikigai is pointing toward something different. Not abandoning your skills, but redirecting them. The same ability that helps you build a client's campaign can help you build your own platform. The same empathy that helps you understand a client's customer can help you connect with your own audience. The tools are the same. The direction is what changes."
-        ],
-        quote:"Nobody will ever pay you for Photoshop skills. They will pay you because you understand what they need before they can articulate it, and you know how to build it."
-      }
-    ],
-    connects:{
-      opening:"There is one word that runs through every answer you gave. You probably cannot see it because you are inside it.",
-      word:"Congruence",
-      definition:"Living in alignment with who you actually are.",
-      note:"You are not drawn to success. You are drawn to wholeness, to people who are the same person in private as they are in public.",
-      evidence:[
-        {who:"Ronaldo",line:"Ronaldo's discipline is congruence between **ambition** and **action**"},
-        {who:"Hormozi",line:"Hormozi's energy is congruence between **intelligence** and **output**"},
-        {who:"Hinman",line:"Hinman's lifestyle is congruence between **values** and **daily choices**"},
-        {who:"Your father",line:"Your father's sacrifice is congruence between **love** and **behavior**"},
-        {who:"Your mother",line:"Your mother's love is congruence between **feeling** and **expression**"}
-      ],
-      tension:"Your professional self and your aspirational self are not yet fully aligned. That discomfort is not a problem to solve. It is a compass pointing forward, and it does not require you to blow up your life. Take the same skills, the same discipline, the same empathy you already have, and point some of that energy toward your own voice.",
-      traditionHeading:"In the Japanese tradition, this would not be called a career plan. It would be called a way of being.",
-      tradition:[
-        "The original concept of Ikigai is not about finding the perfect intersection of four circles. It is about the small daily things that make life feel worth living. For you, that translates to something specific: the feeling of creating something honest and watching it resonate with another person. That is your Ikigai in its purest form. Not a product, not a brand, not a career move. A feeling.",
-        "What is interesting about your particular combination is that it mirrors a principle the Japanese call Kodawari: an uncompromising devotion to the craft of living well. Your discipline in training, your care in building things for clients, your frustration with people who live unconsciously. These are all expressions of the same instinct: a refusal to do things halfway.",
-        "In Japan, this quality is not seen as ambition. It is seen as respect. Respect for the work, for the people it serves, and for yourself. Your Ikigai does not need a perfect launch or a large audience to be real. It needs consistency and honesty. You already have it. You keep looking past it because you think it needs to be bigger."
-      ],
-      question:"If the people you admire most could see how you spend your average Tuesday, would they see someone living by the same values you admire in them?"
-    },
-    roadmap:{
-      steps:[
-        {when:"This week",title:"Start your weekly practice",text:"You said you like creating but you have not committed to it yet. Pick one format: writing, photography, or short video. Publish something once a week for 8 weeks. Do not optimize. Do not strategize. Just document what you are thinking, learning, or experiencing. Your marketing brain will want to make it perfect. Resist that."},
-        {when:"Week 1",title:"Audit your congruence",text:"Spend 30 minutes this week writing down how you actually spend your time versus how you want to spend it. You admire people who live with discipline and intention. Map where your own daily actions align with that, and where they do not. No judgment, just clarity."},
-        {when:"Weeks 2 to 4",title:"Have three real conversations",text:"You mentioned empathy and connection as core strengths. Use them intentionally. Reach out to three people whose path you find interesting and ask them one honest question: \"What made you start?\" Not for networking. Not for advice. For perspective."},
-        {when:"One weekend",title:"Build one thing that is yours",text:"You know how to build tools, automate systems, and create content for other people. Take one weekend and build something small that represents your own perspective. It does not matter what it is. What matters is that it has your name on it and it reflects what you actually think."},
-        {when:"Day 90",title:"Revisit this in 90 days",text:"Save this result. Put a reminder for 90 days from now. Retake the test. Compare your answers. The shifts in language, priorities, and frustrations will tell you more about your growth than any productivity metric ever could."}
-      ]
-    }
-};
+  // Hero
+  document.getElementById('res-ikigai-phrase').textContent = r.ikigai_central || '';
+  document.getElementById('res-ikigai-sub').textContent = r.ikigai_subtitle || '';
 
-const DIMENSIONS=[
-  {cls:'passion',dim:'Passion',tag:'What you love',num:'01'},
-  {cls:'vocation',dim:'Vocation',tag:'What you are good at',num:'02'},
-  {cls:'mission',dim:'Mission',tag:'What the world needs',num:'03'},
-  {cls:'profession',dim:'Profession',tag:'What you can be paid for',num:'04'}
-];
-const ROADMAP_COLORS=['#FF9C34','#C96A82','#74B8E8','#CEEC56','#B9A6E8'];
-
-function scrollToChapter(cls){
-  const locked=document.getElementById('locked-content');
-  const isUnlocked=locked&&locked.style.display!=='none';
-
-  if(isUnlocked){
-    const el=document.getElementById('chapter-'+cls);
-    if(!el)return;
-    const y=el.getBoundingClientRect().top+window.scrollY-72;
-    window.scrollTo({top:y,behavior:'smooth'});
-    return;
-  }
-
-  // Not unlocked yet: tease the exact chapter they clicked on, then send them to the paywall.
-  const idx=DIMENSIONS.findIndex(d=>d.cls===cls);
-  const dim=DIMENSIONS[idx]||DIMENSIONS[0];
-  const chapters=(resultData&&resultData.chapters)||[];
-  const ch=chapters[idx]||{};
-  const ptTag=document.getElementById('pt-tag'),ptHeading=document.getElementById('pt-heading'),ptText=document.getElementById('pt-text');
-  if(ptTag)ptTag.textContent=dim.tag;
-  if(ptHeading)ptHeading.textContent=ch.heading||'';
-  if(ptText)ptText.textContent=(ch.paragraphs&&ch.paragraphs[0])||'';
-
-  const paywallEl=document.getElementById('paywall-section');
-  if(!paywallEl)return;
-  const y=paywallEl.getBoundingClientRect().top+window.scrollY-72;
-  window.scrollTo({top:y,behavior:'smooth'});
-}
-
-function mdEm(s){return (s||'').replace(/\*\*(.+?)\*\*/g,'<em>$1</em>')}
-
-let spineSteps=[],spineOl=null,spineHost=null,spineObserver=null;
-function positionSpine(){
-  if(!spineSteps.length||!spineOl||!spineHost)return;
-  const top=spineOl.getBoundingClientRect().top,H=spineOl.getBoundingClientRect().height;
-  const Y=spineSteps.map(li=>li.getBoundingClientRect().top-top+40);
-  const X=spineSteps.map((_,i)=>i%2===0?46:54);
-  let d=`M ${X[0]} ${Y[0]}`;
-  for(let i=1;i<Y.length;i++){const my=(Y[i-1]+Y[i])/2;d+=` C ${X[i-1]} ${my}, ${X[i]} ${my}, ${X[i]} ${Y[i]}`;}
-  const drifts=[[26,-32],[-28,24],[22,28]];
-  spineHost.innerHTML=`<svg viewBox="0 0 100 ${H}" height="${H}" preserveAspectRatio="none">
-    <defs><linearGradient id="spineFade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#FBF7EE" stop-opacity=".28"/><stop offset="1" stop-color="#FBF7EE" stop-opacity=".28"/>
-    </linearGradient></defs>
-    <path d="${d}" fill="none" stroke="url(#spineFade)" stroke-width="1.5" vector-effect="non-scaling-stroke"
-      style="stroke-dasharray:6000;stroke-dashoffset:6000;animation:rmdraw 3.5s cubic-bezier(.22,.61,.36,1) .2s forwards"/></svg>`+
-    Y.map((y,i)=>{const [dx,dy]=drifts[i%3];return `<span class="ball" style="left:${X[i]}%;top:${y}px;background:${spineSteps[i].dataset.color};--dur:${6+i}s;--d2:${1.3+i*0.6}s;--dx:${dx}px;--dy:${dy}px;animation-delay:${0.5+i*0.6}s,${1.3+i*0.6}s"></span>`;}).join('');
-}
-function drawSpine(){
-  spineOl=document.getElementById('steps');
-  spineHost=document.getElementById('spine');
-  if(!spineOl||!spineHost)return;
-  spineSteps=[...spineOl.querySelectorAll('.step')];
-  if(!spineSteps.length)return;
-  spineSteps.forEach((li,i)=>{li.style.animationDelay=(0.2+i*0.3)+'s'});
-  positionSpine();
-  if(spineObserver)spineObserver.disconnect();
-  spineObserver=new ResizeObserver(positionSpine);
-  spineObserver.observe(spineOl);
-}
-window.addEventListener('resize',positionSpine);
-
-function unlockFullReport(){
-  document.getElementById('paywall-section').style.display='none';
-  document.getElementById('locked-content').style.display='block';
-  const dl=document.getElementById('share-download-block');
-  if(dl)dl.style.display='flex';
-  drawSpine();
-  document.getElementById('locked-content').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function renderResult(r){
-  document.getElementById('result-section').style.display='block';
-  window.scrollTo({top:0,behavior:'smooth'});
-  if(!r)return;
-  resultData=r;
-
-  document.getElementById('paywall-section').style.display='block';
-  document.getElementById('locked-content').style.display='none';
-  const dlBlock=document.getElementById('share-download-block');
-  if(dlBlock)dlBlock.style.display='none';
-
-  const teaserChapter=(r.chapters||[])[0]||{};
-  document.getElementById('pt-tag').textContent=DIMENSIONS[0].tag;
-  document.getElementById('pt-heading').textContent=teaserChapter.heading||'';
-  document.getElementById('pt-text').textContent=(teaserChapter.paragraphs&&teaserChapter.paragraphs[0])||'';
-  document.getElementById('paywall-word-value').textContent=(r.connects&&r.connects.word)||'';
-
-  const hero=r.hero||{};
-  document.getElementById('rh-statement').textContent=hero.statement||'';
-  document.getElementById('rh-summary').textContent=hero.summary||'';
-  document.getElementById('rh-cards').innerHTML=(hero.cards||[]).map((c,i)=>`
-    <div class="rh-card-pos rh-c${i+1}"><div class="rh-card"><span class="lbl">${c.dimension}</span><span class="val">${c.value}</span></div></div>`).join('');
-
-  const cards=[
-    {label:'What you love',title:'Passion',text:r.what_you_love,target:'passion'},
-    {label:"What you're good at",title:'Vocation',text:r.what_you_are_good_at,target:'vocation'},
-    {label:'What the world needs',title:'Mission',text:r.what_the_world_needs,target:'mission'},
-    {label:'What you can be paid for',title:'Profession',text:r.what_you_can_be_paid_for,target:'profession'},
+  // Floating cards (use first keyword from each chapter)
+  const cardData = [
+    { label: 'Passion', word: r.chapters?.[0]?.keywords?.[0] || 'Creating', color: 'var(--orange)' },
+    { label: 'Vocation', word: r.chapters?.[1]?.keywords?.[0] || 'Empathy', color: 'var(--cornflower)' },
+    { label: 'Mission', word: r.chapters?.[2]?.keywords?.[0] || 'Purpose', color: 'var(--wine)' },
+    { label: 'Profession', word: r.chapters?.[3]?.keywords?.[0] || 'Strategy', color: 'var(--sage)' }
   ];
-  document.getElementById('result-cards').innerHTML=cards.map(c=>`
-    <div class="card" onclick="scrollToChapter('${c.target}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')scrollToChapter('${c.target}')" aria-label="Jump to the ${c.title} chapter">
-      <div class="card-label">${c.label}</div>
-      <div class="card-title serif">${c.title}<span class="card-arrow" aria-hidden="true">&rarr;</span></div>
-      <div class="card-text">${c.text}</div>
-    </div>`).join('');
+  document.getElementById('res-cards').innerHTML = cardData.map((c, i) =>
+    `<div class="rc-pos rc${i + 1}"><div class="rc" style="border-color:${c.color}"><span class="lbl">${c.label}</span><span class="val">${c.word}</span></div></div>`
+  ).join('');
 
-  const chapters=r.chapters||[];
-  document.getElementById('chapters-container').innerHTML=DIMENSIONS.map((d,i)=>{
-    const ch=chapters[i]||{};
-    const paras=ch.paragraphs||[];
-    const words=(ch.words||[]).map(w=>`<span>${w}</span>`).join('');
-    return `<section class="chapter ${d.cls}" id="chapter-${d.cls}">
-      <div class="dd-wrap dd-opener">
-        <div class="dd-figure">
-          <div class="dd-blob"></div>
-          <div class="dd-numblock">
-            <span class="dd-num serif">${d.num}</span>
-            <div class="dd-tag"><i></i>${d.tag}</div>
+  // Four dimension cards (FREE)
+  const dims = [
+    { label: 'What you love', title: 'Passion', text: r.what_you_love, color: '#FF9C34' },
+    { label: 'What you are good at', title: 'Vocation', text: r.what_you_are_good_at, color: '#9CCBEC' },
+    { label: 'What the world needs', title: 'Mission', text: r.what_the_world_needs, color: '#551E29' },
+    { label: 'What you can be paid for', title: 'Profession', text: r.what_you_can_be_paid_for, color: '#AEBBA0' }
+  ];
+  document.getElementById('fd-grid').innerHTML = dims.map(d =>
+    `<article class="fd-card" style="border-top-color:${d.color}">
+      <div class="fd-label">${d.label}</div>
+      <h3 style="color:${d.color}">${d.title}</h3>
+      <p>${d.text}</p>
+    </article>`
+  ).join('');
+
+  // Render paid content (hidden until payment)
+  renderChapters(r.chapters);
+  renderPhilosophy(r.ikigai_philosophy);
+  renderIntersection(r.intersection_analysis);
+  renderRoadmap(r.next_steps);
+}
+
+/* ═══════ RENDER EDITORIAL CHAPTERS ═══════ */
+function renderChapters(chapters) {
+  if (!chapters?.length) return;
+  const nums = ['01', '02', '03', '04'];
+  const ballColors = ['#FF9C34', '#74B8E8', '#551E29', '#AEBBA0'];
+
+  document.getElementById('chapters-container').innerHTML = chapters.map((ch, i) => `
+    <section class="ch ${ch.dimension}">
+      <div class="ch-wrap ch-opener">
+        <div class="ch-figure">
+          <div class="ch-blob"></div>
+          <div class="ch-numblock">
+            <span class="ch-num">${nums[i]}</span>
+            <div class="ch-tag"><i></i>${ch.label}</div>
           </div>
         </div>
-        <div class="dd-intro">
-          <span class="dd-dimension">${d.dim}</span>
-          <h2>${ch.heading||''}</h2>
+        <div class="ch-intro">
+          <span class="ch-dimension">${ch.name}</span>
+          <h2>${ch.title}</h2>
         </div>
       </div>
-      <div class="dd-wrap dd-reading">
-        <aside class="dd-rail">
-          <div class="dd-rule"></div>
-          <span class="dd-rail-label">In your words</span>
-          <div class="dd-words">${words}</div>
+      <div class="ch-wrap ch-reading">
+        <aside class="ch-rail">
+          <div class="ch-rule"></div>
+          <span class="ch-rail-label">In your words</span>
+          <div class="ch-words">${ch.keywords.map(k => `<span>${k}</span>`).join('')}</div>
         </aside>
-        <div class="dd-prose">
-          <p>${paras[0]||''}</p>
-          <p>${paras[1]||''}</p>
-          <blockquote>${ch.quote||''}</blockquote>
-          <p>${paras[2]||''}</p>
+        <div class="ch-prose">
+          <p>${ch.p1}</p>
+          <blockquote>${ch.quote}</blockquote>
+          <p>${ch.p2}</p>
+          <p>${ch.p3}</p>
         </div>
       </div>
-    </section>`;
-  }).join('');
+    </section>
+  `).join('');
+}
 
-  const cx=r.connects||{};
-  document.getElementById('cx-opening').textContent=cx.opening||'';
-  document.getElementById('cx-word').textContent=cx.word||'';
-  document.getElementById('cx-def').textContent=cx.definition||'';
-  document.getElementById('cx-note').textContent=cx.note||'';
-  document.getElementById('cx-evidence').innerHTML=(cx.evidence||[]).map(ev=>`
-    <div class="cx-row"><span class="cx-who">${ev.who}</span><span class="cx-line">${mdEm(ev.line)}</span></div>`).join('');
-  document.getElementById('cx-tension').textContent=cx.tension||'';
-  document.getElementById('cx-trad-heading').textContent=cx.traditionHeading||'';
-  document.getElementById('cx-trad-cols').innerHTML=(cx.tradition||[]).map(p=>`<p>${p}</p>`).join('');
-  document.getElementById('cx-question').textContent=cx.question||'';
+function renderPhilosophy(text) {
+  if (!text) return;
+  const paragraphs = text.split('\n\n').filter(p => p.trim());
+  document.getElementById('philosophy-text').innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+}
 
-  const steps=(r.roadmap&&r.roadmap.steps)||[];
-  document.getElementById('steps').innerHTML=steps.map((s,i)=>`
-    <li class="step" data-color="${ROADMAP_COLORS[i%ROADMAP_COLORS.length]}">
-      <div class="step-body">
-        <div class="step-head"><span class="num serif">${String(i+1).padStart(2,'0')}</span><span class="when">${s.when||''}</span></div>
-        <h3>${s.title||''}</h3>
-        <p>${s.text||''}</p>
+function renderIntersection(text) {
+  if (!text) return;
+  const paragraphs = text.split('\n\n').filter(p => p.trim());
+  document.getElementById('intersection-text').innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+}
+
+function renderRoadmap(steps) {
+  if (!steps?.length) return;
+  const ballColors = ['#FF9C34', '#C96A82', '#74B8E8', '#CEEC56', '#B9A6E8'];
+  const delays = ['0.2s,1.3s', '0.8s,1.9s', '1.4s,2.5s', '2s,3.1s', '2.6s,3.7s'];
+
+  document.getElementById('rm-steps').innerHTML = steps.map((s, i) => `
+    <li class="rm-step" style="animation-delay:${(i * 0.3 + 0.2).toFixed(1)}s">
+      <div class="rm-ball" style="background:${ballColors[i % 5]};animation-delay:${delays[i % 5]}"></div>
+      <div class="rm-body">
+        <div class="rm-num">${String(i + 1).padStart(2, '0')}</div>
+        <span class="rm-when">${s.when || ''}</span>
+        <h3>${s.title}</h3>
+        <p>${s.detail}</p>
       </div>
-    </li>`).join('');
+    </li>
+  `).join('');
 }
 
-let shareStatusTimer=null;
-function flashShareStatus(msg){
-  const el=document.getElementById('share-status');
-  if(!el)return;
-  el.textContent=msg;
-  el.classList.add('show');
-  clearTimeout(shareStatusTimer);
-  shareStatusTimer=setTimeout(()=>el.classList.remove('show'),3200);
-}
-
-function shareTo(platform){
-  const url='https://foundbyikigai.com';
-  const phrase=resultData&&resultData.hero?resultData.hero.statement:null;
-  const text=phrase?`I just found my Ikigai:\n\n“${phrase}”\n\nIf you want to find yours, this tool helped me get clarity on the path I actually want to take.`:`If you feel like you are running on autopilot and want more clarity on your path, this tool can help.`;
-
-  if(platform==='x'){
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,'_blank');
-    return;
-  }
-  if(platform==='facebook'){
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,'_blank');
-    return;
-  }
-  if(platform==='linkedin'){
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(text)}`,'_blank');
-    return;
-  }
-
-  // Instagram and TikTok have no web intent for sharing arbitrary text.
-  // Prefer the native share sheet first (on phones, lets the person pick
-  // Instagram/TikTok directly); fall back to copy the text + open the site.
-  const dest=platform==='instagram'?'https://www.instagram.com':'https://www.tiktok.com/upload';
-  const dropZone=platform==='instagram'?'your Story or caption':'your video caption';
-  const fullText=`${text}\n\n${url}`;
-
-  function copyAndOpen(){
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(fullText).then(()=>{
-        flashShareStatus(`Copied! Paste it into ${dropZone}.`);
-        window.open(dest,'_blank');
-      }).catch(()=>{
-        flashShareStatus(`Copy this, then paste it into ${dropZone}: ${fullText}`);
-        window.open(dest,'_blank');
-      });
-    }else{
-      flashShareStatus(`Copy this, then paste it into ${dropZone}: ${fullText}`);
-      window.open(dest,'_blank');
-    }
-  }
-
-  if(navigator.share){
-    navigator.share({title:'Found by Ikigai',text:text,url:url}).catch(e=>{
-      if(e&&e.name==='AbortError')return;
-      copyAndOpen();
-    });
-  }else{
-    copyAndOpen();
+/* ═══════ SHARE & DOWNLOAD ═══════ */
+function shareResult(platform) {
+  const phrase = resultData ? resultData.ikigai_central : '';
+  const text = `I just found my Ikigai:\n\n“${phrase}”\n\nIf you want to find yours:\nhttps://foundbyikigai.com`;
+  if (platform === 'instagram') {
+    // Instagram doesn't have a share URL, copy to clipboard
+    navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard! Paste it in your Instagram story or post.'));
+  } else if (platform === 'tiktok') {
+    navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard! Paste it in your TikTok caption.'));
   }
 }
 
-function downloadResultAsText(r){
-  const at=allQuestions.filter(q=>answers[q.id]).map(q=>`${q.text}\n> ${answers[q.id]}`).join('\n\n');
-  const chapterNames=['PASSION','VOCATION','MISSION','PROFESSION'];
-  const chaptersText=(r.chapters||[]).map((c,i)=>`${chapterNames[i]}\n${c.heading||''}\n\n${(c.paragraphs||[]).join('\n\n')}\n\n"${c.quote||''}"`).join(`\n\n${'_'.repeat(40)}\n\n`);
-  const cx=r.connects||{};
-  const connectsText=`${cx.opening||''}\n\n${cx.word||''}: ${cx.definition||''}\n${cx.note||''}\n\n${(cx.evidence||[]).map(e=>`${e.who}: ${(e.line||'').replace(/\*\*/g,'')}`).join('\n')}\n\n${cx.tension||''}\n\n${cx.traditionHeading||''}\n${(cx.tradition||[]).join('\n\n')}\n\n${cx.question||''}`;
-  const steps=((r.roadmap&&r.roadmap.steps)||[]).map((s,i)=>`${i+1}. [${s.when||''}] ${s.title||''}\n   ${s.text||''}`).join('\n\n');
-  const c=`FOUND BY IKIGAI\n${'='.repeat(40)}\n\nYOUR IKIGAI\n${(r.hero&&r.hero.statement)||''}\n${(r.hero&&r.hero.summary)||''}\n\n${'_'.repeat(40)}\n\nWHAT YOU LOVE\n${r.what_you_love}\n\nWHAT YOU ARE GOOD AT\n${r.what_you_are_good_at}\n\nWHAT THE WORLD NEEDS\n${r.what_the_world_needs}\n\nWHAT YOU CAN BE PAID FOR\n${r.what_you_can_be_paid_for}\n\n${'_'.repeat(40)}\n\n${chaptersText}\n\n${'_'.repeat(40)}\n\nWHERE IT ALL CONNECTS\n${connectsText}\n\n${'_'.repeat(40)}\n\nYOUR PERSONALIZED ROADMAP\n${steps}\n\n${'_'.repeat(40)}\n\nYOUR ANSWERS\n${at}\n\n${'_'.repeat(40)}\nfoundbyikigai.com`;
-  const blob=new Blob([c],{type:'text/plain;charset=utf-8'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);a.download='my-ikigai.txt';a.click();URL.revokeObjectURL(a.href);
+function downloadResult() {
+  if (!resultData) return;
+  const at = allQuestions.filter(q => answers[q.id]).map(q => `${q.text}\n> ${answers[q.id]}`).join('\n\n');
+  const chapters = (resultData.chapters || []).map(ch =>
+    `${ch.name.toUpperCase()}: ${ch.label}\n${ch.title}\n\n${ch.p1}\n\n${ch.quote}\n\n${ch.p2}\n\n${ch.p3}`
+  ).join('\n\n' + '_'.repeat(40) + '\n\n');
+  const steps = (resultData.next_steps || []).map((s, i) =>
+    `${i + 1}. ${s.title} (${s.when || ''})\n   ${s.detail}`
+  ).join('\n\n');
+
+  const content = [
+    'FOUND BY IKIGAI',
+    '='.repeat(40),
+    '',
+    'YOUR IKIGAI',
+    resultData.ikigai_central,
+    resultData.ikigai_subtitle || '',
+    '',
+    '_'.repeat(40),
+    '',
+    'WHAT YOU LOVE',
+    resultData.what_you_love,
+    '',
+    'WHAT YOU ARE GOOD AT',
+    resultData.what_you_are_good_at,
+    '',
+    'WHAT THE WORLD NEEDS',
+    resultData.what_the_world_needs,
+    '',
+    'WHAT YOU CAN BE PAID FOR',
+    resultData.what_you_can_be_paid_for,
+    '',
+    '_'.repeat(40),
+    '',
+    'DEEP ANALYSIS',
+    '',
+    chapters,
+    '_'.repeat(40),
+    '',
+    'THE IKIGAI PHILOSOPHY AND YOU',
+    resultData.ikigai_philosophy || '',
+    '',
+    '_'.repeat(40),
+    '',
+    'WHERE IT ALL CONNECTS',
+    resultData.intersection_analysis || '',
+    '',
+    '_'.repeat(40),
+    '',
+    'YOUR PERSONALIZED ROADMAP',
+    steps,
+    '',
+    '_'.repeat(40),
+    '',
+    'YOUR ANSWERS',
+    at,
+    '',
+    '_'.repeat(40),
+    'foundbyikigai.com'
+  ].join('\n');
+
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'my-ikigai.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 
-function downloadResultAsPdf(r){
-  const jsPDFCtor=window.jspdf&&window.jspdf.jsPDF;
-  if(!jsPDFCtor){downloadResultAsText(r);return}
+/* ═══════ SPEECH RECOGNITION ═══════ */
+let recognition = null;
+let isRecording = false;
 
-  const doc=new jsPDFCtor({unit:'pt',format:'a4'});
-  const pageW=doc.internal.pageSize.getWidth(),pageH=doc.internal.pageSize.getHeight();
-  const margin=56,maxW=pageW-margin*2;
-  const WINE=[85,30,41],ZEUS=[26,23,20],OLIVE=[138,130,112],ARM=[74,69,61];
-  let y=margin;
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  let finalTranscript = '';
 
-  function ensureSpace(h){if(y+h>pageH-margin){doc.addPage();y=margin}}
-  function rule(){ensureSpace(24);doc.setDrawColor(222,216,202);doc.line(margin,y,pageW-margin,y);y+=24}
-  function label(text){
-    ensureSpace(18);
-    doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...OLIVE);
-    doc.text(String(text).toUpperCase(),margin,y);
-    y+=18;
-  }
-  function heading(text,size,color,style,gapAfter){
-    if(!text)return;
-    ensureSpace(size+(gapAfter||10));
-    doc.setFont('times',style||'bold');doc.setFontSize(size);doc.setTextColor(...color);
-    const lines=doc.splitTextToSize(text,maxW);
-    lines.forEach(line=>{ensureSpace(size*1.15);doc.text(line,margin,y);y+=size*1.15});
-    y+=(gapAfter||10);
-  }
-  function paragraph(text,opts){
-    if(!text)return;
-    opts=opts||{};
-    const size=opts.size||11,color=opts.color||ARM,font=opts.font||'helvetica',style=opts.style||'normal';
-    doc.setFont(font,style);doc.setFontSize(size);doc.setTextColor(...color);
-    const lines=doc.splitTextToSize(text,maxW);
-    const lh=size*1.4;
-    lines.forEach(line=>{ensureSpace(lh);doc.text(line,margin,y);y+=lh});
-    y+=8;
-  }
-
-  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...OLIVE);
-  doc.text('FOUND BY IKIGAI',margin,y);y+=30;
-  heading((r.hero&&r.hero.statement)||'Your Ikigai',24,ZEUS,'bolditalic',14);
-  paragraph((r.hero&&r.hero.summary)||'',{size:12});
-  rule();
-
-  label('What you love');paragraph(r.what_you_love);
-  label('What you are good at');paragraph(r.what_you_are_good_at);
-  label('What the world needs');paragraph(r.what_the_world_needs);
-  label('What you can be paid for');paragraph(r.what_you_can_be_paid_for);
-  rule();
-
-  const chapterNames=['Passion','Vocation','Mission','Profession'];
-  (r.chapters||[]).forEach((c,i)=>{
-    label(chapterNames[i]||`Chapter ${i+1}`);
-    heading(c.heading,15,ZEUS,'bold',8);
-    (c.paragraphs||[]).forEach(p=>paragraph(p));
-    if(c.quote)paragraph('“'+c.quote+'”',{color:WINE,font:'times',style:'italic'});
-    y+=6;
-  });
-  rule();
-
-  const cx=r.connects||{};
-  label('Where it all connects');
-  paragraph(cx.opening);
-  heading(cx.word,20,WINE,'bolditalic',4);
-  if(cx.definition)paragraph(cx.definition,{font:'times',style:'italic'});
-  paragraph(cx.note);
-  (cx.evidence||[]).forEach(ev=>paragraph(`${ev.who}: ${(ev.line||'').replace(/\*\*/g,'')}`));
-  paragraph(cx.tension);
-  heading(cx.traditionHeading,13,ZEUS,'bold',6);
-  (cx.tradition||[]).forEach(p=>paragraph(p));
-  if(cx.question)paragraph(cx.question,{size:13,color:WINE,font:'times',style:'italic'});
-  rule();
-
-  label('Your personalized roadmap');
-  ((r.roadmap&&r.roadmap.steps)||[]).forEach((s,i)=>{
-    heading(`${i+1}. ${s.title||''}`,13,ZEUS,'bold',2);
-    paragraph(s.when,{size:9,color:OLIVE});
-    paragraph(s.text);
-  });
-  rule();
-
-  label('Your answers');
-  allQuestions.filter(q=>answers[q.id]).forEach(q=>{
-    heading(q.text,11,ZEUS,'bold',4);
-    paragraph(answers[q.id],{font:'helvetica',style:'italic'});
-  });
-
-  const pageCount=doc.internal.getNumberOfPages();
-  for(let i=1;i<=pageCount;i++){
-    doc.setPage(i);
-    doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...OLIVE);
-    doc.text('foundbyikigai.com',margin,pageH-30);
-    doc.text(String(i),pageW-margin,pageH-30,{align:'right'});
-  }
-
-  doc.save('my-ikigai.pdf');
-}
-
-function downloadResult(){
-  if(!resultData)return;
-  try{downloadResultAsPdf(resultData)}
-  catch(e){downloadResultAsText(resultData)}
-}
-// Speech Recognition
-let recognition=null;
-let isRecording=false;
-
-if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  recognition=new SR();
-  recognition.continuous=true;
-  recognition.interimResults=true;
-  recognition.lang='en-US';
-
-  let finalTranscript='';
-
-  recognition.onstart=()=>{
-    isRecording=true;
-    const btn=document.getElementById('mic-btn');
-    const status=document.getElementById('mic-status');
-    if(btn)btn.classList.add('recording');
-    if(status)status.classList.add('show');
+  recognition.onstart = () => {
+    isRecording = true;
+    const btn = document.getElementById('mic-btn');
+    const status = document.getElementById('mic-status');
+    if (btn) btn.classList.add('recording');
+    if (status) status.classList.add('show');
   };
-
-  recognition.onend=()=>{
-    isRecording=false;
-    const btn=document.getElementById('mic-btn');
-    const status=document.getElementById('mic-status');
-    if(btn)btn.classList.remove('recording');
-    if(status)status.classList.remove('show');
+  recognition.onend = () => {
+    isRecording = false;
+    const btn = document.getElementById('mic-btn');
+    const status = document.getElementById('mic-status');
+    if (btn) btn.classList.remove('recording');
+    if (status) status.classList.remove('show');
   };
-
-  recognition.onresult=(e)=>{
-    const textarea=document.getElementById('current-answer');
-    if(!textarea)return;
-    let interim='';
-    finalTranscript=textarea.getAttribute('data-base')||'';
-    for(let i=e.resultIndex;i<e.results.length;i++){
-      if(e.results[i].isFinal){
-        finalTranscript+=e.results[i][0].transcript+' ';
-        textarea.setAttribute('data-base',finalTranscript);
-      }else{
-        interim+=e.results[i][0].transcript;
+  recognition.onresult = (e) => {
+    const textarea = document.getElementById('current-answer');
+    if (!textarea) return;
+    let interim = '';
+    finalTranscript = textarea.getAttribute('data-base') || '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) {
+        finalTranscript += e.results[i][0].transcript + ' ';
+        textarea.setAttribute('data-base', finalTranscript);
+      } else {
+        interim += e.results[i][0].transcript;
       }
     }
-    textarea.value=finalTranscript+interim;
+    textarea.value = finalTranscript + interim;
   };
-
-  recognition.onerror=(e)=>{
-    if(e.error!=='aborted'){
-      isRecording=false;
-      const btn=document.getElementById('mic-btn');
-      const status=document.getElementById('mic-status');
-      if(btn)btn.classList.remove('recording');
-      if(status){status.textContent='Error. Try again.';setTimeout(()=>status.classList.remove('show'),2000)}
+  recognition.onerror = (e) => {
+    if (e.error !== 'aborted') {
+      isRecording = false;
+      const btn = document.getElementById('mic-btn');
+      const status = document.getElementById('mic-status');
+      if (btn) btn.classList.remove('recording');
+      if (status) { status.textContent = 'Error. Try again.'; setTimeout(() => status.classList.remove('show'), 2000); }
     }
   };
 }
 
-function toggleMic(){
-  if(!recognition){alert('Voice input is not supported in this browser. Try Chrome.');return}
-  const textarea=document.getElementById('current-answer');
-  if(isRecording){
-    recognition.stop();
-  }else{
-    if(textarea)textarea.setAttribute('data-base',textarea.value);
-    recognition.start();
-  }
+function toggleMic() {
+  if (!recognition) { alert('Voice input is not supported in this browser. Try Chrome.'); return; }
+  const textarea = document.getElementById('current-answer');
+  if (isRecording) { recognition.stop(); }
+  else { if (textarea) textarea.setAttribute('data-base', textarea.value); recognition.start(); }
 }
 </script>
+</body>
+</html>
