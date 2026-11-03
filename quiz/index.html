@@ -29,11 +29,13 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
   position:fixed;top:0;left:0;right:0;z-index:100;
   height:var(--nav-h);padding:0 max(24px,calc((100% - 720px)/2));
   display:flex;align-items:center;
-  background:transparent;
-  transition:background .35s ease,box-shadow .35s ease,backdrop-filter .35s ease;
+  background:var(--cream);
+  transition:box-shadow .35s ease;
 }
-.nav.scrolled{background:rgba(251,247,238,0.85);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(0,0,0,0.05)}
-.nav-logo{height:26px;display:block}
+.nav.scrolled{box-shadow:0 1px 0 rgba(0,0,0,0.05)}
+.nav-logo{display:flex;align-items:center;gap:8px}
+.nav-logo svg{width:22px;height:22px;flex-shrink:0}
+.nav-logo span{font-family:'Newsreader',serif;font-size:17px;font-weight:500;color:var(--zeus);letter-spacing:-.2px}
 
 .wrap{max-width:720px;margin:0 auto;padding:0 24px}
 .serif{font-family:var(--serif)}
@@ -377,7 +379,16 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
 <body>
 
 <nav class="nav" id="main-nav">
-  <img src="/ikigai-logo.png" alt="Found by Ikigai" class="nav-logo">
+  <div class="nav-logo" role="img" aria-label="Found by Ikigai">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M2.16 5.52C7.92 8.4 10.8 10.56 12.96 12.48" stroke="#551E29" stroke-width="0.96" stroke-linecap="round"/>
+      <path d="M22.32 4.08C16.56 7.92 14.4 10.32 12.96 12.48" stroke="#551E29" stroke-width="0.96" stroke-linecap="round"/>
+      <path d="M3.6 21.84C9.36 17.52 11.28 14.88 12.96 12.48" stroke="#551E29" stroke-width="0.96" stroke-linecap="round"/>
+      <path d="M21.84 21.6C16.8 17.52 14.64 14.64 12.96 12.48" stroke="#551E29" stroke-width="0.96" stroke-linecap="round"/>
+      <path d="M12.96 14.16C13.8878 14.16 14.64 13.4078 14.64 12.48C14.64 11.5522 13.8878 10.8 12.96 10.8C12.0322 10.8 11.28 11.5522 11.28 12.48C11.28 13.4078 12.0322 14.16 12.96 14.16Z" fill="#FF9C34"/>
+    </svg>
+    <span>Found by Ikigai</span>
+  </div>
 </nav>
 
 <!-- ═══════ HERO ═══════ -->
