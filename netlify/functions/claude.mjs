@@ -8,7 +8,7 @@
 // under 30 seconds.
 import Anthropic from "@anthropic-ai/sdk";
 
-const MODEL = "claude-haiku-4-5";
+const MODEL = "claude-haiku-4-5-20251001";
 const MAX_TOKENS = 4000;
 const MAX_PROMPT_CHARS = 30000;
 
