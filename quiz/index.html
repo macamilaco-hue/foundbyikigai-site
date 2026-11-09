@@ -819,14 +819,11 @@ or
 async function generateResult() {
   showLoading();
   const at = allQuestions.filter(q => answers[q.id]).map(q => `${q.text}\n"${answers[q.id]}"`).join('\n\n');
-  try {
-    const raw = await callClaude(`You are an honest, direct guide with deep knowledge of scientific psychology, Jungian psychology, and the Japanese philosophy of Ikigai. You speak like a wise friend who tells the truth with respect. Natural English.
-
+  const RULES = `You are an honest, direct guide with deep knowledge of scientific psychology, Jungian psychology, and the Japanese philosophy of Ikigai. You speak like a wise friend who tells the truth with respect. Natural English.
 CRITICAL FORMATTING RULES:
 - NEVER use hyphens or dashes of any kind (no -, no --, no em dashes, no en dashes)
 - Use commas, periods, or semicolons instead
 - Write "self discovery" not "self-discovery"
-
 CONTENT RULES:
 - Base everything ONLY on what the person wrote
 - Present unclear things as possibilities, not certainties
@@ -836,70 +833,43 @@ CONTENT RULES:
 - Do NOT invent facts about the person
 
 Person's answers:
-${at}
+`;
+  try {
+    // Split into 3 parallel requests to stay under Netlify's 30s timeout
+    const [r1, r2, r3] = await Promise.all([
+      // Part 1: Core ikigai + free preview + first 2 chapters
+      callClaude(RULES + at + `
 
-Reply ONLY in valid JSON with this exact structure:
-
+Reply ONLY in valid JSON:
 {
   "ikigai_central":"Short phrase max 10 words capturing their ikigai",
   "ikigai_subtitle":"One sentence describing how their dimensions converge",
-
   "what_you_love":"2 specific sentences for the FREE preview. Based on THEIR answers.",
   "what_you_are_good_at":"2 sentences for the FREE preview. About their real strengths.",
   "what_the_world_needs":"2 sentences for the FREE preview. How their sensitivity connects with the world.",
   "what_you_can_be_paid_for":"2 sentences for the FREE preview. Their real professional value.",
-
   "chapters":[
-    {
-      "dimension":"passion",
-      "label":"What you love",
-      "name":"Passion",
-      "title":"A compelling editorial headline about their passion. Not generic.",
-      "keywords":["word1","word2","word3","word4","word5"],
-      "quote":"A striking pull quote from the analysis. One sentence. Powerful.",
-      "p1":"First paragraph. Deep psychological analysis. 80 to 120 words.",
-      "p2":"Second paragraph. Build on the first. Connect to research. 80 to 120 words.",
-      "p3":"Third paragraph. Make it personal. End with a question or insight. 80 to 120 words."
-    },
-    {
-      "dimension":"vocation",
-      "label":"What you are good at",
-      "name":"Vocation",
-      "title":"Editorial headline about their vocation.",
-      "keywords":["word1","word2","word3","word4","word5"],
-      "quote":"Pull quote.",
-      "p1":"Paragraph 1.",
-      "p2":"Paragraph 2.",
-      "p3":"Paragraph 3."
-    },
-    {
-      "dimension":"mission",
-      "label":"What the world needs",
-      "name":"Mission",
-      "title":"Editorial headline about their mission.",
-      "keywords":["word1","word2","word3","word4","word5"],
-      "quote":"Pull quote.",
-      "p1":"Paragraph 1.",
-      "p2":"Paragraph 2.",
-      "p3":"Paragraph 3."
-    },
-    {
-      "dimension":"profession",
-      "label":"What you can be paid for",
-      "name":"Profession",
-      "title":"Editorial headline about their profession.",
-      "keywords":["word1","word2","word3","word4","word5"],
-      "quote":"Pull quote.",
-      "p1":"Paragraph 1.",
-      "p2":"Paragraph 2.",
-      "p3":"Paragraph 3."
-    }
-  ],
+    {"dimension":"passion","label":"What you love","name":"Passion","title":"A compelling editorial headline about their passion. Not generic.","keywords":["word1","word2","word3","word4","word5"],"quote":"A striking pull quote. One sentence.","p1":"Deep psychological analysis. 80 to 120 words.","p2":"Build on the first. Connect to research. 80 to 120 words.","p3":"Make it personal. End with a question or insight. 80 to 120 words."},
+    {"dimension":"vocation","label":"What you are good at","name":"Vocation","title":"Editorial headline.","keywords":["word1","word2","word3","word4","word5"],"quote":"Pull quote.","p1":"Paragraph 1. 80 to 120 words.","p2":"Paragraph 2. 80 to 120 words.","p3":"Paragraph 3. 80 to 120 words."}
+  ]
+}`, 2000),
+      // Part 2: Last 2 chapters
+      callClaude(RULES + at + `
 
+Reply ONLY in valid JSON:
+{
+  "chapters":[
+    {"dimension":"mission","label":"What the world needs","name":"Mission","title":"Editorial headline.","keywords":["word1","word2","word3","word4","word5"],"quote":"Pull quote.","p1":"Paragraph 1. 80 to 120 words.","p2":"Paragraph 2. 80 to 120 words.","p3":"Paragraph 3. 80 to 120 words."},
+    {"dimension":"profession","label":"What you can be paid for","name":"Profession","title":"Editorial headline.","keywords":["word1","word2","word3","word4","word5"],"quote":"Pull quote.","p1":"Paragraph 1. 80 to 120 words.","p2":"Paragraph 2. 80 to 120 words.","p3":"Paragraph 3. 80 to 120 words."}
+  ]
+}`, 1800),
+      // Part 3: Philosophy + intersection + next steps
+      callClaude(RULES + at + `
+
+Reply ONLY in valid JSON:
+{
   "ikigai_philosophy":"3 paragraphs separated by \\n\\n connecting their specific result to the original Japanese philosophy of Ikigai. Not the westernized Venn diagram but the deeper Japanese understanding: the small daily joys, the sense of being needed, the reason to get up. Reference Kodawari, Wabi Sabi, Blue Zones of Ogimi. Make it specific to this person.",
-
   "intersection_analysis":"4 paragraphs separated by \\n\\n analyzing how all four dimensions converge. Where the tensions live. Where the harmony is. The one thread connecting everything. End with ONE powerful question that stays with them.",
-
   "next_steps":[
     {"title":"Short title","detail":"2 to 3 sentences. Deeply personalized. Not generic. Reference their specific answers.","when":"This week"},
     {"title":"Short title","detail":"2 to 3 sentences.","when":"This month"},
@@ -907,8 +877,17 @@ Reply ONLY in valid JSON with this exact structure:
     {"title":"Short title","detail":"2 to 3 sentences.","when":"Next 6 months"},
     {"title":"Short title","detail":"2 to 3 sentences.","when":"Ongoing"}
   ]
-}`, 4000);
-    resultData = JSON.parse(raw);
+}`, 2000)
+    ]);
+    const p1 = JSON.parse(r1);
+    const p2 = JSON.parse(r2);
+    const p3 = JSON.parse(r3);
+    // Merge the three responses
+    resultData = {
+      ...p1,
+      ...p3,
+      chapters: [...(p1.chapters || []), ...(p2.chapters || [])]
+    };
     hideLoading();
     renderResult(resultData);
   } catch (e) {
