@@ -605,7 +605,7 @@ body{background:#FBF7EE;color:#1A1714;font-family:'Inter',sans-serif;overflow-x:
 let hasPaid = false;
 
 Paddle.Initialize({
-  token: 'live_8961e3d5d6b7b1e6ffb729c73b9',
+  token: 'live_4d2c73bd993614850e6f378a3b2',
   eventCallback: function(event) {
     if (event.name === 'checkout.completed') {
       hasPaid = true;
@@ -620,7 +620,7 @@ function openPaddleCheckout() {
     return;
   }
   Paddle.Checkout.open({
-    items: [{ priceId: 'pri_01m3t9menzy9cjhx429eg6bvy9', quantity: 1 }],
+    items: [{ priceId: 'pri_01m713d313brs0nvr4r7gzrh4j', quantity: 1 }],
     settings: {
       displayMode: 'overlay',
       theme: 'light'
