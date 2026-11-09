@@ -780,7 +780,7 @@ function showLoading() {
 function hideLoading() { clearInterval(loadingInterval); document.getElementById('loading-section').style.display = 'none'; }
 
 async function callClaude(prompt, maxTokens) {
-  const res = await fetch('/.netlify/functions/claude', {
+  const res = await fetch('/api/claude', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: maxTokens || 800, messages: [{ role: 'user', content: prompt }] })
