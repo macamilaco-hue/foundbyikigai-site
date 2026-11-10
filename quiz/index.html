@@ -780,6 +780,34 @@ function showLoading() {
 }
 function hideLoading() { clearInterval(loadingInterval); document.getElementById('loading-section').style.display = 'none'; }
 
+function repairJSON(raw) {
+  // Try parsing as-is first
+  try { return JSON.parse(raw); } catch(e) {}
+  // Try closing truncated JSON by adding closing brackets/braces
+  let s = raw.trim();
+  // Remove trailing comma
+  s = s.replace(/,\s*$/, '');
+  // Count open/close brackets
+  const opens = { '{': 0, '[': 0 };
+  const closes = { '}': '{', ']': '[' };
+  let inStr = false, esc = false;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (esc) { esc = false; continue; }
+    if (c === '\\') { esc = true; continue; }
+    if (c === '"') { inStr = !inStr; continue; }
+    if (inStr) continue;
+    if (c in opens) opens[c]++;
+    if (c in closes) opens[closes[c]]--;
+  }
+  // If we're inside a string, close it
+  if (inStr) s += '"';
+  // Close any open arrays/objects
+  for (let i = 0; i < opens['[']; i++) s += ']';
+  for (let i = 0; i < opens['{']; i++) s += '}';
+  return JSON.parse(s);
+}
+
 async function callClaude(prompt, maxTokens) {
   const res = await fetch('/api/claude', {
     method: 'POST',
@@ -850,8 +878,8 @@ Reply ONLY in valid JSON:
   "what_the_world_needs":"2 sentences for the FREE preview. How their sensitivity connects with the world.",
   "what_you_can_be_paid_for":"2 sentences for the FREE preview. Their real professional value.",
   "chapters":[
-    {"dimension":"passion","label":"What you love","name":"Passion","title":"A compelling editorial headline about their passion. Not generic.","keywords":["word1","word2","word3","word4","word5"],"quote":"A striking pull quote. One sentence.","p1":"Deep psychological analysis. 80 to 120 words.","p2":"Build on the first. Connect to research. 80 to 120 words.","p3":"Make it personal. End with a question or insight. 80 to 120 words."},
-    {"dimension":"vocation","label":"What you are good at","name":"Vocation","title":"Editorial headline.","keywords":["word1","word2","word3","word4","word5"],"quote":"Pull quote.","p1":"Paragraph 1. 80 to 120 words.","p2":"Paragraph 2. 80 to 120 words.","p3":"Paragraph 3. 80 to 120 words."}
+    {"dimension":"passion","label":"What you love","name":"Passion","title":"A compelling editorial headline. Not generic.","keywords":["word1","word2","word3"],"quote":"A striking pull quote. One sentence.","p1":"Deep psychological analysis. 40 to 60 words.","p2":"Connect to research. 40 to 60 words.","p3":"End with a question or insight. 40 to 60 words."},
+    {"dimension":"vocation","label":"What you are good at","name":"Vocation","title":"Editorial headline.","keywords":["word1","word2","word3"],"quote":"Pull quote.","p1":"40 to 60 words.","p2":"40 to 60 words.","p3":"40 to 60 words."}
   ]
 }`, 2000),
       // Part 2: Last 2 chapters
@@ -860,8 +888,8 @@ Reply ONLY in valid JSON:
 Reply ONLY in valid JSON:
 {
   "chapters":[
-    {"dimension":"mission","label":"What the world needs","name":"Mission","title":"Editorial headline.","keywords":["word1","word2","word3","word4","word5"],"quote":"Pull quote.","p1":"Paragraph 1. 80 to 120 words.","p2":"Paragraph 2. 80 to 120 words.","p3":"Paragraph 3. 80 to 120 words."},
-    {"dimension":"profession","label":"What you can be paid for","name":"Profession","title":"Editorial headline.","keywords":["word1","word2","word3","word4","word5"],"quote":"Pull quote.","p1":"Paragraph 1. 80 to 120 words.","p2":"Paragraph 2. 80 to 120 words.","p3":"Paragraph 3. 80 to 120 words."}
+    {"dimension":"mission","label":"What the world needs","name":"Mission","title":"Editorial headline.","keywords":["word1","word2","word3"],"quote":"Pull quote.","p1":"40 to 60 words.","p2":"40 to 60 words.","p3":"40 to 60 words."},
+    {"dimension":"profession","label":"What you can be paid for","name":"Profession","title":"Editorial headline.","keywords":["word1","word2","word3"],"quote":"Pull quote.","p1":"40 to 60 words.","p2":"40 to 60 words.","p3":"40 to 60 words."}
   ]
 }`, 1800),
       // Part 3: Philosophy + intersection + next steps
@@ -880,9 +908,9 @@ Reply ONLY in valid JSON:
   ]
 }`, 3000)
     ]);
-    const p1 = JSON.parse(r1);
-    const p2 = JSON.parse(r2);
-    const p3 = JSON.parse(r3);
+    const p1 = repairJSON(r1);
+    const p2 = repairJSON(r2);
+    const p3 = repairJSON(r3);
     // Merge the three responses
     resultData = {
       ...p1,
