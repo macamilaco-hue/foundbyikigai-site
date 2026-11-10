@@ -1,7 +1,7 @@
 # Only the site pages are published; brand files, handoff notes and old
 # tool versions stay in the repo but are not served.
 [build]
-  command = "mkdir -p dist/quiz && cp index.html terms.html privacy.html legal.css dist/ && cp quiz/index.html dist/quiz/"
+  command = "mkdir -p dist/quiz && cp index.html terms.html privacy.html legal.css favicon.svg favicon.ico apple-touch-icon.png dist/ && cp quiz/index.html dist/quiz/"
   publish = "dist"
 
 [functions]
